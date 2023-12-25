@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public enum PlayerState
-{ 
+{
     Idle,
     Run,
     Jump,
@@ -20,9 +20,10 @@ public class PCPlayerController : MonoBehaviour
     public float Accelation = 10f;
     public float Deccelation = -10f;
     public float velPower = 1.001f;
+    public float frictionAmount = 5f;
     public PlayerState state;
+    private float _playerVelocity;
 
-    
     private Vector3 _moveDirection = Vector3.zero;
 
     public Rigidbody rb;
@@ -70,12 +71,12 @@ public class PCPlayerController : MonoBehaviour
 
 
         GroundedCheck();
-
+        _playerVelocity = Mathf.Sqrt(rb.velocity.x * rb.velocity.x + rb.velocity.z * rb.velocity.z);
         #region Run
         float targetSpeed = _moveDirection.magnitude * MoveSpeed;
         //float speedDif = targetSpeed - rb.velocity.magnitude;
         //if (rb.velocity.x == 0 && rb.velocity.z == 0) return;
-        float speedDif = targetSpeed - Mathf.Sqrt(rb.velocity.x * rb.velocity.x + rb.velocity.z * rb.velocity.z);
+        float speedDif = targetSpeed - _playerVelocity;
         float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? Accelation : Deccelation;
         float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, velPower) * Mathf.Sign(speedDif);
 
@@ -84,9 +85,9 @@ public class PCPlayerController : MonoBehaviour
                 $"<color=red>currentSpeed : {Mathf.Sqrt(rb.velocity.x * rb.velocity.x + rb.velocity.z * rb.velocity.z)}</color>" +
                 $"movement : {movement}");
 
-        if ((state == PlayerState.Idle || state == PlayerState.Run) )
+        if ((state == PlayerState.Idle || state == PlayerState.Run))
         {
-            if(rb.velocity.y < 0)
+            if (rb.velocity.y < 0)
             {
                 state = PlayerState.Jump;
             }
@@ -96,6 +97,13 @@ public class PCPlayerController : MonoBehaviour
         #endregion
 
 
+        #region Friciton
+        if (isGround && (Mathf.Abs(targetSpeed) < 0.01f))
+        {
+            float amount = Mathf.Min(Mathf.Abs(_playerVelocity), Mathf.Abs(frictionAmount));
+            rb.AddForce(_moveDirection * -amount, ForceMode.Impulse);
+        } 
+        #endregion
         //움직이는 상태일 때
         /*        if (!_moveDirection.Equals(Vector3.zero) && state == PlayerState.Run)
                 {
@@ -136,7 +144,7 @@ public class PCPlayerController : MonoBehaviour
     private void OnMovemnetCancelled(InputAction.CallbackContext value)
     {
         //점프상태가 아니고 땅에 닿아 있을때
-        if(state != PlayerState.Jump && isGround)
+        if (state != PlayerState.Jump && isGround)
         {
         }
         state = PlayerState.Idle;
@@ -148,7 +156,7 @@ public class PCPlayerController : MonoBehaviour
     private void Jump(InputAction.CallbackContext obj)
     {
         //todo 1220땅에 닿았을때만 가능하게 조건 추가해줘
-        if(isGround)
+        if (isGround)
         {
             isGround = false;
             state = PlayerState.Jump;
