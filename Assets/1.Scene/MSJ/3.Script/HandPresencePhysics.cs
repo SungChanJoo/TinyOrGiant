@@ -2,13 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum HandPresenceType
+{
+    LeftHand,
+    RightHand,
+}
+
 public class HandPresencePhysics : MonoBehaviour
 {
+    public HandPresenceType handType;
+
     [Header("Non-Physical Hand")]
-    public Transform target;
     public bool showNonPhysicalHand = true;
-    public Renderer nonPhysicalHand;
     public float distanceThreshold = .3f;
+    Transform target;
+    Renderer nonPhysicalHandRenderer;
 
     [Header("Physical Hand")]
     public float colliderEnableDelay = .5f;
@@ -17,6 +25,18 @@ public class HandPresencePhysics : MonoBehaviour
 
     private void Awake()
     {
+        switch (handType)
+        {
+            case HandPresenceType.LeftHand:
+                target = GameObject.FindGameObjectWithTag("NonPhysicsLeftHandPresence").transform;
+                nonPhysicalHandRenderer = GameObject.FindGameObjectWithTag("NonPhysicsLeftHandRenderer").GetComponent<MeshRenderer>();
+                break;
+            case HandPresenceType.RightHand:
+                target = GameObject.FindGameObjectWithTag("NonPhysicsRightHandPresence").transform;
+                nonPhysicalHandRenderer = GameObject.FindGameObjectWithTag("NonPhysicsRightHandRenderer").GetComponent<MeshRenderer>();
+                break;
+        }
+
         TryGetComponent(out rb);
         handColliders = GetComponentsInChildren<Collider>();
     }
@@ -40,7 +60,7 @@ public class HandPresencePhysics : MonoBehaviour
         if (showNonPhysicalHand)
         {
             float distance = Vector3.Distance(transform.position, target.position);
-            nonPhysicalHand.enabled = distance < distanceThreshold ? false : true;
+            nonPhysicalHandRenderer.enabled = distance < distanceThreshold ? false : true;
         }
     }
 
@@ -48,7 +68,7 @@ public class HandPresencePhysics : MonoBehaviour
     public void ToggleCollider(bool isEnable)
     {
         if (isEnable)
-            Invoke("EnableHandCollider", colliderEnableDelay);
+            Invoke(nameof(EnableHandCollider), colliderEnableDelay);
         else
             DisableHandCollider();
     }
