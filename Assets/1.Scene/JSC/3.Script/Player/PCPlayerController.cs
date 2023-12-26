@@ -18,23 +18,34 @@ public class PCPlayerController : MonoBehaviour
     public float MoveSpeed = 3f;
     public float JumpPower = 30f;
     public float Accelation = 10f;
-    public float Deccelation = -10f;
+    public float Deccelation = 10f;
     public float velPower = 1.001f;
     public float frictionAmount = 5f;
+    public float RotationSpeed = 10f;
+    public float TurnSmoothTime = 0.1f;
+    float _turnSmoothVelocity;
     public PlayerState state;
-    private float _playerVelocity;
 
+    private float _playerVelocity;
+    private float _targetSpeed;
     private Vector3 _moveDirection = Vector3.zero;
 
     public Rigidbody rb;
     public PlayerControls input;
+    public Transform Cam;
 
     [Header("Player Grounded")]
+    public float GravityScale = 5f;
     public bool isGround;
     public float GroundedOffset = -0.14f;
     public float GroundedRadius = 0.28f;
     public LayerMask GroundLayers;
 
+    [Header("ETC")]
+    public GameObject RocketPrefab;
+    public int RocketCount=0;
+    public GameObject RocketParent;
+    public Transform[] EquidRocketPos;
     private void Awake()
     {
         input = new PlayerControls();
@@ -49,9 +60,11 @@ public class PCPlayerController : MonoBehaviour
         input.Land.Move.performed += OnMovemnetPerformed;
         input.Land.Move.started += OnMovemnetStarted;
         input.Land.Move.canceled += OnMovemnetCancelled;
-
+        
         input.Land.Jump.performed += Jump;
 
+        input.Land.Fire.performed += Fire;
+        input.Land.Fire.canceled += Fire;
     }
 
     private void OnDisable()
@@ -63,71 +76,72 @@ public class PCPlayerController : MonoBehaviour
 
         input.Land.Jump.performed -= Jump;
 
+        input.Land.Fire.performed -= Fire;
+        input.Land.Fire.canceled -= Fire;
     }
 
 
     private void FixedUpdate()
     {
 
-
-        GroundedCheck();
         _playerVelocity = Mathf.Sqrt(rb.velocity.x * rb.velocity.x + rb.velocity.z * rb.velocity.z);
-        #region Run
-        float targetSpeed = _moveDirection.magnitude * MoveSpeed;
-        //float speedDif = targetSpeed - rb.velocity.magnitude;
-        //if (rb.velocity.x == 0 && rb.velocity.z == 0) return;
-        float speedDif = targetSpeed - _playerVelocity;
-        float accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? Accelation : Deccelation;
-        float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, velPower) * Mathf.Sign(speedDif);
-
-        Debug.Log($"targetSpeed : {targetSpeed}" +
-                $"speedDif : {speedDif}" +
-                $"<color=red>currentSpeed : {Mathf.Sqrt(rb.velocity.x * rb.velocity.x + rb.velocity.z * rb.velocity.z)}</color>" +
-                $"movement : {movement}");
-
-        if ((state == PlayerState.Idle || state == PlayerState.Run))
+        if(_moveDirection.magnitude >= 0.1f)
         {
-            if (rb.velocity.y < 0)
+            float targetAngle = Mathf.Atan2(_moveDirection.x, _moveDirection.z) * Mathf.Rad2Deg + Cam.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, TurnSmoothTime);
+            transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+
+            #region Run
+            _targetSpeed = _moveDirection.normalized.magnitude * MoveSpeed;
+            float speedDif = _targetSpeed - _playerVelocity;
+            float accelRate = (Mathf.Abs(_targetSpeed) > 0.01f) ? Accelation : Deccelation;
+            float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, velPower) * Mathf.Sign(speedDif);
+
+            if (isGround || (state == PlayerState.Idle || state == PlayerState.Run))
             {
-                state = PlayerState.Jump;
+                if (rb.velocity.y < 0)
+                {
+                    state = PlayerState.Jump;
+                }
+                rb.velocity = new Vector3(0, rb.velocity.y, 0);
+                rb.AddForce(moveDir.normalized * movement, ForceMode.Force);
+                Debug.DrawLine(transform.position, transform.position + transform.forward * 10, Color.red);
             }
-            rb.AddForce(_moveDirection * movement, ForceMode.Force);
-            Debug.Log(_moveDirection * movement);
+            #endregion
         }
-        #endregion
 
 
         #region Friciton
-        if (isGround && (Mathf.Abs(targetSpeed) < 0.01f))
+        if (isGround && _moveDirection.magnitude < 0.01f && state != PlayerState.Jump)
         {
-            float amount = Mathf.Min(Mathf.Abs(_playerVelocity), Mathf.Abs(frictionAmount));
-            rb.AddForce(_moveDirection * -amount, ForceMode.Impulse);
+            Vector3 normalVelocity = rb.velocity;
+            float amount = Mathf.Min(Mathf.Abs(Mathf.Abs(normalVelocity.magnitude)), Mathf.Abs(frictionAmount));
+            Debug.Log(amount);
+            Debug.Log("_playerVelocity : " + Mathf.Abs(normalVelocity.magnitude));
+            rb.AddForce(-rb.velocity * amount, ForceMode.Impulse);
+
+        }
+        #endregion
+
+
+        #region Jump Gravity
+        if (rb.velocity.y < 3 && !isGround)
+        {
+            rb.AddForce(Physics.gravity * GravityScale, ForceMode.Acceleration);
         } 
         #endregion
-        //움직이는 상태일 때
-        /*        if (!_moveDirection.Equals(Vector3.zero) && state == PlayerState.Run)
-                {
-                    rb.AddForce(_moveDirection * MoveSpeed, ForceMode.Force);
-                    //rb.velocity = _moveDirection * MoveSpeed;
-                    Debug.Log(_moveDirection);
 
-                }*/
-        /*if (rb.velocity.y < 0)
-{
 
-    Debug.DrawRay(rb.position, Vector3.down * 3f, new Color(1,0,0));
-    if (Physics.Raycast(rb.position, Vector3.down, out RaycastHit hit, 3f))
-    {
-        Debug.Log(hit.distance);
+        #region CheckGround
+        // set sphere position, with offset
+        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
+        transform.position.z);
+        isGround = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
+            QueryTriggerInteraction.Ignore); 
+        #endregion
 
-        if (hit.distance < 1f)
-        {
-            state = PlayerState.Idle;
-            isGround = true;
-        }
-    }
-
-}*/
     }
 
     private void OnMovemnetStarted(InputAction.CallbackContext value)
@@ -143,18 +157,17 @@ public class PCPlayerController : MonoBehaviour
     }
     private void OnMovemnetCancelled(InputAction.CallbackContext value)
     {
-        //점프상태가 아니고 땅에 닿아 있을때
-        if (state != PlayerState.Jump && isGround)
-        {
-        }
         state = PlayerState.Idle;
         _moveDirection = Vector3.zero;
+
+
         //StartCoroutine(DecreaseMoveSpeed_co());
     }
 
 
     private void Jump(InputAction.CallbackContext obj)
     {
+
         //todo 1220땅에 닿았을때만 가능하게 조건 추가해줘
         if (isGround)
         {
@@ -164,30 +177,53 @@ public class PCPlayerController : MonoBehaviour
         }
 
     }
-    private void GroundedCheck()
-    {
-        if (rb.velocity.y < 0)
-        {
-            //_moveDirection = Vector3.zero;
 
-            Debug.Log("떨어지는 중");
-            // set sphere position, with offset
-            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
-            transform.position.z);
-            isGround = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
-                QueryTriggerInteraction.Ignore);
-            if (isGround)
-            {
-                state = PlayerState.Run;
-            }
+    private void Fire(InputAction.CallbackContext obj)
+    {
+        if(RocketCount>0)
+        {
+            UseRocket();
         }
 
-        // update animator if using character
-        /*        if (_hasAnimator)
-                {
-                    _animator.SetBool(_animIDGrounded, Grounded);
-                }*/
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Item"))
+        {
+            //아이템 획득
+            Debug.Log("아이템획득");
+            
+            PickUpRocket();
+            other.transform.gameObject.SetActive(false);
+        }
+    }
+
+    public void PickUpRocket()
+    {
+        if(RocketCount < 3)
+        {
+            GameObject item = RocketPrefab;
+            item.transform.localScale = new Vector3(0.5f, 1, 0.5f);
+            Instantiate(item, EquidRocketPos[RocketCount].position, Quaternion.identity, RocketParent.transform);
+            RocketCount++;
+        }
+        else
+        {
+            Debug.Log("더 이상 로켓을 얻을 수 없습니다.");
+        }
+
+    }
+
+    public void UseRocket()
+    {
+        Instantiate(RocketPrefab, this.transform.position + Vector3.forward * 2f, transform.rotation);
+        Debug.Log("로켓발싸");
+        Destroy(RocketParent.transform.GetChild(3).gameObject);
+        RocketCount--;
+    }
+
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
