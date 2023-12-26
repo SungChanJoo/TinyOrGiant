@@ -257,7 +257,7 @@
                     "type": "Value",
                     "id": "83a7af0b-87e3-42c3-a909-95fbf8091e4f",
                     "expectedControlType": "Vector3",
-                    "processors": "",
+                    "processors": "ScaleVector3(x=2,y=2,z=2)",
                     "interactions": "",
                     "initialStateCheck": true
                 },
@@ -953,7 +953,7 @@
                     "type": "Value",
                     "id": "c4990d70-7b8a-4ce1-b03c-da86716b8352",
                     "expectedControlType": "Vector3",
-                    "processors": "",
+                    "processors": "ScaleVector3(x=2,y=2,z=2)",
                     "interactions": "",
                     "initialStateCheck": true
                 },
