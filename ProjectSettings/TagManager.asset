@@ -8,6 +8,8 @@ TagManager:
   - NonPhysicsRightHandPresence
   - NonPhysicsLeftHandRenderer
   - NonPhysicsRightHandRenderer
+  - PhysicsLeftHandPresence
+  - PhysicsRightHandPresence
   layers:
   - Default
   - TransparentFX
@@ -17,7 +19,7 @@ TagManager:
   - UI
   - Left Hand Physics
   - Right Hand Physics
-  - 
+  - Head Physics
   - 
   - 
   - 

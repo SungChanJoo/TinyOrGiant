@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 27324041504090631}
   m_Layer: 6
   m_Name: Left Hand Presence Physics
-  m_TagString: Untagged
+  m_TagString: PhysicsLeftHandPresence
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -63,11 +63,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handType: 0
-  target: {fileID: 0}
   showNonPhysicalHand: 1
-  nonPhysicalHandRenderer: {fileID: 0}
   distanceThreshold: 0.3
-  colliderEnableDelay: 0.5
 --- !u!54 &27324041504090649
 Rigidbody:
   m_ObjectHideFlags: 0

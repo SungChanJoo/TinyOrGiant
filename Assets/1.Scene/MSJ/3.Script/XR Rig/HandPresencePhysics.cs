@@ -18,9 +18,6 @@ public class HandPresencePhysics : MonoBehaviour
     Transform target;
     Renderer nonPhysicalHandRenderer;
 
-    [Header("Physical Hand")]
-    public float colliderEnableDelay = .5f;
-    Collider[] handColliders;
     Rigidbody rb;
 
     private void Awake()
@@ -29,16 +26,15 @@ public class HandPresencePhysics : MonoBehaviour
         {
             case HandPresenceType.LeftHand:
                 target = GameObject.FindGameObjectWithTag("NonPhysicsLeftHandPresence").transform;
-                nonPhysicalHandRenderer = GameObject.FindGameObjectWithTag("NonPhysicsLeftHandRenderer").GetComponent<MeshRenderer>();
+                nonPhysicalHandRenderer = GameObject.FindGameObjectWithTag("NonPhysicsLeftHandRenderer").GetComponent<SkinnedMeshRenderer>();
                 break;
             case HandPresenceType.RightHand:
                 target = GameObject.FindGameObjectWithTag("NonPhysicsRightHandPresence").transform;
-                nonPhysicalHandRenderer = GameObject.FindGameObjectWithTag("NonPhysicsRightHandRenderer").GetComponent<MeshRenderer>();
+                nonPhysicalHandRenderer = GameObject.FindGameObjectWithTag("NonPhysicsRightHandRenderer").GetComponent<SkinnedMeshRenderer>();
                 break;
         }
 
         TryGetComponent(out rb);
-        handColliders = GetComponentsInChildren<Collider>();
     }
 
     private void FixedUpdate()
@@ -61,31 +57,6 @@ public class HandPresencePhysics : MonoBehaviour
         {
             float distance = Vector3.Distance(transform.position, target.position);
             nonPhysicalHandRenderer.enabled = distance < distanceThreshold ? false : true;
-        }
-    }
-
-    // XR Direct Interactor Event
-    public void ToggleCollider(bool isEnable)
-    {
-        if (isEnable)
-            Invoke(nameof(EnableHandCollider), colliderEnableDelay);
-        else
-            DisableHandCollider();
-    }
-
-    public void EnableHandCollider()
-    {
-        foreach (var handCollider in handColliders)
-        {
-            handCollider.enabled = true;
-        }
-    }
-
-    public void DisableHandCollider()
-    {
-        foreach (var handCollider in handColliders)
-        {
-            handCollider.enabled = false;
         }
     }
 }
