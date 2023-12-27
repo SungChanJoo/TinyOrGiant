@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,7 @@ public enum PlayerState
     Idle,
     Run,
     Jump,
-    Attack
+    Attack,
 }
 
 
@@ -28,6 +29,7 @@ public class PCPlayerController : MonoBehaviour
 
     private float _playerVelocity;
     private float _targetSpeed;
+    private Vector3 _inputDirection = Vector3.zero;
     private Vector3 _moveDirection = Vector3.zero;
 
     public Rigidbody rb;
@@ -42,14 +44,23 @@ public class PCPlayerController : MonoBehaviour
     public LayerMask GroundLayers;
 
     [Header("ETC")]
-    public GameObject RocketPrefab;
+    public Camera FollowCamera;
+
+    public GameObject RocketBullet;
+    public Transform RocketPos;
     public int RocketCount=0;
     public GameObject RocketParent;
-    public Transform[] EquidRocketPos;
+    public GameObject[] EquidRocket;
+
+    bool _rotateOnMove = true;
+
+    public static Action OnFired;
     private void Awake()
     {
         input = new PlayerControls();
         rb = GetComponent<Rigidbody>();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         state = PlayerState.Idle;
         isGround = true;
     }
@@ -63,8 +74,8 @@ public class PCPlayerController : MonoBehaviour
         
         input.Land.Jump.performed += Jump;
 
-        input.Land.Fire.performed += Fire;
-        input.Land.Fire.canceled += Fire;
+        input.Land.Fire.performed += FirePerformed;
+        input.Land.Fire.canceled += FireCanceled;
     }
 
     private void OnDisable()
@@ -76,28 +87,51 @@ public class PCPlayerController : MonoBehaviour
 
         input.Land.Jump.performed -= Jump;
 
-        input.Land.Fire.performed -= Fire;
-        input.Land.Fire.canceled -= Fire;
+        input.Land.Fire.performed -= FirePerformed;
+        input.Land.Fire.canceled -= FireCanceled;
     }
 
+    private void Update()
+    {
+        //Debug.Log("_rotateOnMove" + _rotateOnMove);
+        if (!_rotateOnMove)
+        {
+            Vector3 mouseWorldPosition = Vector3.zero;
+            Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
+
+            Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
+            if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f))
+            {
+                mouseWorldPosition = raycastHit.point;
+            }
+
+            Vector3 worldAimTarget = mouseWorldPosition;
+            //worldAimTarget.y = transform.position.y;
+            Vector3 aimDirection = (worldAimTarget - transform.position).normalized;
+
+            transform.forward = aimDirection;
+        }
+    }
 
     private void FixedUpdate()
     {
 
-        _playerVelocity = Mathf.Sqrt(rb.velocity.x * rb.velocity.x + rb.velocity.z * rb.velocity.z);
-        if(_moveDirection.magnitude >= 0.1f)
-        {
-            float targetAngle = Mathf.Atan2(_moveDirection.x, _moveDirection.z) * Mathf.Rad2Deg + Cam.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, TurnSmoothTime);
-            transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
-            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+        _playerVelocity = Mathf.Sqrt(rb.velocity.x * rb.velocity.x + rb.velocity.z * rb.velocity.z);
+        if (_inputDirection.magnitude >= 0.1f)
+        {
+            float targetAngle = Mathf.Atan2(_inputDirection.x, _inputDirection.z) * Mathf.Rad2Deg + Cam.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, TurnSmoothTime);
+            if(_rotateOnMove) transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+            _moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
 
             #region Run
-            _targetSpeed = _moveDirection.normalized.magnitude * MoveSpeed;
+            _targetSpeed = _inputDirection.normalized.magnitude * MoveSpeed;
             float speedDif = _targetSpeed - _playerVelocity;
             float accelRate = (Mathf.Abs(_targetSpeed) > 0.01f) ? Accelation : Deccelation;
             float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, velPower) * Mathf.Sign(speedDif);
+
 
             if (isGround || (state == PlayerState.Idle || state == PlayerState.Run))
             {
@@ -106,7 +140,7 @@ public class PCPlayerController : MonoBehaviour
                     state = PlayerState.Jump;
                 }
                 rb.velocity = new Vector3(0, rb.velocity.y, 0);
-                rb.AddForce(moveDir.normalized * movement, ForceMode.Force);
+                rb.AddForce(_moveDirection.normalized * movement, ForceMode.Force);
                 Debug.DrawLine(transform.position, transform.position + transform.forward * 10, Color.red);
             }
             #endregion
@@ -114,12 +148,12 @@ public class PCPlayerController : MonoBehaviour
 
 
         #region Friciton
-        if (isGround && _moveDirection.magnitude < 0.01f && state != PlayerState.Jump)
+        if (isGround && _inputDirection.magnitude < 0.01f && state != PlayerState.Jump)
         {
             Vector3 normalVelocity = rb.velocity;
             float amount = Mathf.Min(Mathf.Abs(Mathf.Abs(normalVelocity.magnitude)), Mathf.Abs(frictionAmount));
-            Debug.Log(amount);
-            Debug.Log("_playerVelocity : " + Mathf.Abs(normalVelocity.magnitude));
+            //Debug.Log(amount);
+            //Debug.Log("_playerVelocity : " + Mathf.Abs(normalVelocity.magnitude));
             rb.AddForce(-rb.velocity * amount, ForceMode.Impulse);
 
         }
@@ -147,44 +181,55 @@ public class PCPlayerController : MonoBehaviour
     private void OnMovemnetStarted(InputAction.CallbackContext value)
     {
         rb.velocity = new Vector3(0, rb.velocity.y, 0);
-        Debug.Log("OnMovemnetStarted");
     }
     private void OnMovemnetPerformed(InputAction.CallbackContext value)
     {
         state = PlayerState.Run;
-        _moveDirection = new Vector3(value.ReadValue<Vector2>().x, 0f, value.ReadValue<Vector2>().y);
-        Debug.Log("OnMovemnetPerformed");
+        _inputDirection = new Vector3(value.ReadValue<Vector2>().x, 0f, value.ReadValue<Vector2>().y);
     }
     private void OnMovemnetCancelled(InputAction.CallbackContext value)
     {
         state = PlayerState.Idle;
-        _moveDirection = Vector3.zero;
-
-
-        //StartCoroutine(DecreaseMoveSpeed_co());
+        _inputDirection = Vector3.zero;
     }
 
 
     private void Jump(InputAction.CallbackContext obj)
     {
-
-        //todo 1220땅에 닿았을때만 가능하게 조건 추가해줘
         if (isGround)
         {
             isGround = false;
             state = PlayerState.Jump;
             rb.AddForce(Vector3.up * JumpPower, ForceMode.Impulse);
         }
-
     }
 
-    private void Fire(InputAction.CallbackContext obj)
+    private void FirePerformed(InputAction.CallbackContext obj)
     {
-        if(RocketCount>0)
+        //Aim UI 변경해줘 todo 1227
+        Debug.Log("FirePerformed");
+        if (RocketCount > 0)
         {
-            UseRocket();
+            SetRotateOnMove(false);
+            //RocketBullet.transform.forward = _moveDirection;
+            GameObject Rocket = Instantiate(RocketBullet);
+            Rocket.transform.parent = RocketPos;
+            Rocket.transform.position = RocketPos.transform.position;
+            
+            Debug.Log(Rocket.transform.localRotation);
+            Rocket.transform.localRotation = Quaternion.Euler(0, 0, 90);
+            Debug.Log(Rocket.transform.localRotation);
+            EquidRocket[RocketCount - 1].gameObject.SetActive(false);
+            RocketCount--;
         }
-
+    }
+    private void FireCanceled(InputAction.CallbackContext obj)
+    {
+        SetRotateOnMove(true);
+        Debug.Log("FireCanceled");
+        RocketPos.GetChild(0).parent = null;
+        OnFired(); // 로켓 발사이벤트 로켓에서 호출
+        Debug.Log("로켓발싸");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -192,37 +237,33 @@ public class PCPlayerController : MonoBehaviour
         if(other.CompareTag("Item"))
         {
             //아이템 획득
-            Debug.Log("아이템획득");
-            
-            PickUpRocket();
-            other.transform.gameObject.SetActive(false);
+            if(PickUpRocket())
+            {
+                Debug.Log("아이템획득");
+                other.transform.gameObject.SetActive(false);
+            }
         }
     }
 
-    public void PickUpRocket()
+    public bool PickUpRocket()
     {
         if(RocketCount < 3)
         {
-            GameObject item = RocketPrefab;
-            item.transform.localScale = new Vector3(0.5f, 1, 0.5f);
-            Instantiate(item, EquidRocketPos[RocketCount].position, Quaternion.identity, RocketParent.transform);
+            EquidRocket[RocketCount].gameObject.SetActive(true);
             RocketCount++;
+            return true;
         }
         else
         {
             Debug.Log("더 이상 로켓을 얻을 수 없습니다.");
+            return false;
         }
-
     }
 
-    public void UseRocket()
+    public void SetRotateOnMove(bool newRotateOnMove)
     {
-        Instantiate(RocketPrefab, this.transform.position + Vector3.forward * 2f, transform.rotation);
-        Debug.Log("로켓발싸");
-        Destroy(RocketParent.transform.GetChild(3).gameObject);
-        RocketCount--;
+        _rotateOnMove = newRotateOnMove;
     }
-
 
     private void OnDrawGizmos()
     {
