@@ -29,8 +29,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 27324041504090653}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.1, y: 1.1176, z: 0.07}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 25, y: 25, z: 25}
   m_Children:
   - {fileID: 7606466191248112937}
   m_Father: {fileID: 0}
@@ -64,7 +64,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handType: 0
   showNonPhysicalHand: 1
-  distanceThreshold: 0.3
+  distanceThreshold: 3
 --- !u!54 &27324041504090649
 Rigidbody:
   m_ObjectHideFlags: 0

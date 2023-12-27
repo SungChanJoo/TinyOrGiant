@@ -14,7 +14,7 @@ public class HandPresencePhysics : MonoBehaviour
 
     [Header("Non-Physical Hand")]
     public bool showNonPhysicalHand = true;
-    public float distanceThreshold = .3f;
+    public float distanceThreshold = 3f;
     Transform target;
     Renderer nonPhysicalHandRenderer;
 
@@ -39,9 +39,23 @@ public class HandPresencePhysics : MonoBehaviour
 
     private void FixedUpdate()
     {
+        TryMoveHand();
+        TryRotateHand();
+    }
+
+    private void LateUpdate()
+    {
+        ShowNonPhysicalHand();
+    }
+
+    private void TryMoveHand()
+    {
         // Try move to target position
         rb.velocity = (target.position - transform.position) / Time.fixedDeltaTime;
+    }
 
+    private void TryRotateHand()
+    {
         // Try rotate to target rotation
         Quaternion rotationDiff = target.rotation * Quaternion.Inverse(transform.rotation);
         rotationDiff.ToAngleAxis(out float angleInDegree, out Vector3 rotationAxis);
@@ -51,7 +65,7 @@ public class HandPresencePhysics : MonoBehaviour
         rb.angularVelocity = (rotationDiffInDegree * Mathf.Deg2Rad) / Time.fixedDeltaTime;
     }
 
-    private void Update()
+    private void ShowNonPhysicalHand()
     {
         if (showNonPhysicalHand)
         {
@@ -59,4 +73,5 @@ public class HandPresencePhysics : MonoBehaviour
             nonPhysicalHandRenderer.enabled = distance < distanceThreshold ? false : true;
         }
     }
+    
 }

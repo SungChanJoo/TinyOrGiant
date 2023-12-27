@@ -10,7 +10,7 @@
                     "type": "Value",
                     "id": "1a9029f8-7a46-46b9-9eff-e9ae8365f611",
                     "expectedControlType": "Vector3",
-                    "processors": "",
+                    "processors": "ScaleVector3(x=30,y=15,z=30)",
                     "interactions": "",
                     "initialStateCheck": true
                 },
@@ -257,7 +257,7 @@
                     "type": "Value",
                     "id": "83a7af0b-87e3-42c3-a909-95fbf8091e4f",
                     "expectedControlType": "Vector3",
-                    "processors": "ScaleVector3(x=2,y=2,z=2)",
+                    "processors": "ScaleVector3(x=6,y=6,z=6)",
                     "interactions": "",
                     "initialStateCheck": true
                 },
@@ -953,7 +953,7 @@
                     "type": "Value",
                     "id": "c4990d70-7b8a-4ce1-b03c-da86716b8352",
                     "expectedControlType": "Vector3",
-                    "processors": "ScaleVector3(x=2,y=2,z=2)",
+                    "processors": "ScaleVector3(x=6,y=6,z=6)",
                     "interactions": "",
                     "initialStateCheck": true
                 },

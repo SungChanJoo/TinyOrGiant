@@ -990,8 +990,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5102293645157505691}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.1, y: 0, z: 0.07}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 25, y: 25, z: 25}
   m_Children:
   - {fileID: 8433530929453077799}
   m_Father: {fileID: 8398406253164771053}
@@ -1036,8 +1036,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5102293645289419392}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.1, y: 0, z: 0.07}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 25, y: 25, z: 25}
   m_Children:
   - {fileID: 4207511120103497510}
   m_Father: {fileID: 8398406254215263343}
@@ -2647,8 +2647,9 @@ GameObject:
   - component: {fileID: 8398406254514910056}
   - component: {fileID: 4037622823871443357}
   - component: {fileID: 8625906976727741663}
+  - component: {fileID: 3551487503107985104}
   m_Layer: 0
-  m_Name: XR Rig (The Giant)
+  m_Name: XR Rig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2826,6 +2827,19 @@ MonoBehaviour:
   leftHandDirectInteractor: {fileID: 8398406254716513404}
   rightHandDirectInteractor: {fileID: 8398406254005108258}
   colliderEnableDelay: 0.5
+--- !u!114 &3551487503107985104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8398406254514910060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e390ad5d00fa6b479fbdeb3995e3233, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teleportationProvider: {fileID: 8398406254687169188}
 --- !u!1 &8398406254687169214
 GameObject:
   m_ObjectHideFlags: 0
@@ -2879,7 +2893,7 @@ MonoBehaviour:
   m_OriginBaseGameObject: {fileID: 8398406254687169214}
   m_CameraFloorOffsetObject: {fileID: 8398406254415499437}
   m_RequestedTrackingOriginMode: 1
-  m_CameraYOffset: 5
+  m_CameraYOffset: 10
 --- !u!114 &8398406254687169209
 MonoBehaviour:
   m_ObjectHideFlags: 0
