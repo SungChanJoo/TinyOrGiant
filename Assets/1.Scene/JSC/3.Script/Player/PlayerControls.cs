@@ -53,6 +53,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Grappling"",
+                    ""type"": ""Button"",
+                    ""id"": ""605775b9-3ceb-47c2-a225-eab584c894fa"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -132,6 +141,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ad6d2418-9d3e-4950-b7a6-69c5bd11c90e"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Grappling"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -155,6 +175,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Land_Move = m_Land.FindAction("Move", throwIfNotFound: true);
         m_Land_Jump = m_Land.FindAction("Jump", throwIfNotFound: true);
         m_Land_Fire = m_Land.FindAction("Fire", throwIfNotFound: true);
+        m_Land_Grappling = m_Land.FindAction("Grappling", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -217,6 +238,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Land_Move;
     private readonly InputAction m_Land_Jump;
     private readonly InputAction m_Land_Fire;
+    private readonly InputAction m_Land_Grappling;
     public struct LandActions
     {
         private @PlayerControls m_Wrapper;
@@ -224,6 +246,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Land_Move;
         public InputAction @Jump => m_Wrapper.m_Land_Jump;
         public InputAction @Fire => m_Wrapper.m_Land_Fire;
+        public InputAction @Grappling => m_Wrapper.m_Land_Grappling;
         public InputActionMap Get() { return m_Wrapper.m_Land; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -242,6 +265,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Fire.started -= m_Wrapper.m_LandActionsCallbackInterface.OnFire;
                 @Fire.performed -= m_Wrapper.m_LandActionsCallbackInterface.OnFire;
                 @Fire.canceled -= m_Wrapper.m_LandActionsCallbackInterface.OnFire;
+                @Grappling.started -= m_Wrapper.m_LandActionsCallbackInterface.OnGrappling;
+                @Grappling.performed -= m_Wrapper.m_LandActionsCallbackInterface.OnGrappling;
+                @Grappling.canceled -= m_Wrapper.m_LandActionsCallbackInterface.OnGrappling;
             }
             m_Wrapper.m_LandActionsCallbackInterface = instance;
             if (instance != null)
@@ -255,6 +281,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Fire.started += instance.OnFire;
                 @Fire.performed += instance.OnFire;
                 @Fire.canceled += instance.OnFire;
+                @Grappling.started += instance.OnGrappling;
+                @Grappling.performed += instance.OnGrappling;
+                @Grappling.canceled += instance.OnGrappling;
             }
         }
     }
@@ -273,5 +302,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
+        void OnGrappling(InputAction.CallbackContext context);
     }
 }
