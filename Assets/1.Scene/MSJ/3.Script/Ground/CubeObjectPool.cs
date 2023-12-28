@@ -49,13 +49,15 @@ public class CubeObjectPool : MonoBehaviour
             }
 
             var cube = Instantiate(cubePrefabList[prefabIndex]);
+
             var cubeRespawnHandler = cube.GetComponent<CubeRespawnHandler>();
             cubeRespawnHandler.ToggleRigidbodyKinematic(false);
+            cubeRespawnHandler.IsUsed = false;
+
             cubeRespawnHandler.AssignedSlot = slotList[slotIndex];
 
-            cube.transform.SetPositionAndRotation(
-                slotList[slotIndex].transform.position,
-                slotList[slotIndex].transform.rotation);
+            var cubeSlotTransform = slotList[slotIndex].transform;
+            cube.transform.SetPositionAndRotation(cubeSlotTransform.position, cubeSlotTransform.rotation);
 
             spawnedCubeList.Add(cube);
         }
@@ -102,8 +104,9 @@ public class CubeObjectPool : MonoBehaviour
             var cubeRespawnHandler = inactiveCube.GetComponent<CubeRespawnHandler>();
             cubeRespawnHandler.ToggleRigidbodyKinematic(false);
             cubeRespawnHandler.IsUsed = false;
-            inactiveCube.transform.position = cubeRespawnHandler.AssignedSlot.transform.position;
-            inactiveCube.transform.rotation = cubeRespawnHandler.AssignedSlot.transform.rotation;
+
+            var cubeSlotTransform = cubeRespawnHandler.AssignedSlot.transform;
+            inactiveCube.transform.SetPositionAndRotation(cubeSlotTransform.position, cubeSlotTransform.rotation);
 
             // Activate cube
             inactiveCube.SetActive(true);

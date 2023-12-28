@@ -1344,7 +1344,6 @@ MonoBehaviour:
   m_StartingGroupMembers:
   - {fileID: 8398406254716513404}
   - {fileID: 8398406253851458195}
-  - {fileID: 0}
 --- !u!1 &8398406253851458196
 GameObject:
   m_ObjectHideFlags: 0
@@ -1466,7 +1465,7 @@ MonoBehaviour:
   m_AllowHoverHapticsWhileSelecting: 1
   m_LineType: 0
   m_BlendVisualLinePoints: 1
-  m_MaxRaycastDistance: 30
+  m_MaxRaycastDistance: 300
   m_RayOriginTransform: {fileID: 0}
   m_ReferenceFrame: {fileID: 0}
   m_Velocity: 16
@@ -1482,7 +1481,7 @@ MonoBehaviour:
   m_SphereCastRadius: 0.1
   m_RaycastMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2048
   m_RaycastTriggerInteraction: 1
   m_RaycastSnapVolumeInteraction: 1
   m_HitClosestOnly: 0
@@ -1539,7 +1538,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  - {x: 0, y: 0, z: 300}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.02
@@ -1616,29 +1615,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e988983f96fe1dd48800bcdfc82f23e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_LineWidth: 0.02
+  m_LineWidth: 0.05
   m_OverrideInteractorLineLength: 1
-  m_LineLength: 10
+  m_LineLength: 300
   m_WidthCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: -0.0094233155
+      outSlope: -0.0094233155
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.22952364
     - serializedVersion: 3
       time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
+      value: 0
+      inSlope: -1.8614334
+      outSlope: -1.8614334
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.041829348
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -2167,7 +2166,6 @@ MonoBehaviour:
   m_StartingGroupMembers:
   - {fileID: 8398406254005108258}
   - {fileID: 8398406254381032569}
-  - {fileID: 0}
 --- !u!1 &8398406254273192856
 GameObject:
   m_ObjectHideFlags: 0
@@ -2334,7 +2332,7 @@ MonoBehaviour:
   m_AllowHoverHapticsWhileSelecting: 1
   m_LineType: 0
   m_BlendVisualLinePoints: 1
-  m_MaxRaycastDistance: 30
+  m_MaxRaycastDistance: 300
   m_RayOriginTransform: {fileID: 0}
   m_ReferenceFrame: {fileID: 0}
   m_Velocity: 16
@@ -2350,7 +2348,7 @@ MonoBehaviour:
   m_SphereCastRadius: 0.1
   m_RaycastMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2048
   m_RaycastTriggerInteraction: 1
   m_RaycastSnapVolumeInteraction: 1
   m_HitClosestOnly: 0
@@ -2486,27 +2484,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LineWidth: 0.02
   m_OverrideInteractorLineLength: 1
-  m_LineLength: 10
+  m_LineLength: 300
   m_WidthCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: 0
-      outSlope: 0
+      inSlope: -0.0094233155
+      outSlope: -0.0094233155
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.22952364
     - serializedVersion: 3
       time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
+      value: 0
+      inSlope: -1.8614334
+      outSlope: -1.8614334
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.041829348
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
