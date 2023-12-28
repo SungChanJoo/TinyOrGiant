@@ -1827,7 +1827,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1080137587}
-  m_LocalRotation: {x: 0.07781995, y: -0.001721803, z: 0.0001343984, w: 0.99696594}
+  m_LocalRotation: {x: 0.077819966, y: -0.0017218027, z: 0.00013439842, w: 0.99696594}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2289,7 +2289,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1209320934}
-  m_LocalRotation: {x: 0.07781996, y: -0.0017218034, z: 0.00013439845, w: 0.99696594}
+  m_LocalRotation: {x: 0.07781998, y: -0.001721803, z: 0.00013439845, w: 0.99696594}
   m_LocalPosition: {x: 18.4701, y: 13.63, z: -7.678999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -3718,7 +3718,6 @@ GameObject:
   - component: {fileID: 5874827048258699798}
   - component: {fileID: 5874827048258699799}
   - component: {fileID: 4098956968186140209}
-  - component: {fileID: 5874827048258699794}
   m_Layer: 0
   m_Name: PCPlayer
   m_TagString: Player
@@ -3756,18 +3755,6 @@ MonoBehaviour:
   m_DefaultActionMap: Land
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &5874827048258699794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5874827048258699792}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a37c8d8067c6f44e94710f1361522b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!23 &5874827048258699795
 MeshRenderer:
   m_ObjectHideFlags: 0
