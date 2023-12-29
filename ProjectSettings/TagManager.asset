@@ -7,12 +7,6 @@ TagManager:
   - Item
   - Bullet
   - PCPlayerCam
-  - NonPhysicsLeftHandPresence
-  - NonPhysicsRightHandPresence
-  - NonPhysicsLeftHandRenderer
-  - NonPhysicsRightHandRenderer
-  - PhysicsLeftHandPresence
-  - PhysicsRightHandPresence
   layers:
   - Default
   - TransparentFX
@@ -26,12 +20,6 @@ TagManager:
   - 
   - 
   - 
-  - Left Hand Physics
-  - Right Hand Physics
-  - Head Physics
-  - DeadZone
-  - SlotZone
-  - Teleport Anchor
   - 
   - 
   - 
