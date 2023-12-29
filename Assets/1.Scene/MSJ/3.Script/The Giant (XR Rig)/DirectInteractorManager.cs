@@ -20,15 +20,21 @@ public class DirectInteractorManager : NetworkBehaviour
     {
         base.OnStartLocalPlayer();
 
+        //leftHandPresencePhysics = GameObject.FindGameObjectWithTag("PhysicsLeftHandPresence");
+        //rightHandPresencePhysics = GameObject.FindGameObjectWithTag("PhysicsRightHandPresence");
+
+        //leftHandColliders = leftHandPresencePhysics.GetComponentsInChildren<Collider>();
+        //rightHandColliders = rightHandPresencePhysics.GetComponentsInChildren<Collider>();
+    }
+
+    private void Start()
+    {
         leftHandPresencePhysics = GameObject.FindGameObjectWithTag("PhysicsLeftHandPresence");
         rightHandPresencePhysics = GameObject.FindGameObjectWithTag("PhysicsRightHandPresence");
 
         leftHandColliders = leftHandPresencePhysics.GetComponentsInChildren<Collider>();
         rightHandColliders = rightHandPresencePhysics.GetComponentsInChildren<Collider>();
-    }
 
-    private void Start()
-    {
         leftHandDirectInteractor.selectEntered.AddListener((SelectEnterEventArgs) =>
         {
             DisableLeftHandColliders();

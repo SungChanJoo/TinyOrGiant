@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CubeSlot : MonoBehaviour
 {
-    [field: SerializeField] public bool IsEmpty { get; set; } = true;
+    public bool IsEmpty = true;
 
     // 5¹ø Respawn ½Ã Disable??
 }

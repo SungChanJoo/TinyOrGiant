@@ -45,7 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81a5fced6fd517645aa0de10d470acc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <IsEmpty>k__BackingField: 1
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  IsEmpty: 1
 --- !u!65 &360170197772958320
 BoxCollider:
   m_ObjectHideFlags: 0

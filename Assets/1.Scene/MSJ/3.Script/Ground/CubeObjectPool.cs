@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 public enum RespawnType
 {
@@ -8,14 +9,14 @@ public enum RespawnType
     RoundRobin = 1,
 }
 
-public class CubeObjectPool : MonoBehaviour
+public class CubeObjectPool : NetworkBehaviour
 {
-    [Header("Prefabs")]
+    [Header("Pre Defined")]
     public List<GameObject> cubePrefabList = new List<GameObject>();
+    public List<GameObject> slotList = new List<GameObject>();
 
-    [Header("Initial Spawn")]
-    public List<CubeSlot> slotList = new List<CubeSlot>();
-    public List<GameObject> spawnedCubeList = new List<GameObject>();
+    [Header("Synced Data")]
+    public readonly SyncList<GameObject> spawnedCubeList = new SyncList<GameObject>();
 
     [Header("Respawn")]
     public int currentRepawnCount = 0;
@@ -23,12 +24,15 @@ public class CubeObjectPool : MonoBehaviour
     public int maxRespawnCount = 20;
     public float respawnInterval = 1f;
 
-    private void Start()
+    public override void OnStartServer()
     {
+        base.OnStartServer();
+
         InitialSpawn();
         StartCoroutine(ReadyToRespawn());
     }
 
+    [Server]
     private void InitialSpawn()
     {
         int slotIndex = -1;
@@ -50,19 +54,22 @@ public class CubeObjectPool : MonoBehaviour
 
             var cube = Instantiate(cubePrefabList[prefabIndex]);
 
-            var cubeRespawnHandler = cube.GetComponent<CubeRespawnHandler>();
+            var cubeRespawnHandler = cube.GetComponent<CubeHandler>();
             cubeRespawnHandler.ToggleRigidbodyKinematic(false);
-            cubeRespawnHandler.IsUsed = false;
+            cubeRespawnHandler.SetCubeUsed(false);
 
-            cubeRespawnHandler.AssignedSlot = slotList[slotIndex];
+            cubeRespawnHandler.AssignCubeSlot(slotList[slotIndex]);
 
             var cubeSlotTransform = slotList[slotIndex].transform;
             cube.transform.SetPositionAndRotation(cubeSlotTransform.position, cubeSlotTransform.rotation);
 
             spawnedCubeList.Add(cube);
+
+            NetworkServer.Spawn(cube);
         }
     }
 
+    [Server]
     private IEnumerator ReadyToRespawn()
     {
         float elapsedTime = 0f;
@@ -82,9 +89,9 @@ public class CubeObjectPool : MonoBehaviour
             CubeSlot emptySlot = null;
             foreach (var slot in slotList)
             {
-                if (!slot.IsEmpty) continue;
+                if (!slot.GetComponent<CubeSlot>().IsEmpty) continue;
 
-                emptySlot = slot;
+                emptySlot = slot.GetComponent<CubeSlot>();
                 break;
             }
 
@@ -101,9 +108,9 @@ public class CubeObjectPool : MonoBehaviour
             if (emptySlot == null || inactiveCube == null) continue;
 
             // Respawn cube at slot
-            var cubeRespawnHandler = inactiveCube.GetComponent<CubeRespawnHandler>();
+            var cubeRespawnHandler = inactiveCube.GetComponent<CubeHandler>();
             cubeRespawnHandler.ToggleRigidbodyKinematic(false);
-            cubeRespawnHandler.IsUsed = false;
+            cubeRespawnHandler.SetCubeUsed(false);
 
             var cubeSlotTransform = cubeRespawnHandler.AssignedSlot.transform;
             inactiveCube.transform.SetPositionAndRotation(cubeSlotTransform.position, cubeSlotTransform.rotation);
