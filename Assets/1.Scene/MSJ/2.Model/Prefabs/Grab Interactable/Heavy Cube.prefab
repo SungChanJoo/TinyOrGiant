@@ -4775,9 +4775,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d96fd8312e66a6b49b970aa617865e7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cubeRigidbody: {fileID: 0}
-  <IsUsed>k__BackingField: 0
-  <AssignedSlot>k__BackingField: {fileID: 0}
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  IsUsed: 0
+  AssignedSlot: {fileID: 0}
 --- !u!114 &4289758269679109495
 MonoBehaviour:
   m_ObjectHideFlags: 0

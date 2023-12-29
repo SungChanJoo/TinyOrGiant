@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4337797815348793560}
   - component: {fileID: 360170197772958320}
   - component: {fileID: -4476888545982128380}
-  m_Layer: 10
+  m_Layer: 16
   m_Name: Cube Slot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,9 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81a5fced6fd517645aa0de10d470acc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
   IsEmpty: 1
 --- !u!65 &360170197772958320
 BoxCollider:

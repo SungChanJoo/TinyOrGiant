@@ -1006,7 +1006,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5102293645157505691}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99b4a737903b82a43bb95804a2149147, type: 3}
+  m_Script: {fileID: 11500000, guid: 760917b1cdcfa0d49a1f3c4645661217, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   controllerCharacteristics: 320
@@ -1052,7 +1052,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5102293645289419392}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99b4a737903b82a43bb95804a2149147, type: 3}
+  m_Script: {fileID: 11500000, guid: 760917b1cdcfa0d49a1f3c4645661217, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   controllerCharacteristics: 576
@@ -1481,7 +1481,7 @@ MonoBehaviour:
   m_SphereCastRadius: 0.1
   m_RaycastMask:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 131072
   m_RaycastTriggerInteraction: 1
   m_RaycastSnapVolumeInteraction: 1
   m_HitClosestOnly: 0
@@ -2348,7 +2348,7 @@ MonoBehaviour:
   m_SphereCastRadius: 0.1
   m_RaycastMask:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 131072
   m_RaycastTriggerInteraction: 1
   m_RaycastSnapVolumeInteraction: 1
   m_HitClosestOnly: 0

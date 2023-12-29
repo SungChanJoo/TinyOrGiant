@@ -4778,7 +4778,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  cubeRigidbody: {fileID: 0}
   IsUsed: 0
   AssignedSlot: {fileID: 0}
 --- !u!114 &1720207577917874048
