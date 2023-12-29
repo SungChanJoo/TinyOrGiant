@@ -7,6 +7,7 @@ using UnityEngine.InputSystem.XR;
 public class VRHeadController : NetworkBehaviour
 {
     public GameObject XRMainCameraObject;
+    public Transform XRHead;
 
     public override void OnStartClient()
     {
@@ -22,7 +23,7 @@ public class VRHeadController : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
 
-        transform.SetPositionAndRotation(
+        XRHead.SetPositionAndRotation(
             XRMainCameraObject.transform.position, 
             XRMainCameraObject.transform.rotation);
     }

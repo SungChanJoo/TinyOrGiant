@@ -4785,6 +4785,8 @@ GameObject:
   - component: {fileID: 2403833318120917701}
   - component: {fileID: 2403833318120917720}
   - component: {fileID: 2403833318120917702}
+  - component: {fileID: 5600723246562538886}
+  - component: {fileID: 6515582359515375103}
   m_Layer: 0
   m_Name: XR Origin
   m_TagString: Untagged
@@ -4960,6 +4962,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_System: {fileID: 2403833318120917723}
   m_DelayTime: 0
+--- !u!114 &5600723246562538886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2403833318120917724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd3fde6b66d724b42840e9bcd0154efd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  NonPhysicsLeftHand: {fileID: 2403833318704060032}
+  NonPhysicsRightHand: {fileID: 2403833317657924622}
+--- !u!114 &6515582359515375103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2403833318120917724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce25320519f5c6541899542c70cda0b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  XRMainCameraObject: {fileID: 3623323317989040872}
+  XRHead: {fileID: 5708207962651758411}
 --- !u!1 &2403833318704060032
 GameObject:
   m_ObjectHideFlags: 0
@@ -5546,7 +5582,6 @@ GameObject:
   - component: {fileID: 5708207962651758421}
   - component: {fileID: 5708207962651758420}
   - component: {fileID: 5708207962651758423}
-  - component: {fileID: 2113515456528409084}
   m_Layer: 14
   m_Name: Head Physics
   m_TagString: Untagged
@@ -5646,22 +5681,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
---- !u!114 &2113515456528409084
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5708207962651758408}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce25320519f5c6541899542c70cda0b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
-  XRMainCameraObject: {fileID: 3623323317989040872}
 --- !u!1 &6278994798011224944
 GameObject:
   m_ObjectHideFlags: 0

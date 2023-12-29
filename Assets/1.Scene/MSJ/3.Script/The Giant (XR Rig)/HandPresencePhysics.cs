@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
 
 public enum HandPresenceType
 {
@@ -9,7 +8,7 @@ public enum HandPresenceType
     RightHand,
 }
 
-public class HandPresencePhysics : NetworkBehaviour
+public class HandPresencePhysics : MonoBehaviour
 {
     public HandPresenceType handType;
 
@@ -23,8 +22,6 @@ public class HandPresencePhysics : NetworkBehaviour
 
     private void Awake()
     {
-        if (!isLocalPlayer) return;
-
         switch (handType)
         {
             case HandPresenceType.LeftHand:
@@ -40,27 +37,14 @@ public class HandPresencePhysics : NetworkBehaviour
         TryGetComponent(out rb);
     }
 
-    private void Start()
-    {
-        
-    }
-
     private void FixedUpdate()
     {
-        if (!isLocalPlayer) return;
-
         TryMoveHand();
         TryRotateHand();
     }
 
     private void LateUpdate()
     {
-        if (!isLocalPlayer)
-        {
-            showNonPhysicalHand = false;
-            return;
-        }
-
         ShowNonPhysicalHand();
     }
 
