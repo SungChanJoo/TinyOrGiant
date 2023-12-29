@@ -41,6 +41,8 @@ public class GameManager : NetworkBehaviour
     }
     public void VRCharacter()
     {
+        if (!isLocalPlayer) return;
+
         playerType = PlayerType.VR;
         foreach (GameObject obj in PCGameObeject)
         {
@@ -58,6 +60,8 @@ public class GameManager : NetworkBehaviour
     }
     public void PCCharacter()
     {
+        if (!isLocalPlayer) return;
+
         playerType = PlayerType.PC;
         foreach (GameObject obj in VRGameObeject)
         {
