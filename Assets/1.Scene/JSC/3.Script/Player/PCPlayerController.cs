@@ -95,7 +95,7 @@ public class PCPlayerController : NetworkBehaviour
         _freeLook = GameObject.FindGameObjectWithTag("PCPlayerCam").GetComponent<CinemachineFreeLook>();
 
 
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
         state = PlayerState.Idle;
         isGround = true;
@@ -216,7 +216,7 @@ public class PCPlayerController : NetworkBehaviour
     private void Update()
     {
         if (!isLocalPlayer) return;
-
+        if (GameManager.Instance.playerType != PlayerType.PC) return;
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if(Vector3.SqrMagnitude(transform.position- grapplePoint) <10f)
         {

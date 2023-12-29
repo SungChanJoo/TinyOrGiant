@@ -1541,27 +1541,27 @@ LineRenderer:
   - {x: 0, y: 0, z: 300}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.02
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
         value: 1
-        inSlope: 0
-        outSlope: 0
+        inSlope: -0.0094233155
+        outSlope: -0.0094233155
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
-        outWeight: 0
+        outWeight: 0.22952364
       - serializedVersion: 3
         time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
+        value: 0
+        inSlope: -1.8614334
+        outSlope: -1.8614334
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.041829348
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -2415,20 +2415,20 @@ LineRenderer:
       - serializedVersion: 3
         time: 0
         value: 1
-        inSlope: 0
-        outSlope: 0
+        inSlope: -0.0094233155
+        outSlope: -0.0094233155
         tangentMode: 0
         weightedMode: 0
         inWeight: 0
-        outWeight: 0
+        outWeight: 0.22952364
       - serializedVersion: 3
         time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
+        value: 0
+        inSlope: -1.8614334
+        outSlope: -1.8614334
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.041829348
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -2822,9 +2822,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  xrOrigin: {fileID: 8398406254687169208}
-  cameraOffset: {fileID: 8398406254415499436}
-  headPhysicsPrefab: {fileID: 9042948475990611267, guid: 506eda8c66de7a24fa21e5a24fa750d0, type: 3}
 --- !u!114 &8625906976727741663
 MonoBehaviour:
   m_ObjectHideFlags: 0

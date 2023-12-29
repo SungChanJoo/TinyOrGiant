@@ -13,6 +13,7 @@ TagManager:
   - NonPhysicsRightHandRenderer
   - PhysicsLeftHandPresence
   - PhysicsRightHandPresence
+  - XRMainCamera
   layers:
   - Default
   - TransparentFX
@@ -32,12 +33,6 @@ TagManager:
   - DeadZone
   - SlotZone
   - Teleport Anchor
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
   - 
   - 
   - 

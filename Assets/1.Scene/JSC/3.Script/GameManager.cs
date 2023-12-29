@@ -37,11 +37,15 @@ public class GameManager : NetworkBehaviour
             Destroy(gameObject);
             return;
         }*/
+        
+    }
+    public override void OnStartClient()
+    {
         meId = GetComponent<NetworkIdentity>();
     }
+
     public void VRCharacter()
     {
-        if (!isLocalPlayer) return;
 
         playerType = PlayerType.VR;
         foreach (GameObject obj in PCGameObeject)
@@ -55,12 +59,11 @@ public class GameManager : NetworkBehaviour
                 obj.SetActive(true);
         }
         CmdChangeVR(meId.connectionToClient);
-        if (NetworkManager.singleton is ChoiceNetworkManager manager)
-            manager.CreateVRPhysicalHands();
+        //if (NetworkManager.singleton is ChoiceNetworkManager manager)
+        //    manager.CreateVRPhysicalHands();
     }
     public void PCCharacter()
     {
-        if (!isLocalPlayer) return;
 
         playerType = PlayerType.PC;
         foreach (GameObject obj in VRGameObeject)
