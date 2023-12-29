@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Item
   - Bullet
+  - PCPlayerCam
   layers:
   - Default
   - TransparentFX

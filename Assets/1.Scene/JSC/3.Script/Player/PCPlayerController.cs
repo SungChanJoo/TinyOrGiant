@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Mirror;
+using Cinemachine;
 
 public enum PlayerState
 {
@@ -15,7 +17,7 @@ public enum PlayerState
 }
 
 
-public class PCPlayerController : MonoBehaviour
+public class PCPlayerController : NetworkBehaviour
 {
     public Transform cam;
 
@@ -39,6 +41,7 @@ public class PCPlayerController : MonoBehaviour
     public Rigidbody rb;
     public PlayerControls input;
     public Transform Cam;
+    [SerializeField] CinemachineFreeLook _freeLook;
 
     [Header("Player Grounded")]
     public float GravityScale = 5f;
@@ -64,15 +67,19 @@ public class PCPlayerController : MonoBehaviour
     public LayerMask WhatIsGrappleable;
     public LineRenderer Lr;
 
-    [Header("ETC")]
-    public Camera FollowCamera;
 
+
+    [Header("Rocket")]
     public GameObject RocketBullet;
     public Transform RocketPos;
     public int RocketCount=0;
     public GameObject RocketParent;
     public GameObject[] EquidRocket;
+    public float RocketPower = 3f;
+    public bool IsFireReady = false;
 
+    [Header("ETC")]
+    public Camera FollowCamera;
     bool _rotateOnMove = true;
     public bool Freeze = false;
     public bool ActiveGrapple;
@@ -84,10 +91,16 @@ public class PCPlayerController : MonoBehaviour
     {
         input = new PlayerControls();
         rb = GetComponent<Rigidbody>();
+        Cam = GameObject.FindGameObjectWithTag("MainCamera").transform;
+        _freeLook = GameObject.FindGameObjectWithTag("PCPlayerCam").GetComponent<CinemachineFreeLook>();
+
+
         Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
         state = PlayerState.Idle;
         isGround = true;
+
+
     }
 
     private void OnEnable()
@@ -122,8 +135,16 @@ public class PCPlayerController : MonoBehaviour
         input.Land.Grappling.canceled -= GrpplingCanceled;
     }
 
+    public override void OnStartLocalPlayer()
+    {
+        _freeLook.Follow = this.transform;
+        _freeLook.LookAt = this.transform;
+    }
+
     private void FixedUpdate()
     {
+
+        if (!isLocalPlayer) return;
 
         #region Grappling
         if (state == PlayerState.Grappling)
@@ -138,18 +159,19 @@ public class PCPlayerController : MonoBehaviour
         _playerVelocity = Mathf.Sqrt(rb.velocity.x * rb.velocity.x + rb.velocity.z * rb.velocity.z);
         if (_inputDirection.magnitude >= 0.1f && !Freeze)
         {
+            #region CameraMovement
             float targetAngle = Mathf.Atan2(_inputDirection.x, _inputDirection.z) * Mathf.Rad2Deg + Cam.eulerAngles.y;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVelocity, TurnSmoothTime);
             if (_rotateOnMove) transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
-            _moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+            _moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward; 
+            #endregion
 
             #region Run
             _targetSpeed = _inputDirection.normalized.magnitude * MoveSpeed;
             float speedDif = _targetSpeed - _playerVelocity;
             float accelRate = (Mathf.Abs(_targetSpeed) > 0.01f) ? Accelation : Deccelation;
             float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, velPower) * Mathf.Sign(speedDif);
-
 
             if (isGround || (state == PlayerState.Idle || state == PlayerState.Run))
             {
@@ -193,6 +215,8 @@ public class PCPlayerController : MonoBehaviour
     }
     private void Update()
     {
+        if (!isLocalPlayer) return;
+
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if(Vector3.SqrMagnitude(transform.position- grapplePoint) <10f)
         {
@@ -200,6 +224,9 @@ public class PCPlayerController : MonoBehaviour
         }
         if (grapplingCdTimer > 0)
             grapplingCdTimer -= Time.deltaTime;
+
+
+        #region CameraMovement
         if (!_rotateOnMove)
         {
             Vector3 mouseWorldPosition = Vector3.zero;
@@ -210,11 +237,14 @@ public class PCPlayerController : MonoBehaviour
             Debug.DrawRay(transform.position, ray.direction * 999f, Color.red);
             Vector3 aimDirection = (mouseWorldPosition - transform.position).normalized;
             transform.forward = aimDirection;
-        }
+        } 
+        #endregion
     }
 
     private void LateUpdate()
     {
+        if (!isLocalPlayer) return;
+
         if (grappling)
         {
             Lr.SetPosition(0, GunTip.position);
@@ -222,11 +252,15 @@ public class PCPlayerController : MonoBehaviour
     }
     private void OnMovemnetStarted(InputAction.CallbackContext value)
     {
-        if(!Freeze)
+        if (!isLocalPlayer) return;
+
+        if (!Freeze)
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
     }
     private void OnMovemnetPerformed(InputAction.CallbackContext value)
     {
+        if (!isLocalPlayer) return;
+
         if (!Freeze)
         {
             state = PlayerState.Run;
@@ -236,6 +270,8 @@ public class PCPlayerController : MonoBehaviour
     }
     private void OnMovemnetCancelled(InputAction.CallbackContext value)
     {
+        if (!isLocalPlayer) return;
+
         state = PlayerState.Idle;
         _inputDirection = Vector3.zero;
     }
@@ -243,6 +279,8 @@ public class PCPlayerController : MonoBehaviour
 
     private void Jump(InputAction.CallbackContext obj)
     {
+        if (!isLocalPlayer) return;
+
         if (isGround)
         {
             isGround = false;
@@ -251,7 +289,7 @@ public class PCPlayerController : MonoBehaviour
         }
         else if( RocketCount >0)
         {
-            rb.AddForce(Vector3.up * JumpPower * 5f, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * JumpPower * RocketPower, ForceMode.Impulse);
             EquidRocket[RocketCount - 1].gameObject.SetActive(false);
             RocketCount--;
         }
@@ -259,32 +297,63 @@ public class PCPlayerController : MonoBehaviour
 
     private void FirePerformed(InputAction.CallbackContext obj)
     {
+        if (!isLocalPlayer) return;
+
         //Aim UI 변경해줘 todo 1227
-        Debug.Log("FirePerformed");
+
+        CmdFireReadyRocket();
+    }
+    [Command]
+    public void CmdFireReadyRocket()
+    {
+        RPCFireReadyRocket();
+    }
+    [ClientRpc]
+    public void RPCFireReadyRocket()
+    {
         if (RocketCount > 0)
         {
+            IsFireReady = true;
             SetRotateOnMove(false);
             GameObject Rocket = Instantiate(RocketBullet);
             Rocket.transform.parent = RocketPos;
             Rocket.transform.position = RocketPos.transform.position;
-            
+
             Rocket.transform.localRotation = Quaternion.Euler(0, 0, 90);
             EquidRocket[RocketCount - 1].gameObject.SetActive(false);
             RocketCount--;
         }
     }
+
+
     private void FireCanceled(InputAction.CallbackContext obj)
     {
-        SetRotateOnMove(true);
-        Debug.Log("FireCanceled");
-        RocketPos.GetChild(0).parent = null;
-        OnFired(); // 로켓 발사이벤트 로켓에서 호출
-        Debug.Log("로켓발싸");
+        if (!isLocalPlayer) return;
+
+        CmdFireRocket();
     }
 
+    [Command]
+    public void CmdFireRocket()
+    {
+        RPCFireRocket();
+    }
+    [ClientRpc]
+    public void RPCFireRocket()
+    {
+        if(IsFireReady)
+        {
+            SetRotateOnMove(true);
+            RocketPos.GetChild(0).parent = null;
+            OnFired(); // 로켓 발사이벤트 로켓에서 호출
+            IsFireReady = false;
+        }
 
+    }
     private void GrpplingPerformed(InputAction.CallbackContext obj)
     {
+        if (!isLocalPlayer) return;
+
         if (Physics.Raycast(ray, out RaycastHit hit, 999f))
         {
             transform.LookAt(hit.point);
@@ -303,12 +372,16 @@ public class PCPlayerController : MonoBehaviour
     }
     private void GrpplingCanceled(InputAction.CallbackContext obj)
     {
+        if (!isLocalPlayer) return;
+
         StopGrappling();
     }
     private bool enableMovementOnNextTouch;
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (!isLocalPlayer) return;
+
         Debug.Log("OnCollisionEnter : " + collision.transform.name);
         if (enableMovementOnNextTouch)
         {
@@ -320,7 +393,9 @@ public class PCPlayerController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Item"))
+        if (!isLocalPlayer) return;
+
+        if (other.CompareTag("Item"))
         {
             //아이템 획득
             if(PickUpRocket())
@@ -333,6 +408,7 @@ public class PCPlayerController : MonoBehaviour
 
     private void StopGrappling()
     {
+
         Freeze = false;
         grappling = false;
         grapplingCdTimer = GrapplingCd;
@@ -342,7 +418,8 @@ public class PCPlayerController : MonoBehaviour
 
     public bool PickUpRocket()
     {
-        if(RocketCount < 3)
+
+        if (RocketCount < 3)
         {
             EquidRocket[RocketCount].gameObject.SetActive(true);
             RocketCount++;
