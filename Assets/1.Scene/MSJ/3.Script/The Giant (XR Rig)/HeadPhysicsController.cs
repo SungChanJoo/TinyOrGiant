@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using UnityEngine.InputSystem.XR;
 
 public class HeadPhysicsController : NetworkBehaviour
 {
@@ -13,13 +14,14 @@ public class HeadPhysicsController : NetworkBehaviour
 
         if (!isLocalPlayer)
         {
-            XRMainCameraObject.GetComponent<Camera>().enabled = false;
-            XRMainCameraObject.GetComponent<AudioListener>().enabled = false;
+            XRMainCameraObject.SetActive(false);
         }
     }
 
     private void Update()
     {
+        if (!isLocalPlayer) return;
+
         transform.SetPositionAndRotation(
             XRMainCameraObject.transform.position, 
             XRMainCameraObject.transform.rotation);
