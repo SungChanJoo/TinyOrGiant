@@ -4,7 +4,7 @@ using UnityEngine;
 using Mirror;
 using UnityEngine.InputSystem.XR;
 
-public class HeadPhysicsController : NetworkBehaviour
+public class VRHeadController : NetworkBehaviour
 {
     public GameObject XRMainCameraObject;
 
