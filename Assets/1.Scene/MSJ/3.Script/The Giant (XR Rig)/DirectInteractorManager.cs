@@ -29,11 +29,7 @@ public class DirectInteractorManager : NetworkBehaviour
 
     private void Start()
     {
-        leftHandPresencePhysics = GameObject.FindGameObjectWithTag("PhysicsLeftHandPresence");
-        rightHandPresencePhysics = GameObject.FindGameObjectWithTag("PhysicsRightHandPresence");
-
-        leftHandColliders = leftHandPresencePhysics.GetComponentsInChildren<Collider>();
-        rightHandColliders = rightHandPresencePhysics.GetComponentsInChildren<Collider>();
+        FindHandPresencePhysics();
 
         leftHandDirectInteractor.selectEntered.AddListener((SelectEnterEventArgs) =>
         {
@@ -52,6 +48,22 @@ public class DirectInteractorManager : NetworkBehaviour
         {
             Invoke(nameof(EnableRightHandColliders), colliderEnableDelay);
         });
+    }
+
+    private void FindHandPresencePhysics()
+    {
+        StartCoroutine(DelayedFindHandPresencePhysics());
+    }
+
+    private IEnumerator DelayedFindHandPresencePhysics()
+    {
+        yield return new WaitForSeconds(2f);
+
+        leftHandPresencePhysics = GameObject.FindGameObjectWithTag("PhysicsLeftHandPresence");
+        rightHandPresencePhysics = GameObject.FindGameObjectWithTag("PhysicsRightHandPresence");
+
+        leftHandColliders = leftHandPresencePhysics.GetComponentsInChildren<Collider>();
+        rightHandColliders = rightHandPresencePhysics.GetComponentsInChildren<Collider>();
     }
 
     private void EnableLeftHandColliders()

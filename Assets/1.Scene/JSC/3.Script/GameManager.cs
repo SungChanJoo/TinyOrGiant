@@ -14,12 +14,12 @@ public class GameManager : NetworkBehaviour
 {
     public static GameManager Instance = null;
 
-
     [Header("None -> VR -> PC")]
     public GameObject[] VRorPC;
 
     [Header("VRSetting")]
     public GameObject[] VRGameObeject;
+
     [Header("PCSetting")]
     public GameObject[] PCGameObeject;
 
@@ -39,7 +39,6 @@ public class GameManager : NetworkBehaviour
         }*/
         meId = GetComponent<NetworkIdentity>();
     }
-
     public void VRCharacter()
     {
         playerType = PlayerType.VR;
@@ -54,6 +53,8 @@ public class GameManager : NetworkBehaviour
                 obj.SetActive(true);
         }
         CmdChangeVR(meId.connectionToClient);
+        if (NetworkManager.singleton is ChoiceNetworkManager manager)
+            manager.CreateVRPhysicalHands();
     }
     public void PCCharacter()
     {

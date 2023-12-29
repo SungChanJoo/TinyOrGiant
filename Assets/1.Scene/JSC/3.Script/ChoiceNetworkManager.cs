@@ -15,5 +15,23 @@ public class ChoiceNetworkManager : NetworkManager
         Destroy(oldPlayer, 0.1f);
     }
 
+    public GameObject leftHandPresencePhysicsPrefab;
+    public GameObject rightHandPresencePhysicsPrefab;
+
+    public void CreateVRPhysicalHands()
+    {
+        StartCoroutine(DelayedCreateVRPhysicalHands());
+    }
+
+    private IEnumerator DelayedCreateVRPhysicalHands()
+    {
+        yield return new WaitForSeconds(1f);
+
+        var leftHandPresenceObject = Instantiate(leftHandPresencePhysicsPrefab);
+        var rightHandPresenceObject = Instantiate(rightHandPresencePhysicsPrefab);
+
+        NetworkServer.Spawn(leftHandPresenceObject);
+        NetworkServer.Spawn(rightHandPresenceObject);
+    }
 }
 
