@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 27324041504090649}
   - component: {fileID: 27324041504090630}
   - component: {fileID: 27324041504090631}
+  - component: {fileID: 2141616926311420689}
   m_Layer: 12
   m_Name: Left Hand Presence Physics
   m_TagString: PhysicsLeftHandPresence
@@ -133,6 +134,23 @@ MonoBehaviour:
   positionSensitivity: 0.01
   rotationSensitivity: 0.01
   scaleSensitivity: 0.01
+--- !u!114 &2141616926311420689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 27324041504090653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  clientAuthority: 1
+  animator: {fileID: 7552422000944096395}
 --- !u!1 &7608864504286513353
 GameObject:
   m_ObjectHideFlags: 0

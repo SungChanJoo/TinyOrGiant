@@ -2100,6 +2100,7 @@ GameObject:
   - component: {fileID: 5636494502309594734}
   - component: {fileID: 5636494502309594733}
   - component: {fileID: 5636494502309594732}
+  - component: {fileID: 6519638632654740398}
   m_Layer: 13
   m_Name: Right Hand Presence Physics
   m_TagString: PhysicsRightHandPresence
@@ -2219,3 +2220,20 @@ MonoBehaviour:
   positionSensitivity: 0.01
   rotationSensitivity: 0.01
   scaleSensitivity: 0.01
+--- !u!114 &6519638632654740398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5636494502309594738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  clientAuthority: 1
+  animator: {fileID: 4457710500756262362}

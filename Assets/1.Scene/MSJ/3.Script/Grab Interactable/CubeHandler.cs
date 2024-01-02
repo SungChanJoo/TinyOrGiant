@@ -47,44 +47,51 @@ public class CubeHandler : NetworkBehaviour
     public void SetCubeSlotEmpty(bool isEmpty)
     {
         AssignedSlot.IsEmpty = isEmpty;
-        RPCSetCubeSlotEmpty(isEmpty);
+        //RPCSetCubeSlotEmpty(isEmpty);
     }
 
-    [ClientRpc]
-    public void RPCSetCubeSlotEmpty(bool isEmpty)
-    {
-        AssignedSlot.IsEmpty = isEmpty;
-    }
+    //[ClientRpc]
+    //public void RPCSetCubeSlotEmpty(bool isEmpty)
+    //{
+    //    AssignedSlot.IsEmpty = isEmpty;
+    //}
 
     [Server]
     public void SetCubeUsed(bool isUsed)
     {
         IsUsed = isUsed;
-        RPCSetCubeUsed(isUsed);
+        //RPCSetCubeUsed(isUsed);
     }
 
-    [ClientRpc]
-    public void RPCSetCubeUsed(bool isUsed)
-    {
-        IsUsed = isUsed;
-    }
+    //[ClientRpc]
+    //public void RPCSetCubeUsed(bool isUsed)
+    //{
+    //    IsUsed = isUsed;
+    //}
 
     [Server]
     public void AssignCubeSlot(GameObject slotObj)
     {
         AssignedSlot = slotObj.GetComponent<CubeSlot>();
-        RPCAssignCubeSlot(slotObj);
+        //RPCAssignCubeSlot(slotObj);
     }
 
-    [ClientRpc]
-    public void RPCAssignCubeSlot(GameObject slotObj)
-    {
-        AssignedSlot = slotObj.GetComponent<CubeSlot>();
-    }
+    //[ClientRpc]
+    //public void RPCAssignCubeSlot(GameObject slotObj)
+    //{
+    //    AssignedSlot = slotObj.GetComponent<CubeSlot>();
+    //}
     #endregion
 
     [Server]
     public void ToggleRigidbodyKinematic(bool isKinematic)
+    {
+        cubeRigidbody.isKinematic = isKinematic;
+        RPCToggleRigidbodyKinematic(isKinematic);
+    }
+
+    [ClientRpc]
+    public void RPCToggleRigidbodyKinematic(bool isKinematic)
     {
         cubeRigidbody.isKinematic = isKinematic;
     }

@@ -3170,13 +3170,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2403833317350218486}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.13052596, y: -0, z: -0, w: 0.99144495}
+  m_LocalPosition: {x: -1.2, y: -0.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2403833318704060047}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 15, y: 0, z: 0}
 --- !u!114 &2403833317350218481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4037,13 +4037,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2403833317755995152}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.13052596, y: -0, z: -0, w: 0.99144495}
+  m_LocalPosition: {x: 1.2, y: -0.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2403833317657924621}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 15, y: 0, z: 0}
 --- !u!114 &2403833317755995163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4467,6 +4467,8 @@ GameObject:
   - component: {fileID: 2403833317889872650}
   - component: {fileID: 2478212236972070077}
   - component: {fileID: 7248661548731281074}
+  - component: {fileID: 1926486668928213270}
+  - component: {fileID: 2550261848071731138}
   m_Layer: 0
   m_Name: XR Rig Test
   m_TagString: Untagged
@@ -4675,6 +4677,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teleportationProvider: {fileID: 2403833318120917702}
+--- !u!114 &1926486668928213270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2403833317889872654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  clientAuthority: 0
+  animator: {fileID: 2112124894363777068}
+--- !u!114 &2550261848071731138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2403833317889872654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  clientAuthority: 0
+  animator: {fileID: 6229287716626707826}
 --- !u!1 &2403833318092000272
 GameObject:
   m_ObjectHideFlags: 0
@@ -4856,7 +4892,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0cb9aa70a22847b5925ee5f067c10a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 3623323317989040873}
   m_OriginBaseGameObject: {fileID: 2403833318120917724}
   m_CameraFloorOffsetObject: {fileID: 2403833317856014543}
   m_RequestedTrackingOriginMode: 1
@@ -5378,7 +5414,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d397116cd5938ae448cc9d6b708827fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   handType: 1
+  rayInteractor: {fileID: 2403833317755995167}
+  punchForwardAngleThreshold: 30
+  punchVelocityThreshold: 6
+  punchCoolDown: 0.5
+  curPunchCoolDown: 0
+  isClaw: 0
+  clawThreshold: 0.7
+  isFist: 0
+  fistThreshold: 0.7
   showNonPhysicalHand: 1
   distanceThreshold: 3
 --- !u!54 &2708565373874945734
@@ -8827,7 +8875,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d397116cd5938ae448cc9d6b708827fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   handType: 0
+  rayInteractor: {fileID: 2403833317350218485}
+  punchForwardAngleThreshold: 30
+  punchVelocityThreshold: 6
+  punchCoolDown: 0.5
+  curPunchCoolDown: 0
+  isClaw: 0
+  clawThreshold: 0.7
+  isFist: 0
+  fistThreshold: 0.7
   showNonPhysicalHand: 1
   distanceThreshold: 3
 --- !u!54 &8494143761016436414
