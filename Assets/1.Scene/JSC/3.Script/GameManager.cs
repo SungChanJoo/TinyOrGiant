@@ -64,7 +64,6 @@ public class GameManager : NetworkBehaviour
     }
     public void PCCharacter()
     {
-
         playerType = PlayerType.PC;
         foreach (GameObject obj in VRGameObeject)
         {

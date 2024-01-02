@@ -13,11 +13,12 @@ public class HandPresencePhysics : NetworkBehaviour
 {
     public HandPresenceType handType;
     private HandPresence handPresence;
-    public Transform rayInteractor;
-
+    
     [Header("Magical Punch")]
-    [Range(1f, 60f)] public float punchForwardAngleThreshold = 60f;
-    [Range(1f, 50f)] public float punchVelocityThreshold = 10f;
+    public Transform rayInteractor;
+    public ParticleSystem punchParticle;
+    [Range(1f, 60f)] public float punchForwardAngleThreshold = 30f;
+    [Range(50f, 200f)] public float punchVelocityThreshold = 120f;
     [Range(.1f, 10f)] public float punchCoolDown = .5f;
     public float curPunchCoolDown = 0f;
 
@@ -97,6 +98,7 @@ public class HandPresencePhysics : NetworkBehaviour
             && isForwarded)                                 // Check direction
         {
             Debug.Log("Magic Punch!!");
+            if (!punchParticle.isEmitting) punchParticle.Play();
             curPunchCoolDown = punchCoolDown;
         }
     }
