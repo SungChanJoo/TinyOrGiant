@@ -4470,7 +4470,7 @@ GameObject:
   - component: {fileID: 2403833317889872650}
   - component: {fileID: 2550261848071731138}
   - component: {fileID: 2478212236972070077}
-  - component: {fileID: 7248661548731281074}
+  - component: {fileID: 522261822322558711}
   m_Layer: 0
   m_Name: XR Rig
   m_TagString: Untagged
@@ -4768,7 +4768,7 @@ MonoBehaviour:
   leftHandDirectInteractor: {fileID: 2403833318092000286}
   rightHandDirectInteractor: {fileID: 2403833317463957056}
   colliderEnableDelay: 0.5
---- !u!114 &7248661548731281074
+--- !u!114 &522261822322558711
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4777,10 +4777,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2403833317889872654}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e390ad5d00fa6b479fbdeb3995e3233, type: 3}
+  m_Script: {fileID: 11500000, guid: 12283d2b2a66b43438f02e9225ed0f46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   teleportationProvider: {fileID: 2403833318120917702}
+  currentAnchorIndex: -1
+  currentAnchor: {fileID: 0}
 --- !u!1 &2403833318092000272
 GameObject:
   m_ObjectHideFlags: 0

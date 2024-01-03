@@ -77,7 +77,7 @@ public class CubeObjectPool : NetworkBehaviour
         {
             yield return null;
 
-            // Delay for respawnInterval
+            // Delay for respawn interval
             if (elapsedTime < respawnInterval)
             {
                 elapsedTime += Time.deltaTime;
