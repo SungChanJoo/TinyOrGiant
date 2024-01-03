@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 public enum HandPresenceType
 {
@@ -8,9 +9,25 @@ public enum HandPresenceType
     RightHand,
 }
 
-public class HandPresencePhysics : MonoBehaviour
+public class HandPresencePhysics : NetworkBehaviour
 {
     public HandPresenceType handType;
+    private HandPresence handPresence;
+    
+    [Header("Magical Punch")]
+    public Transform rayInteractor;
+    public ParticleSystem punchParticle;
+    [Range(1f, 60f)] public float punchForwardAngleThreshold = 30f;
+    [Range(50f, 200f)] public float punchVelocityThreshold = 120f;
+    [Range(.1f, 10f)] public float punchCoolDown = .5f;
+    public float curPunchCoolDown = 0f;
+
+    [Header("Gesture")]
+    public bool isClaw = false;
+    public float clawThreshold = .7f;
+
+    public bool isFist = false;
+    public float fistThreshold = .7f;
 
     [Header("Non-Physical Hand")]
     public bool showNonPhysicalHand = true;
@@ -35,16 +52,61 @@ public class HandPresencePhysics : MonoBehaviour
         }
 
         TryGetComponent(out rb);
+        handPresence = GetComponent<HandPresence>();
+    }
+
+    private IEnumerator Start()
+    {
+        while (true)
+        {
+            curPunchCoolDown = Mathf.Max(0, curPunchCoolDown - Time.deltaTime);
+
+            yield return null;
+        }
     }
 
     private void FixedUpdate()
     {
+        if (!isLocalPlayer) return;
+
         TryMoveHand();
         TryRotateHand();
     }
 
+    private void Update()
+    {
+        CheckHandGesture();
+        CheckMagicPunch();
+    }
+
+    private void CheckHandGesture()
+    {
+        var clawValue = handPresence.handAnimator.GetFloat("Trigger");
+        var fistValue = handPresence.handAnimator.GetFloat("Grip");
+
+        isClaw = clawValue >= clawThreshold;
+        isFist = fistValue >= fistThreshold;
+    }
+
+    private void CheckMagicPunch()
+    {
+        if (!isFist) return;
+
+        var isForwarded = Vector3.Angle(rayInteractor.forward, rb.velocity.normalized) <= punchForwardAngleThreshold;
+        if (rb.velocity.magnitude >= punchVelocityThreshold // Check velocity
+            && curPunchCoolDown == 0                        // Check cool down
+            && isForwarded)                                 // Check direction
+        {
+            Debug.Log("Magic Punch!!");
+            if (!punchParticle.isEmitting) punchParticle.Play();
+            curPunchCoolDown = punchCoolDown;
+        }
+    }
+
     private void LateUpdate()
     {
+        if (!isLocalPlayer) return;
+
         ShowNonPhysicalHand();
     }
 
@@ -73,5 +135,4 @@ public class HandPresencePhysics : MonoBehaviour
             nonPhysicalHandRenderer.enabled = distance < distanceThreshold ? false : true;
         }
     }
-    
 }

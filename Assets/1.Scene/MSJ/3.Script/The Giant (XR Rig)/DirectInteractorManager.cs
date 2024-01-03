@@ -16,17 +16,6 @@ public class DirectInteractorManager : NetworkBehaviour
     Collider[] leftHandColliders;
     Collider[] rightHandColliders;
 
-    public override void OnStartLocalPlayer()
-    {
-        base.OnStartLocalPlayer();
-
-        //leftHandPresencePhysics = GameObject.FindGameObjectWithTag("PhysicsLeftHandPresence");
-        //rightHandPresencePhysics = GameObject.FindGameObjectWithTag("PhysicsRightHandPresence");
-
-        //leftHandColliders = leftHandPresencePhysics.GetComponentsInChildren<Collider>();
-        //rightHandColliders = rightHandPresencePhysics.GetComponentsInChildren<Collider>();
-    }
-
     private void Start()
     {
         FindHandPresencePhysics();

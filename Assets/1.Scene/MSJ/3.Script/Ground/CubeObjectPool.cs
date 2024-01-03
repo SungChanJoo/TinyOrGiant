@@ -14,16 +14,14 @@ public class CubeObjectPool : NetworkBehaviour
     [Header("Pre Defined")]
     public List<GameObject> cubePrefabList = new List<GameObject>();
     public List<GameObject> slotList = new List<GameObject>();
-
-    [Header("Synced Data")]
-    public readonly SyncList<GameObject> spawnedCubeList = new SyncList<GameObject>();
+    public List<GameObject> spawnedCubeList = new List<GameObject>();
 
     [Header("Respawn")]
     public int currentRepawnCount = 0;
     public RespawnType respawnType = RespawnType.Random;
     public int maxRespawnCount = 20;
     public float respawnInterval = 1f;
-
+    
     public override void OnStartServer()
     {
         base.OnStartServer();
@@ -35,6 +33,8 @@ public class CubeObjectPool : NetworkBehaviour
     [Server]
     private void InitialSpawn()
     {
+        if (isClientOnly && !isLocalPlayer) return;
+
         int slotIndex = -1;
         int prefabIndex = -1;
 
@@ -63,9 +63,8 @@ public class CubeObjectPool : NetworkBehaviour
             var cubeSlotTransform = slotList[slotIndex].transform;
             cube.transform.SetPositionAndRotation(cubeSlotTransform.position, cubeSlotTransform.rotation);
 
+            if (isServer) NetworkServer.Spawn(cube);
             spawnedCubeList.Add(cube);
-
-            NetworkServer.Spawn(cube);
         }
     }
 
@@ -120,6 +119,25 @@ public class CubeObjectPool : NetworkBehaviour
 
             elapsedTime = 0f;
             currentRepawnCount++;
+        }
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+
+        InitialSync();
+    }
+
+    [Client]
+    private void InitialSync()
+    {
+        int index = 0;
+
+        foreach (var spawnedCube in spawnedCubeList)
+        {
+            var cubeRespawnHandler = spawnedCube.GetComponent<CubeHandler>();
+            cubeRespawnHandler.AssignedSlot = slotList[index++].GetComponent<CubeSlot>();
         }
     }
 }

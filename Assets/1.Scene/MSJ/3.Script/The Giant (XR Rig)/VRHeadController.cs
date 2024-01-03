@@ -15,6 +15,8 @@ public class VRHeadController : NetworkBehaviour
 
         if (!isLocalPlayer)
         {
+            XRMainCameraObject.GetComponent<Camera>().enabled = false;
+            XRMainCameraObject.GetComponent<AudioListener>().enabled = false;
             XRMainCameraObject.SetActive(false);
         }
     }
