@@ -13,16 +13,16 @@ public class HandPresencePhysics : NetworkBehaviour
 {
     public HandPresenceType handType;
     private HandPresence handPresence;
-    
+
     [Header("Magical Punch")]
+    public GameObject magicalPunchProjectile;
     public Transform rayInteractor;
-    public ParticleSystem punchParticle;
-    [Range(1f, 60f)] public float punchForwardAngleThreshold = 30f;
-    [Range(50f, 200f)] public float punchVelocityThreshold = 120f;
+    [Range(1f, 90f)] public float punchForwardAngleThreshold = 80f;
+    [Range(1f, 5f)] public float punchVelocityThreshold = 2f;
     [Range(.1f, 10f)] public float punchCoolDown = .5f;
     public float curPunchCoolDown = 0f;
 
-    [Header("Gesture")]
+    [Header("Gesture Detection")]
     public bool isClaw = false;
     public float clawThreshold = .7f;
 
@@ -57,10 +57,9 @@ public class HandPresencePhysics : NetworkBehaviour
 
     private IEnumerator Start()
     {
-        while (true)
+        while (isLocalPlayer)
         {
             curPunchCoolDown = Mathf.Max(0, curPunchCoolDown - Time.deltaTime);
-
             yield return null;
         }
     }
@@ -75,8 +74,17 @@ public class HandPresencePhysics : NetworkBehaviour
 
     private void Update()
     {
+        if (!isLocalPlayer) return;
+
         CheckHandGesture();
         CheckMagicPunch();
+    }
+
+    private void LateUpdate()
+    {
+        if (!isLocalPlayer) return;
+
+        ShowNonPhysicalHand();
     }
 
     private void CheckHandGesture()
@@ -88,28 +96,33 @@ public class HandPresencePhysics : NetworkBehaviour
         isFist = fistValue >= fistThreshold;
     }
 
+    Vector3 lastTargetPos = Vector3.zero;
     private void CheckMagicPunch()
     {
-        if (!isFist) return;
+        Vector3 currentTargetPosition = target.position;
 
-        var isForwarded = Vector3.Angle(rayInteractor.forward, rb.velocity.normalized) <= punchForwardAngleThreshold;
-        if (rb.velocity.magnitude >= punchVelocityThreshold // Check velocity
-            && curPunchCoolDown == 0                        // Check cool down
-            && isForwarded)                                 // Check direction
+        if (!isFist)
         {
-            Debug.Log("Magic Punch!!");
-            if (!punchParticle.isEmitting) punchParticle.Play();
+            lastTargetPos = currentTargetPosition;
+            return;
+        }
+
+        Vector3 desiredMove = currentTargetPosition - lastTargetPos;
+        Vector3 desiredDirection = desiredMove.normalized;
+
+        if (desiredMove.magnitude >= punchVelocityThreshold                                         // Check desired move vector
+            && curPunchCoolDown == 0                                                                // Check cool down
+            && Vector3.Angle(transform.forward, desiredDirection) <= punchForwardAngleThreshold)    // Check desired direction
+
+        {
+            var projectileObj = Instantiate(magicalPunchProjectile, rayInteractor.position, rayInteractor.rotation);
+            NetworkServer.Spawn(projectileObj);
             curPunchCoolDown = punchCoolDown;
         }
+
+        lastTargetPos = currentTargetPosition;
     }
-
-    private void LateUpdate()
-    {
-        if (!isLocalPlayer) return;
-
-        ShowNonPhysicalHand();
-    }
-
+    
     private void TryMoveHand()
     {
         // Try move to target position
