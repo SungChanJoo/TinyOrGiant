@@ -63,7 +63,7 @@ public class PCPlayerController : NetworkBehaviour
     private float grapplingCdTimer;
 
     public Transform GunTip;
-    [SyncVar(hook = nameof(ChangeGunTipPos))] 
+    [SyncVar(hook = nameof(ChangeGunTipPos))]
     public Vector3 GunTipPos;
     void ChangeGunTipPos(Vector3 _old, Vector3 _new) { }
     public LayerMask WhatIsGrappleable;
@@ -85,7 +85,6 @@ public class PCPlayerController : NetworkBehaviour
     public bool IsFireReady = false;
 
     [Header("ETC")]
-    public Camera FollowCamera;
     bool _rotateOnMove = true;
     public bool Freeze = false;
     public bool ActiveGrapple;
@@ -281,17 +280,17 @@ public class PCPlayerController : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
 
-            state = PlayerState.Run;
-            _inputDirection = new Vector3(value.ReadValue<Vector2>().x, 0f, value.ReadValue<Vector2>().y);
-       
+        state = PlayerState.Run;
+        _inputDirection = new Vector3(value.ReadValue<Vector2>().x, 0f, value.ReadValue<Vector2>().y);
+
 
     }
     private void OnMovemnetCanceled(InputAction.CallbackContext value)
     {
         if (!isLocalPlayer) return;
 
-            state = PlayerState.Idle;
-            _inputDirection = Vector3.zero;
+        state = PlayerState.Idle;
+        _inputDirection = Vector3.zero;
     }
     #endregion
 
@@ -368,8 +367,9 @@ public class PCPlayerController : NetworkBehaviour
 
     private void DashPerformed(InputAction.CallbackContext obj)
     {
+        Debug.Log(_inputDirection.magnitude);
         if (_inputDirection.magnitude < 0.01f || !isGround || dashCdTimer > 0 || Freeze) return;
-        rb.velocity =_moveDirection.normalized * DashSpeed;
+        rb.velocity = _moveDirection.normalized * DashSpeed;
         Freeze = true;
         StartCoroutine(DashFreeze_co());
     }
@@ -380,13 +380,13 @@ public class PCPlayerController : NetworkBehaviour
     #endregion
     IEnumerator DashFreeze_co()
     {
-        while(true)
+        while (true)
         {
             yield return null;
-            if(rb.velocity.sqrMagnitude < DashDistance) //대쉬 끝
+            if (rb.velocity.sqrMagnitude < DashDistance) //대쉬 끝
             {
                 Freeze = false;
-                if(state != PlayerState.Run)
+                if (state != PlayerState.Run)
                     _inputDirection = Vector3.zero;
 
                 //rb.velocity = Vector3.zero;
