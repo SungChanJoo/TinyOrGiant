@@ -335,15 +335,19 @@ MonoBehaviour:
   GroundLayers:
     serializedVersion: 2
     m_Bits: 64
-  GrapplingSpeed: 50
+  GrapplingSpeed: 40
   Offset_y: 0.2
   MaxGrappleDistance: 999
   GrapplingCd: 0.25
   GunTip: {fileID: 9201603884586997619}
+  GunTipPos: {x: 0, y: 0, z: 0}
   WhatIsGrappleable:
     serializedVersion: 2
     m_Bits: 4294967295
   Lr: {fileID: 9201603885738270618}
+  DashSpeed: 25
+  DashDistance: 450
+  DashCd: 1
   RocketBullet: {fileID: 6655116186052315253, guid: 5dff9832461c8da438ee78c4d048380d, type: 3}
   RocketPos: {fileID: 9201603884353004385}
   RocketCount: 0

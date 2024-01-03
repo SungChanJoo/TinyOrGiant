@@ -63,14 +63,17 @@ public class PCPlayerController : NetworkBehaviour
     private float grapplingCdTimer;
 
     public Transform GunTip;
-    [SyncVar(hook = nameof(ChangeGunTipPos))]
+    [SyncVar(hook = nameof(ChangeGunTipPos))] 
     public Vector3 GunTipPos;
-    void ChangeGunTipPos(Vector3 _old, Vector3 _new)
-    {
-        Debug.Log($"GunTip : {_old} -> {_new}");
-    }
+    void ChangeGunTipPos(Vector3 _old, Vector3 _new) { }
     public LayerMask WhatIsGrappleable;
     public LineRenderer Lr;
+
+    [Header("Dash")]
+    public float DashSpeed;
+    public float DashDistance;
+    public float DashCd;
+    private float dashCdTimer;
 
     [Header("Rocket")]
     public GameObject RocketBullet;
@@ -111,7 +114,7 @@ public class PCPlayerController : NetworkBehaviour
         input.Enable();
         input.Land.Move.performed += OnMovemnetPerformed;
         input.Land.Move.started += OnMovemnetStarted;
-        input.Land.Move.canceled += OnMovemnetCancelled;
+        input.Land.Move.canceled += OnMovemnetCanceled;
 
         input.Land.Jump.performed += Jump;
 
@@ -120,6 +123,9 @@ public class PCPlayerController : NetworkBehaviour
 
         input.Land.Grappling.performed += GrapplingPerformed;
         input.Land.Grappling.canceled += GrpplingCanceled;
+
+        input.Land.Dash.performed += DashPerformed;
+        input.Land.Dash.performed += DashCanceled;
     }
 
     private void OnDisable()
@@ -127,7 +133,7 @@ public class PCPlayerController : NetworkBehaviour
         input.Disable();
         input.Land.Move.performed -= OnMovemnetPerformed;
         input.Land.Move.started -= OnMovemnetStarted;
-        input.Land.Move.canceled -= OnMovemnetCancelled;
+        input.Land.Move.canceled -= OnMovemnetCanceled;
 
         input.Land.Jump.performed -= Jump;
 
@@ -136,6 +142,9 @@ public class PCPlayerController : NetworkBehaviour
 
         input.Land.Grappling.performed -= GrapplingPerformed;
         input.Land.Grappling.canceled -= GrpplingCanceled;
+
+        input.Land.Dash.performed -= DashPerformed;
+        input.Land.Dash.performed -= DashCanceled;
     }
 
     public override void OnStartLocalPlayer()
@@ -191,7 +200,7 @@ public class PCPlayerController : NetworkBehaviour
         #endregion
 
         #region Friciton
-        if (isGround && _inputDirection.magnitude < 0.01f && state != PlayerState.Jump && state != PlayerState.Grappling)
+        if (isGround && _inputDirection.magnitude < 0.01f && state != PlayerState.Jump && state != PlayerState.Grappling && !Freeze)
         {
             Vector3 normalVelocity = rb.velocity;
             float amount = Mathf.Min(Mathf.Abs(Mathf.Abs(normalVelocity.magnitude)), Mathf.Abs(frictionAmount));
@@ -230,6 +239,8 @@ public class PCPlayerController : NetworkBehaviour
             grapplingCdTimer -= Time.deltaTime;
         #endregion
 
+        if (dashCdTimer > 0)
+            dashCdTimer -= Time.deltaTime;
 
         #region CameraMovement
         if (!_rotateOnMove)
@@ -270,19 +281,17 @@ public class PCPlayerController : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
 
-        if (!Freeze)
-        {
             state = PlayerState.Run;
             _inputDirection = new Vector3(value.ReadValue<Vector2>().x, 0f, value.ReadValue<Vector2>().y);
-        }
+       
 
     }
-    private void OnMovemnetCancelled(InputAction.CallbackContext value)
+    private void OnMovemnetCanceled(InputAction.CallbackContext value)
     {
         if (!isLocalPlayer) return;
 
-        state = PlayerState.Idle;
-        _inputDirection = Vector3.zero;
+            state = PlayerState.Idle;
+            _inputDirection = Vector3.zero;
     }
     #endregion
 
@@ -325,12 +334,11 @@ public class PCPlayerController : NetworkBehaviour
     }
     #endregion
 
-
     #region MouseRightButton : Grappling 
     private void GrapplingPerformed(InputAction.CallbackContext obj)
     {
         if (!isLocalPlayer) return;
-        //if (grapplingCdTimer > 0) return;
+        if (grapplingCdTimer > 0) return;
         if (Physics.Raycast(ray, out RaycastHit hit, 999f))
         {
             transform.LookAt(hit.point);
@@ -357,8 +365,35 @@ public class PCPlayerController : NetworkBehaviour
         CmdStopGrappling();
     }
     #endregion 
-    #endregion
 
+    private void DashPerformed(InputAction.CallbackContext obj)
+    {
+        if (_inputDirection.magnitude < 0.01f || !isGround || dashCdTimer > 0 || Freeze) return;
+        rb.velocity =_moveDirection.normalized * DashSpeed;
+        Freeze = true;
+        StartCoroutine(DashFreeze_co());
+    }
+    private void DashCanceled(InputAction.CallbackContext obj)
+    {
+
+    }
+    #endregion
+    IEnumerator DashFreeze_co()
+    {
+        while(true)
+        {
+            yield return null;
+            if(rb.velocity.sqrMagnitude < DashDistance) //´ë½¬ ³¡
+            {
+                Freeze = false;
+                if(state != PlayerState.Run)
+                    _inputDirection = Vector3.zero;
+
+                //rb.velocity = Vector3.zero;
+                yield break;
+            }
+        }
+    }
     private void StopGrappling()
     {
 
