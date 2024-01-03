@@ -5,8 +5,8 @@ using Mirror;
 
 public class VRHandController : NetworkBehaviour
 {
-    public GameObject NonPhysicsLeftHand;
-    public GameObject NonPhysicsRightHand;
+    public SkinnedMeshRenderer NonPhysicsLeftHand;
+    public SkinnedMeshRenderer NonPhysicsRightHand;
 
     public override void OnStartClient()
     {
@@ -14,8 +14,8 @@ public class VRHandController : NetworkBehaviour
 
         if (!isLocalPlayer)
         {
-            NonPhysicsLeftHand.SetActive(false);
-            NonPhysicsRightHand.SetActive(false);
+            NonPhysicsLeftHand.enabled = false;
+            NonPhysicsRightHand.enabled = false;
         }
     }
 }
