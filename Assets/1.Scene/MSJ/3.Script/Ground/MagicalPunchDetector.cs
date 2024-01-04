@@ -11,6 +11,8 @@ public class MagicalPunchDetector : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!isServer) return;
+
         if (other.gameObject.layer != LayerMask.NameToLayer("Magical Punch")) return;
 
         CreateMagicalImpact(other.ClosestPoint(transform.position));

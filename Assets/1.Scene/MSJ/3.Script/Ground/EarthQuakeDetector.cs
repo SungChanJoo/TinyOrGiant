@@ -29,6 +29,8 @@ public class EarthQuakeDetector : NetworkBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (!isServer) return;
+
         var isLeftHandHit = IsLeftHandHit(collision);
         var isRightHandHit = IsRightHandHit(collision);
         var isEarthQuake = isLeftHandHit || isRightHandHit;
@@ -48,9 +50,11 @@ public class EarthQuakeDetector : NetworkBehaviour
         if (isEarthQuake)
         {
             var position = collision.collider.ClosestPoint(transform.position);
-            var rotation = collision.gameObject.transform.rotation;
 
-            var earthQuakeObj = Instantiate(EarthQuakeImpactPrefab, position, rotation);
+            var rotationEuler = collision.gameObject.transform.rotation.eulerAngles;
+            Vector3 groundedAngle = new Vector3(0, rotationEuler.y, 0);
+
+            var earthQuakeObj = Instantiate(EarthQuakeImpactPrefab, position, Quaternion.Euler(groundedAngle));
             NetworkServer.Spawn(earthQuakeObj);
         }
     }

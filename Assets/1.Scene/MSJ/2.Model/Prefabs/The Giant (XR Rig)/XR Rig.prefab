@@ -5496,7 +5496,7 @@ MonoBehaviour:
   magicalPunchProjectile: {fileID: 4458528096270883757, guid: 7cbf8309e3e131b4598ce9898ecd3e82, type: 3}
   rayInteractor: {fileID: 2403833317755995167}
   punchForwardAngleThreshold: 80
-  punchVelocityThreshold: 2
+  punchVelocityThreshold: 3
   punchCoolDown: 0.5
   curPunchCoolDown: 0
   isClaw: 0
@@ -8958,7 +8958,7 @@ MonoBehaviour:
   magicalPunchProjectile: {fileID: 4458528096270883757, guid: 7cbf8309e3e131b4598ce9898ecd3e82, type: 3}
   rayInteractor: {fileID: 2403833317350218485}
   punchForwardAngleThreshold: 80
-  punchVelocityThreshold: 2
+  punchVelocityThreshold: 3
   punchCoolDown: 0.5
   curPunchCoolDown: 0
   isClaw: 0
