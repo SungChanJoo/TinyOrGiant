@@ -39,49 +39,38 @@ public class TeleportationTrajectoryRenderer : MonoBehaviour
     public void OnTeleporting()
     {
         HideTrajectory();
-
-        if (teleportManager == null) teleportManager = FindObjectOfType<TeleportationManagerExt>();
         teleportManager.ChangePivotPoint(teleportAnchor);
     }
 
-    public void OnHoverEntered()
+    public void OnHoverEntered() => ShowTrajectory();
+    public void OnHoverExited() => HideTrajectory();
+    public void OnSelectEntered() => isHighlighting = true;
+    public void OnSelectExited() => isHighlighting = false;
+
+    private void ShowTrajectory()
     {
-        currentRendering = RenderTrajectory();
+        currentRendering = UpdateTrajectory();
         StartCoroutine(currentRendering);
-    }
 
-    public void OnHoverExited()
-    {
-        HideTrajectory();
+        teleportManager.SetCurrentTeleportInteractor(teleportAnchor);
     }
-    
-    public void OnSelectEntered()
-    {
-        isHighlighting = true;
-    }
-
-    public void OnSelectExited()
-    {
-        isHighlighting = false;
-    }
-
     private void HideTrajectory()
     {
-        if (currentRendering != null)
-        {
-            lineRenderer.positionCount = 0;
-            StopCoroutine(currentRendering);
-        }
+        if (currentRendering != null) StopCoroutine(currentRendering);
+
+        lineRenderer.positionCount = 0;
         currentRendering = null;
+
+        teleportManager.ResetCurrentTeleportInteractor();
     }
 
-    private IEnumerator RenderTrajectory()
+    private IEnumerator UpdateTrajectory()
     {
         yield return null;
 
         while (true)
         {
-            DrawTrajectory(isHighlighting);
+            SetTrajectory(isHighlighting);
             yield return null;
         }
     }
@@ -90,13 +79,15 @@ public class TeleportationTrajectoryRenderer : MonoBehaviour
     /// Draw bezier's curve with 4 control points
     /// </summary>
     /// <param name="isHighlighting"></param>
-    private void DrawTrajectory(bool isHighlighting)
+    private void SetTrajectory(bool isHighlighting)
     {
-        if (teleportManager.currentAnchor == null) return;
+        if (teleportManager.CurrentAnchor == null) return;
 
         // Set control points (p1/p2/p3/p4)
-        Vector3 p1 = teleportManager.currentAnchor.transform.position;
-        Vector3 p2 = teleportManager.GetSecondaryAnchorPosition();
+        //Vector3 p1 = teleportManager.CurrentAnchor.transform.position;
+        //Vector3 p2 = teleportManager.GetSecondaryAnchorPosition();
+        Vector3 p1 = teleportManager.CurrentTeleportInteractor.transform.position;
+        Vector3 p2 = teleportManager.CurrentTeleportInteractor.transform.position;
         Vector3 p3 = secondaryControlPoint.position;
         Vector3 p4 = transform.position;
 

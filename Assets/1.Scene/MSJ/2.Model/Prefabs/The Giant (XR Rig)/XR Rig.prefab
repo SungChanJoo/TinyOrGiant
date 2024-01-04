@@ -3157,7 +3157,7 @@ GameObject:
   - component: {fileID: 2403833317350218483}
   - component: {fileID: 2403833317350218484}
   m_Layer: 0
-  m_Name: Ray Interactor
+  m_Name: Teleport Ray Interactor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4024,7 +4024,7 @@ GameObject:
   - component: {fileID: 2403833317755995165}
   - component: {fileID: 2403833317755995166}
   m_Layer: 0
-  m_Name: Ray Interactor
+  m_Name: Teleport Ray Interactor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4782,7 +4782,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   teleportationProvider: {fileID: 2403833318120917702}
   currentAnchorIndex: -1
-  currentAnchor: {fileID: 0}
+  <CurrentAnchor>k__BackingField: {fileID: 0}
+  <CurrentTeleportInteractor>k__BackingField: {fileID: 0}
+  leftHandTeleportInteractor: {fileID: 2403833317350218481}
+  rightHandTeleportInteractor: {fileID: 2403833317755995163}
 --- !u!1 &2403833318092000272
 GameObject:
   m_ObjectHideFlags: 0

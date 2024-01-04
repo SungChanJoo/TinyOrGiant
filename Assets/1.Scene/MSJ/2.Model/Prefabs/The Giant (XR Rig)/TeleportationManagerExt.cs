@@ -9,7 +9,12 @@ public class TeleportationManagerExt : TeleportationManager
 
     [Header("Extension")]
     public int currentAnchorIndex = -1;
-    public TeleportationAnchor currentAnchor;
+    [field: SerializeField] public TeleportationAnchor CurrentAnchor { get; private set; }
+    [field:SerializeField] public XRRayInteractor CurrentTeleportInteractor { get; private set; }
+
+    [Header("Preset")]
+    public XRRayInteractor leftHandTeleportInteractor;
+    public XRRayInteractor rightHandTeleportInteractor;
 
     private void Awake()
     {
@@ -24,11 +29,41 @@ public class TeleportationManagerExt : TeleportationManager
     public void ChangePivotPoint(TeleportationAnchor anchor)
     {
         currentAnchorIndex = anchorToIndex[anchor];
-        currentAnchor = anchor;
+        CurrentAnchor = anchor;
+    }
+
+    public void SetCurrentTeleportInteractor(TeleportationAnchor anchor)
+    {
+        List<IXRHoverInteractor> interactors = anchor.interactorsHovering;
+        foreach (var interactor in interactors)
+        {
+            var rayInteractor = interactor as XRRayInteractor;
+            if (rayInteractor == null) continue;
+            
+            if (rayInteractor == leftHandTeleportInteractor)
+            {
+                CurrentTeleportInteractor = leftHandTeleportInteractor;
+                rightHandTeleportInteractor.enabled = false;
+            }
+
+            if (rayInteractor == rightHandTeleportInteractor)
+            {
+                CurrentTeleportInteractor = rightHandTeleportInteractor;
+                leftHandTeleportInteractor.enabled = false;
+            }
+        }
+    }
+
+    public void ResetCurrentTeleportInteractor()
+    {
+        CurrentTeleportInteractor = null;
+
+        leftHandTeleportInteractor.enabled = true;
+        rightHandTeleportInteractor.enabled = true;
     }
 
     public Vector3 GetSecondaryAnchorPosition()
     {
-        return currentAnchor.gameObject.GetComponent<TeleportationTrajectoryRenderer>().secondaryControlPoint.position;
+        return CurrentAnchor.gameObject.GetComponent<TeleportationTrajectoryRenderer>().secondaryControlPoint.position;
     }
 }
