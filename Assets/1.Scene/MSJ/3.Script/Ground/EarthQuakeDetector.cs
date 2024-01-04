@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class EarthQuakeDetector : MonoBehaviour
+public class EarthQuakeDetector : NetworkBehaviour
 {
+    public GameObject EarthQuakeImpactPrefab;
+
     // 충돌 시 rigidbody.velocity 체크 후 filter
     [Range(50f, 500f)] public float velocityThreshold = 50f;
 
@@ -44,7 +47,11 @@ public class EarthQuakeDetector : MonoBehaviour
 
         if (isEarthQuake)
         {
-            //Debug.Log("EarthQuake !!");
+            var position = collision.collider.ClosestPoint(transform.position);
+            var rotation = collision.gameObject.transform.rotation;
+
+            var earthQuakeObj = Instantiate(EarthQuakeImpactPrefab, position, rotation);
+            NetworkServer.Spawn(earthQuakeObj);
         }
     }
 

@@ -567,29 +567,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1517048320263379746, guid: 100ee1beeef88f3479a5165bd5595fda, type: 3}
+    - target: {fileID: 1530691365922317426, guid: 100ee1beeef88f3479a5165bd5595fda, type: 3}
       propertyPath: sceneId
-      value: 1561548422
-      objectReference: {fileID: 0}
-    - target: {fileID: 2773577052074217566, guid: 100ee1beeef88f3479a5165bd5595fda, type: 3}
-      propertyPath: sceneId
-      value: 655080264
-      objectReference: {fileID: 0}
-    - target: {fileID: 2906631510641362861, guid: 100ee1beeef88f3479a5165bd5595fda, type: 3}
-      propertyPath: sceneId
-      value: 2798880416
-      objectReference: {fileID: 0}
-    - target: {fileID: 3368884491948713141, guid: 100ee1beeef88f3479a5165bd5595fda, type: 3}
-      propertyPath: sceneId
-      value: 2140133126
-      objectReference: {fileID: 0}
-    - target: {fileID: 3750096691751092879, guid: 100ee1beeef88f3479a5165bd5595fda, type: 3}
-      propertyPath: sceneId
-      value: 3071545931
-      objectReference: {fileID: 0}
-    - target: {fileID: 6091043598024265891, guid: 100ee1beeef88f3479a5165bd5595fda, type: 3}
-      propertyPath: sceneId
-      value: 78325374
+      value: 4190613701
       objectReference: {fileID: 0}
     - target: {fileID: 6874470660802998553, guid: 100ee1beeef88f3479a5165bd5595fda, type: 3}
       propertyPath: m_Mesh
@@ -651,14 +631,6 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 2137875677}
-    - target: {fileID: 7036665217709803971, guid: 100ee1beeef88f3479a5165bd5595fda, type: 3}
-      propertyPath: sceneId
-      value: 2904453319
-      objectReference: {fileID: 0}
-    - target: {fileID: 7788950558133492095, guid: 100ee1beeef88f3479a5165bd5595fda, type: 3}
-      propertyPath: sceneId
-      value: 130493546
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 100ee1beeef88f3479a5165bd5595fda, type: 3}
 --- !u!1 &267591118
@@ -2317,7 +2289,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1470
+  m_Name: pb_Mesh-173038
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
