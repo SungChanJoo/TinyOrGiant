@@ -122,7 +122,7 @@ public class HandPresencePhysics : NetworkBehaviour
 
         lastTargetPos = currentTargetPosition;
     }
-    
+
     private void TryMoveHand()
     {
         // Try move to target position

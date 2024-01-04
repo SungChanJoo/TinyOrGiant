@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using Mirror;
 
-public class TeleportationTrajectoryRenderer : MonoBehaviour
+public class TeleportationTrajectoryRenderer : NetworkBehaviour
 {
     [Range(0, 200)] public int segmentCount = 50;
 
@@ -18,7 +19,11 @@ public class TeleportationTrajectoryRenderer : MonoBehaviour
     LineRenderer lineRenderer;
     TeleportationAnchor teleportAnchor;
     IEnumerator currentRendering;
+
+    [SyncVar(hook = nameof(OnHighlightChanged))]
     bool isHighlighting = false;
+
+    public void OnHighlightChanged(bool _, bool newFlag) { }
 
     private void Awake()
     {
@@ -58,10 +63,22 @@ public class TeleportationTrajectoryRenderer : MonoBehaviour
     {
         if (currentRendering != null) StopCoroutine(currentRendering);
 
-        lineRenderer.positionCount = 0;
         currentRendering = null;
+        CmdResetLineRenderer();
 
         teleportManager.ResetCurrentTeleportInteractor();
+    }
+
+    [Command(requiresAuthority = false)]
+    private void CmdResetLineRenderer()
+    {
+        RpcResetLineRenderer();
+    }
+
+    [ClientRpc]
+    public void RpcResetLineRenderer()
+    {
+        lineRenderer.positionCount = 0;
     }
 
     private IEnumerator UpdateTrajectory()
@@ -70,7 +87,7 @@ public class TeleportationTrajectoryRenderer : MonoBehaviour
 
         while (true)
         {
-            SetTrajectory(isHighlighting);
+            DrawTrajectory(isHighlighting);
             yield return null;
         }
     }
@@ -79,7 +96,7 @@ public class TeleportationTrajectoryRenderer : MonoBehaviour
     /// Draw bezier's curve with 4 control points
     /// </summary>
     /// <param name="isHighlighting"></param>
-    private void SetTrajectory(bool isHighlighting)
+    private void DrawTrajectory(bool isHighlighting)
     {
         if (teleportManager.CurrentAnchor == null) return;
 
@@ -91,7 +108,23 @@ public class TeleportationTrajectoryRenderer : MonoBehaviour
         Vector3 p3 = secondaryControlPoint.position;
         Vector3 p4 = transform.position;
 
-        // Draw bezier's curve
+        CmdDrawBezierCurve(isHighlighting, p1, p2, p3, p4);
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdDrawBezierCurve(bool isHighlighting, Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4)
+    {
+        RpcDrawBezierCurve(isHighlighting, p1, p2, p3, p4);
+    }
+
+    [ClientRpc]
+    public void RpcDrawBezierCurve(bool isHighlighting, Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4)
+    {
+        DrawBezierCurve(isHighlighting, p1, p2, p3, p4);
+    }
+
+    private void DrawBezierCurve(bool isHighlighting, Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4)
+    {
         lineRenderer.positionCount = segmentCount + 1;
 
         lineRenderer.SetPosition(0, GetDrawPoint(p1, p2, p3, p4, 0));
