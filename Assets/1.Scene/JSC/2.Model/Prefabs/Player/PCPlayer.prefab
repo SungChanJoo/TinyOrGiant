@@ -346,7 +346,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   Lr: {fileID: 9201603885738270618}
   DashSpeed: 25
-  DashDistance: 450
+  DashDistance: 0.8
   DashCd: 1
   RocketBullet: {fileID: 6655116186052315253, guid: 5dff9832461c8da438ee78c4d048380d, type: 3}
   RocketPos: {fileID: 9201603884353004385}

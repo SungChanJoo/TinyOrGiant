@@ -88,7 +88,8 @@ public class PCPlayerController : NetworkBehaviour
     bool _rotateOnMove = true;
     public bool Freeze = false;
     public bool ActiveGrapple;
-
+    public bool enableMovementOnNextTouch;
+    private Animator _animator;
     private Ray ray;
 
     private int grapplingCount = 0;
@@ -100,7 +101,7 @@ public class PCPlayerController : NetworkBehaviour
         rb = GetComponent<Rigidbody>();
         Cam = GameObject.FindGameObjectWithTag("MainCamera").transform;
         _freeLook = GameObject.FindGameObjectWithTag("PCPlayerCam").GetComponent<CinemachineFreeLook>();
-
+        _animator = GetComponent<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
         state = PlayerState.Idle;
@@ -167,6 +168,7 @@ public class PCPlayerController : NetworkBehaviour
 
         #region Run
         _playerVelocity = Mathf.Sqrt(rb.velocity.x * rb.velocity.x + rb.velocity.z * rb.velocity.z);
+
         if (_inputDirection.magnitude >= 0.1f && !Freeze)
         {
             #region CameraMovement
@@ -190,6 +192,11 @@ public class PCPlayerController : NetworkBehaviour
                     state = PlayerState.Jump;
                 }
                 rb.velocity = new Vector3(0, rb.velocity.y, 0);
+                if (_animator != null)
+                {
+                    _animator.SetFloat("x", _moveDirection.normalized.x);
+                    _animator.SetFloat("y", _moveDirection.normalized.z);
+                }
                 rb.AddForce(_moveDirection.normalized * movement, ForceMode.Force);
                 //Debug.Log(_moveDirection.normalized);
                 //Debug.DrawLine(transform.position, transform.position + transform.forward * 10, Color.red);
@@ -203,8 +210,16 @@ public class PCPlayerController : NetworkBehaviour
         {
             Vector3 normalVelocity = rb.velocity;
             float amount = Mathf.Min(Mathf.Abs(Mathf.Abs(normalVelocity.magnitude)), Mathf.Abs(frictionAmount));
+            if(_animator != null)
+            {
+                _animator.SetFloat("x", rb.velocity.x);
+                _animator.SetFloat("y", rb.velocity.z);
+            }
+
             rb.AddForce(-rb.velocity * amount, ForceMode.Impulse);
+           // Debug.Log("Friciton : " +(-rb.velocity * amount));
         }
+
         #endregion
 
         #region Jump Gravity
@@ -218,8 +233,12 @@ public class PCPlayerController : NetworkBehaviour
         // set sphere position, with offset
         Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
         transform.position.z);
+        if(!Freeze)
         isGround = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
             QueryTriggerInteraction.Ignore);
+        if (_animator != null)
+            _animator.SetBool("isGround", isGround);
+
         #endregion
 
     }
@@ -230,16 +249,23 @@ public class PCPlayerController : NetworkBehaviour
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         #region Grappling
-        if (Vector3.SqrMagnitude(transform.position - grapplePoint) < 10f)
+        if (Vector3.SqrMagnitude(transform.position - grapplePoint) < 10f && grappling)
         {
             CmdStopGrappling();
         }
         if (grapplingCdTimer > 0)
+        {
             grapplingCdTimer -= Time.deltaTime;
+            //Debug.Log("grapplingCdTimer :" + grapplingCdTimer);
+        }
+
         #endregion
 
         if (dashCdTimer > 0)
+        {
             dashCdTimer -= Time.deltaTime;
+            //Debug.Log("dashCdTimer :" +dashCdTimer);
+        }
 
         #region CameraMovement
         if (!_rotateOnMove)
@@ -302,6 +328,8 @@ public class PCPlayerController : NetworkBehaviour
         if (isGround)
         {
             isGround = false;
+            if (_animator != null)
+                _animator.SetTrigger("Jump");
             state = PlayerState.Jump;
             rb.AddForce(Vector3.up * JumpPower, ForceMode.Impulse);
         }
@@ -338,9 +366,10 @@ public class PCPlayerController : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
         if (grapplingCdTimer > 0) return;
+
         if (Physics.Raycast(ray, out RaycastHit hit, 999f))
         {
-            transform.LookAt(hit.point);
+            //transform.LookAt(hit.point);
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
             enableMovementOnNextTouch = true;
 
@@ -353,6 +382,10 @@ public class PCPlayerController : NetworkBehaviour
             CmdViewGrappling(grapplePoint);
             state = PlayerState.Grappling;
             Freeze = true;
+        }
+        else
+        {
+            Debug.Log("그곳은 그래플링할 수 없습니다.");
         }
 
     }
@@ -367,8 +400,13 @@ public class PCPlayerController : NetworkBehaviour
 
     private void DashPerformed(InputAction.CallbackContext obj)
     {
-        Debug.Log(_inputDirection.magnitude);
+        //Debug.Log(_inputDirection.magnitude);
         if (_inputDirection.magnitude < 0.01f || !isGround || dashCdTimer > 0 || Freeze) return;
+        dashCdTimer = DashCd;
+        float targetAngle = Mathf.Atan2(_inputDirection.x, _inputDirection.z) * Mathf.Rad2Deg + Cam.eulerAngles.y;
+        transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+        if (_animator != null)
+            _animator.SetTrigger("Dash");
         rb.velocity = _moveDirection.normalized * DashSpeed;
         Freeze = true;
         StartCoroutine(DashFreeze_co());
@@ -382,17 +420,12 @@ public class PCPlayerController : NetworkBehaviour
     {
         while (true)
         {
-            yield return null;
-            if (rb.velocity.sqrMagnitude < DashDistance) //대쉬 끝
-            {
-                Freeze = false;
-                if (state != PlayerState.Run)
-                    _inputDirection = Vector3.zero;
-
-                //rb.velocity = Vector3.zero;
-                yield break;
-            }
+            yield return new WaitForSeconds(DashDistance);
+            break;
         }
+        Freeze = false;
+        if (state == PlayerState.Idle)
+            _inputDirection = Vector3.zero;
     }
     private void StopGrappling()
     {
@@ -417,7 +450,6 @@ public class PCPlayerController : NetworkBehaviour
         Gizmos.DrawSphere(spherePosition, GroundedRadius);
     }
 
-    private bool enableMovementOnNextTouch;
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -425,12 +457,22 @@ public class PCPlayerController : NetworkBehaviour
 
         if (enableMovementOnNextTouch)
         {
-            rb.AddForce(-(grappleMoveVector + Vector3.down) * 10f, ForceMode.Impulse);
             CmdStopGrappling();
+            rb.AddForce(-(grappleMoveVector + Vector3.down) * 10f, ForceMode.Impulse);
             enableMovementOnNextTouch = false;
+
         }
 
     }
+/*    IEnumerator CollisionFreeze_co()
+    {
+
+        Freeze = true;
+        yield return new WaitForSeconds(0.3f);
+        Freeze = false;
+        if (state == PlayerState.Idle)
+            _inputDirection = Vector3.zero;
+    }*/
     private void OnTriggerEnter(Collider other)
     {
         if (!isLocalPlayer) return;
@@ -536,7 +578,7 @@ public class PCPlayerController : NetworkBehaviour
         SetRotateOnMove(false);
         Rocket.transform.parent = RocketPos;
         Rocket.transform.position = RocketPos.transform.position;
-        Rocket.transform.localRotation = Quaternion.Euler(0, 0, 90);
+        Rocket.transform.localRotation = Quaternion.Euler(0, -90, 0);
         EquidRocket[RocketCount - 1].gameObject.SetActive(false);
         RocketCount--;
     }
