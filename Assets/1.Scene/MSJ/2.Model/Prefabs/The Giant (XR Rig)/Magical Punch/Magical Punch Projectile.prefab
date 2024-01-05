@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 4458528096270883759}
   - component: {fileID: 4458528096270883758}
   - component: {fileID: 8895868586496757135}
+  - component: {fileID: 9117520004672452622}
   - component: {fileID: 432855802}
   - component: {fileID: 9188231784340071559}
-  - component: {fileID: 9117520004672452622}
   m_Layer: 18
   m_Name: Magical Punch Projectile
   m_TagString: Untagged
@@ -116,6 +116,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &9117520004672452622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4458528096270883757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a13b4ee7ec90646479c6980a0f433cf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 100
+  lifeTime: 3
 --- !u!114 &432855802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,20 +182,6 @@ MonoBehaviour:
   positionSensitivity: 0.01
   rotationSensitivity: 0.01
   scaleSensitivity: 0.01
---- !u!114 &9117520004672452622
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4458528096270883757}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a13b4ee7ec90646479c6980a0f433cf3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 100
-  lifeTime: 3
 --- !u!1001 &8429067272643987332
 PrefabInstance:
   m_ObjectHideFlags: 0

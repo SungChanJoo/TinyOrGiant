@@ -14,20 +14,27 @@ public class HandPresencePhysics : NetworkBehaviour
     public HandPresenceType handType;
     private HandPresence handPresence;
 
+    [Header("Pose Detection")]
+    public bool isClawPose = false;
+    public float clawThreshold = .7f;
+
+    public bool isFistPose = false;
+    public float fistThreshold = .7f;
+
+    public bool isMagicPunchPose = false;
+    [Range(30f, 90f)] public float punchAngleThreshold = 60f;
+
+    public bool isEarthquakePose = false;
+    [Range(30f, 90f)] public float earthquakeAngleThreshold = 60f;
+
     [Header("Magical Punch")]
+    public Transform rayInteractor; // 사용하지 않도록 변경 필요
     public GameObject magicalPunchProjectile;
-    public Transform rayInteractor;
-    [Range(1f, 90f)] public float punchForwardAngleThreshold = 80f;
+
+    [Range(30f, 90f)] public float punchForwardAngleThreshold = 80f;
     [Range(1f, 5f)] public float punchVelocityThreshold = 2f;
     [Range(.1f, 10f)] public float punchCoolDown = .5f;
     public float curPunchCoolDown = 0f;
-
-    [Header("Gesture Detection")]
-    public bool isClaw = false;
-    public float clawThreshold = .7f;
-
-    public bool isFist = false;
-    public float fistThreshold = .7f;
 
     [Header("Non-Physical Hand")]
     public bool showNonPhysicalHand = true;
@@ -76,8 +83,8 @@ public class HandPresencePhysics : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
 
-        CheckHandGesture();
-        CheckMagicPunch();
+        CheckHandPose();
+        CheckMagicalPunch();
     }
 
     private void LateUpdate()
@@ -87,33 +94,30 @@ public class HandPresencePhysics : NetworkBehaviour
         ShowNonPhysicalHand();
     }
 
-    private void CheckHandGesture()
+    private void CheckHandPose()
     {
         var clawValue = handPresence.handAnimator.GetFloat("Trigger");
         var fistValue = handPresence.handAnimator.GetFloat("Grip");
+        isClawPose = clawValue >= clawThreshold;
+        isFistPose = fistValue >= fistThreshold;
 
-        isClaw = clawValue >= clawThreshold;
-        isFist = fistValue >= fistThreshold;
+        Vector3 handHorizontalDirection = handType == HandPresenceType.RightHand ? transform.right : -transform.right;
+        isMagicPunchPose = isFistPose && Vector3.Angle(handHorizontalDirection, Vector3.up) <= punchAngleThreshold;
+        isEarthquakePose = isFistPose && Vector3.Angle(transform.up, Vector3.up) <= earthquakeAngleThreshold;
     }
 
     Vector3 lastTargetPos = Vector3.zero;
-    private void CheckMagicPunch()
+    private void CheckMagicalPunch()
     {
         Vector3 currentTargetPosition = target.position;
-
-        if (!isFist)
+        if (!isFistPose)
         {
             lastTargetPos = currentTargetPosition;
             return;
         }
 
-        Vector3 desiredMove = currentTargetPosition - lastTargetPos;
-        Vector3 desiredDirection = desiredMove.normalized;
-
-        if (desiredMove.magnitude >= punchVelocityThreshold                                         // Check desired move vector
-            && curPunchCoolDown == 0                                                                // Check cool down
-            && Vector3.Angle(transform.forward, desiredDirection) <= punchForwardAngleThreshold)    // Check desired direction
-
+        Vector3 desiredMove = target.position - lastTargetPos;
+        if (IsValidPunch(desiredMove))
         {
             var projectileObj = Instantiate(magicalPunchProjectile, rayInteractor.position, rayInteractor.rotation);
             NetworkServer.Spawn(projectileObj);
@@ -123,6 +127,24 @@ public class HandPresencePhysics : NetworkBehaviour
         lastTargetPos = currentTargetPosition;
     }
 
+    private bool IsValidPunch(Vector3 desiredMove)
+    {
+        var desiredDirection = desiredMove.normalized;
+
+        if (!isMagicPunchPose
+            || isEarthquakePose
+            || curPunchCoolDown > 0
+            || desiredMove.magnitude < punchVelocityThreshold)
+            return false;
+
+        var forwardBias = Vector3.Dot(transform.forward, desiredDirection);
+        var upwardedBias = Vector3.Dot(transform.up, desiredDirection);
+        var forwardAngle = Vector3.Angle(transform.forward, desiredDirection);
+
+        return forwardBias > upwardedBias                       // 주먹 기준, 정면방향 이동이 윗방향 이동보다 큰 지
+                && forwardAngle <= punchForwardAngleThreshold;  // 주먹의 정면 방향으로 내지르는지
+    }
+    
     private void TryMoveHand()
     {
         // Try move to target position

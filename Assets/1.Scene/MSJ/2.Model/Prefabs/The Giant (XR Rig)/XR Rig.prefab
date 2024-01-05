@@ -3691,6 +3691,7 @@ GameObject:
   - component: {fileID: 2403833317657924616}
   - component: {fileID: 2403833317657924619}
   - component: {fileID: 2403833317657924618}
+  - component: {fileID: 3956294966533619845}
   m_Layer: 0
   m_Name: RightHand Controller
   m_TagString: Untagged
@@ -3965,6 +3966,22 @@ MonoBehaviour:
   m_StartingGroupMembers:
   - {fileID: 2403833317463957056}
   - {fileID: 2403833317755995163}
+--- !u!114 &3956294966533619845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2403833317657924622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b595a74419a1bcc4cbc199d7b8833851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsOverHead>k__BackingField: 0
+  altitudeOffset: 2
+  headTransform: {fileID: 5708207962651758411}
+  teleportRayInteractor: {fileID: 2403833317755995163}
 --- !u!1 &2403833317730010106
 GameObject:
   m_ObjectHideFlags: 0
@@ -5155,6 +5172,7 @@ GameObject:
   - component: {fileID: 2403833318704060042}
   - component: {fileID: 2403833318704060046}
   - component: {fileID: 2403833318704060045}
+  - component: {fileID: 4893656880843117980}
   m_Layer: 0
   m_Name: LeftHand Controller
   m_TagString: Untagged
@@ -5429,6 +5447,22 @@ MonoBehaviour:
   m_StartingGroupMembers:
   - {fileID: 2403833318092000286}
   - {fileID: 2403833317350218481}
+--- !u!114 &4893656880843117980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2403833318704060032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b595a74419a1bcc4cbc199d7b8833851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <IsOverHead>k__BackingField: 0
+  altitudeOffset: 2
+  headTransform: {fileID: 5708207962651758411}
+  teleportRayInteractor: {fileID: 2403833317350218481}
 --- !u!1 &2708565373874945754
 GameObject:
   m_ObjectHideFlags: 0
@@ -5493,16 +5527,20 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   handType: 1
-  magicalPunchProjectile: {fileID: 4458528096270883757, guid: 7cbf8309e3e131b4598ce9898ecd3e82, type: 3}
+  isClawPose: 0
+  clawThreshold: 0.7
+  isFistPose: 0
+  fistThreshold: 0.7
+  isMagicPunchPose: 0
+  punchAngleThreshold: 60
+  isEarthquakePose: 0
+  earthquakeAngleThreshold: 60
   rayInteractor: {fileID: 2403833317755995167}
+  magicalPunchProjectile: {fileID: 4458528096270883757, guid: 7cbf8309e3e131b4598ce9898ecd3e82, type: 3}
   punchForwardAngleThreshold: 80
-  punchVelocityThreshold: 3
+  punchVelocityThreshold: 2
   punchCoolDown: 0.5
   curPunchCoolDown: 0
-  isClaw: 0
-  clawThreshold: 0.7
-  isFist: 0
-  fistThreshold: 0.7
   showNonPhysicalHand: 1
   distanceThreshold: 3
 --- !u!54 &2708565373874945734
@@ -8955,16 +8993,20 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   handType: 0
-  magicalPunchProjectile: {fileID: 4458528096270883757, guid: 7cbf8309e3e131b4598ce9898ecd3e82, type: 3}
+  isClawPose: 0
+  clawThreshold: 0.7
+  isFistPose: 0
+  fistThreshold: 0.7
+  isMagicPunchPose: 0
+  punchAngleThreshold: 60
+  isEarthquakePose: 0
+  earthquakeAngleThreshold: 60
   rayInteractor: {fileID: 2403833317350218485}
+  magicalPunchProjectile: {fileID: 4458528096270883757, guid: 7cbf8309e3e131b4598ce9898ecd3e82, type: 3}
   punchForwardAngleThreshold: 80
-  punchVelocityThreshold: 3
+  punchVelocityThreshold: 2
   punchCoolDown: 0.5
   curPunchCoolDown: 0
-  isClaw: 0
-  clawThreshold: 0.7
-  isFist: 0
-  fistThreshold: 0.7
   showNonPhysicalHand: 1
   distanceThreshold: 3
 --- !u!54 &8494143761016436414

@@ -14311,7 +14311,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   MagicalImpactPrefab: {fileID: 5542702328967071578, guid: 9fa7543e2d9b76f42812f05fc7010c5a, type: 3}
-  offset: {x: 0, y: 0.01, z: 0}
+  decalOffset: {x: 0, y: 0.01, z: 0}
 --- !u!114 &1530691365922317426
 MonoBehaviour:
   m_ObjectHideFlags: 0

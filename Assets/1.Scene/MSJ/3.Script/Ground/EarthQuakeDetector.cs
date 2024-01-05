@@ -7,6 +7,8 @@ public class EarthQuakeDetector : NetworkBehaviour
 {
     public GameObject EarthQuakeImpactPrefab;
 
+    public bool isEarthquakePoseOnly = true;
+
     // 충돌 시 rigidbody.velocity 체크 후 filter
     [Range(50f, 500f)] public float velocityThreshold = 50f;
 
@@ -37,13 +39,11 @@ public class EarthQuakeDetector : NetworkBehaviour
 
         if (isLeftHandHit)
         {
-            Debug.Log($"Left Hand !!");
             curLeftCoolDown = leftHandCoolDown;
         }
 
         if (isRightHandHit)
         {
-            Debug.Log($"RightHand !!");
             curRightCoolDown = rightHandCoolDown;
         }
 
@@ -63,27 +63,25 @@ public class EarthQuakeDetector : NetworkBehaviour
     {
         var isPhysicalLeftHand = collision.gameObject.layer == LayerMask.NameToLayer("Left Hand Physics");
 
-        if (!isPhysicalLeftHand) return false;
+        if (!isPhysicalLeftHand || curLeftCoolDown > 0) return false;
 
-        var isFist = collision.gameObject.GetComponent<HandPresencePhysics>().isFist;
+        var handPhysics = collision.gameObject.GetComponent<HandPresencePhysics>();
+        var isValidPose = isEarthquakePoseOnly ? handPhysics.isEarthquakePose : handPhysics.isFistPose;
         var velocity = collision.gameObject.GetComponent<Rigidbody>().velocity.magnitude;
 
-        return isFist                               // Check Fisted
-                && velocity >= velocityThreshold    // Check velocity
-                && curLeftCoolDown == 0;            // Check Cool Down
+        return isValidPose && velocity >= velocityThreshold;
     }
-
+        
     private bool IsRightHandHit(Collision collision)
     {
         var isPhysicalRightHand = collision.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics");
 
-        if (!isPhysicalRightHand) return false;
+        if (!isPhysicalRightHand || curRightCoolDown > 0) return false;
 
-        var isFist = collision.gameObject.GetComponent<HandPresencePhysics>().isFist;
+        var handPhysics = collision.gameObject.GetComponent<HandPresencePhysics>();
+        var isValidPose = isEarthquakePoseOnly ? handPhysics.isEarthquakePose : handPhysics.isFistPose;
         var velocity = collision.gameObject.GetComponent<Rigidbody>().velocity.magnitude;
 
-        return isFist                               // Check Fisted
-                && velocity >= velocityThreshold    // Check velocity
-                && curRightCoolDown == 0;           // Check Cool Down
+        return isValidPose && velocity >= velocityThreshold;
     }
 }

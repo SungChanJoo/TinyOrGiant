@@ -54,8 +54,6 @@ public class TeleportationTrajectoryRenderer : NetworkBehaviour
 
     private void ShowTrajectory()
     {
-        // Check relative Y position of hand position compared with head...
-
         currentRendering = UpdateTrajectory();
         StartCoroutine(currentRendering);
 

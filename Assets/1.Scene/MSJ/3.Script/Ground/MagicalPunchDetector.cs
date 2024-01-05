@@ -7,7 +7,7 @@ public class MagicalPunchDetector : NetworkBehaviour
 {
     public GameObject MagicalImpactPrefab;
 
-    public Vector3 offset = new Vector3(0, 0.01f, 0);
+    public Vector3 decalOffset = new Vector3(0, 0.01f, 0);
 
     private void OnTriggerEnter(Collider other)
     {
@@ -20,7 +20,7 @@ public class MagicalPunchDetector : NetworkBehaviour
 
     private void CreateMagicalImpact(Vector3 position)
     {
-        var magicalImpcatObj = Instantiate(MagicalImpactPrefab, position + offset, Quaternion.identity);
+        var magicalImpcatObj = Instantiate(MagicalImpactPrefab, position + decalOffset, Quaternion.identity);
         NetworkServer.Spawn(magicalImpcatObj);
     }
 }
