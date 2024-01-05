@@ -34,6 +34,8 @@ public class TeleportationManagerExt : TeleportationManager
 
     public void SetCurrentTeleportInteractor(TeleportationAnchor anchor)
     {
+        if (anchor == null) return;
+
         List<IXRHoverInteractor> interactors = anchor.interactorsHovering;
         foreach (var interactor in interactors)
         {
