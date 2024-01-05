@@ -240,11 +240,11 @@ MonoBehaviour:
   m_LookaheadIgnoreY: 0
   m_HorizontalDamping: 0
   m_VerticalDamping: 0
-  m_ScreenX: 0.5020833
+  m_ScreenX: 0.5020834
   m_ScreenY: 0.7342587
-  m_DeadZoneWidth: 0
+  m_DeadZoneWidth: 0.01354167
   m_DeadZoneHeight: 0
-  m_SoftZoneWidth: 0
+  m_SoftZoneWidth: 0.01354167
   m_SoftZoneHeight: 0
   m_BiasX: 0
   m_BiasY: 0
@@ -621,7 +621,7 @@ MonoBehaviour:
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 3329635567476226736, guid: 592f7fbdda1f0ad49ac317b24468fd86, type: 3}
+  playerPrefab: {fileID: 2608007290464046640, guid: 88ac56f835ff6fc42b8266ac0ad07eb3, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
@@ -707,8 +707,8 @@ MonoBehaviour:
   m_LookaheadIgnoreY: 0
   m_HorizontalDamping: 0
   m_VerticalDamping: 0
-  m_ScreenX: 0.49896103
-  m_ScreenY: 0.88703424
+  m_ScreenX: 0.5015652
+  m_ScreenY: 0.9620336
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_SoftZoneWidth: 0
@@ -1048,12 +1048,12 @@ MonoBehaviour:
   m_BindingMode: 4
   m_SplineCurvature: 0.2
   m_Orbits:
-  - m_Height: 12
-    m_Radius: 18
+  - m_Height: 9
+    m_Radius: 5
   - m_Height: 7
     m_Radius: 18
   - m_Height: -1
-    m_Radius: 18
+    m_Radius: 12
   m_LegacyHeadingBias: 3.4028235e+38
   m_Rigs:
   - {fileID: 2074043794}
@@ -1231,8 +1231,8 @@ MonoBehaviour:
   m_LookaheadIgnoreY: 0
   m_HorizontalDamping: 0
   m_VerticalDamping: 0
-  m_ScreenX: 0.49791655
-  m_ScreenY: 0.49999854
+  m_ScreenX: 0.5041667
+  m_ScreenY: 0.7648107
   m_DeadZoneWidth: 0
   m_DeadZoneHeight: 0
   m_SoftZoneWidth: 0.05416659

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Mirror;
 using Cinemachine;
+using UnityEngine.Animations.Rigging;
 
 public enum PlayerState
 {
@@ -89,6 +90,10 @@ public class PCPlayerController : NetworkBehaviour
     public bool Freeze = false;
     public bool ActiveGrapple;
     public bool enableMovementOnNextTouch;
+    public Transform AimTarget;
+    public RigBuilder PlayerRig;
+    public float AimDistance =1f;
+    
     private Animator _animator;
     private Ray ray;
 
@@ -106,6 +111,8 @@ public class PCPlayerController : NetworkBehaviour
         //Cursor.visible = false;
         state = PlayerState.Idle;
         isGround = true;
+        PlayerRig.enabled = false;
+
 
     }
 
@@ -192,7 +199,7 @@ public class PCPlayerController : NetworkBehaviour
                     state = PlayerState.Jump;
                 }
                 rb.velocity = new Vector3(0, rb.velocity.y, 0);
-                if (_animator != null)
+                if (_animator != null && !IsFireReady)
                 {
                     _animator.SetFloat("x", _moveDirection.normalized.x);
                     _animator.SetFloat("y", _moveDirection.normalized.z);
@@ -239,7 +246,7 @@ public class PCPlayerController : NetworkBehaviour
             QueryTriggerInteraction.Ignore);
         if (_animator != null)
             _animator.SetBool("isGround", isGround);
-
+        
         #endregion
 
     }
@@ -278,7 +285,14 @@ public class PCPlayerController : NetworkBehaviour
             }
             Debug.DrawRay(transform.position, ray.direction * 999f, Color.red);
             Vector3 aimDirection = (mouseWorldPosition - transform.position).normalized;
-            transform.forward = aimDirection;
+            AimTarget.position = Cam.position + Cam.forward * AimDistance;
+            transform.forward = new Vector3(aimDirection.x, 0, aimDirection.z);
+            if (_animator != null && IsFireReady && _inputDirection.magnitude >= 0.1f && !Freeze)
+            {
+                Debug.Log("transform.forward" + transform.forward);
+                _animator.SetFloat("x", _inputDirection.x);
+                _animator.SetFloat("y", _inputDirection.z);
+            }
         }
         #endregion
     }
@@ -325,7 +339,8 @@ public class PCPlayerController : NetworkBehaviour
     private void Jump(InputAction.CallbackContext obj)
     {
         if (!isLocalPlayer) return;
-
+        if (Freeze) return;
+        
         if (isGround)
         {
             isGround = false;
@@ -436,7 +451,7 @@ public class PCPlayerController : NetworkBehaviour
         grapplingCdTimer = GrapplingCd;
         Lr.enabled = false;
         //state = PlayerState.Idle;
-            state = PlayerState.Jump;
+        state = PlayerState.Jump;
     }
 
     public void SetRotateOnMove(bool newRotateOnMove)
@@ -559,30 +574,37 @@ public class PCPlayerController : NetworkBehaviour
     }
     #endregion
     #region FireRocket
-    [ClientRpc]
-    public void RPCFireRocket(Ray ray)
-    {
-        if (IsFireReady)
-        {
-            SetRotateOnMove(true);
-            RocketPos.GetChild(0).parent = null;
-            Vector3 targetVector = new Vector3(ray.direction.x, ray.direction.y, ray.direction.z);
 
-            OnFired(targetVector); // 로켓 발사이벤트 로켓에서 호출
-            IsFireReady = false;
-        }
-
-    }
     [ClientRpc]
     public void RPCFireReadyRocket(GameObject Rocket)
     {
+        PlayerRig.enabled = true;
+
         IsFireReady = true;
+        _animator.SetBool("isAiming", IsFireReady);
         SetRotateOnMove(false);
         Rocket.transform.parent = RocketPos;
         Rocket.transform.position = RocketPos.transform.position;
         Rocket.transform.localRotation = Quaternion.Euler(0, -90, 0);
         EquidRocket[RocketCount - 1].gameObject.SetActive(false);
         RocketCount--;
+    }
+    [ClientRpc]
+    public void RPCFireRocket(Ray ray)
+    {
+        if (IsFireReady)
+        {
+
+            SetRotateOnMove(true);
+            RocketPos.GetChild(0).parent = null;
+            Vector3 targetVector = new Vector3(ray.direction.x, ray.direction.y, ray.direction.z);
+
+            OnFired(targetVector); // 로켓 발사이벤트 로켓에서 호출
+            IsFireReady = false;
+            _animator.SetBool("isAiming", IsFireReady);
+            PlayerRig.enabled = false;
+        }
+
     }
     #endregion
     [ClientRpc]
