@@ -208,6 +208,7 @@ public class PCPlayerController : NetworkBehaviour
         #region Friciton
         if (isGround && _inputDirection.magnitude < 0.01f && state != PlayerState.Jump && state != PlayerState.Grappling && !Freeze)
         {
+
             Vector3 normalVelocity = rb.velocity;
             float amount = Mathf.Min(Mathf.Abs(Mathf.Abs(normalVelocity.magnitude)), Mathf.Abs(frictionAmount));
             if(_animator != null)
@@ -434,7 +435,8 @@ public class PCPlayerController : NetworkBehaviour
         grappling = false;
         grapplingCdTimer = GrapplingCd;
         Lr.enabled = false;
-        state = PlayerState.Idle;
+        //state = PlayerState.Idle;
+            state = PlayerState.Jump;
     }
 
     public void SetRotateOnMove(bool newRotateOnMove)
