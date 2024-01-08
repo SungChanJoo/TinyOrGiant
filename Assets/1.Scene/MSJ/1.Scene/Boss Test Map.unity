@@ -2693,13 +2693,16 @@ MonoBehaviour:
   GrapplingSpeed: 50
   Offset_y: 0.1
   MaxGrappleDistance: 999
-  GrappleDelayTime: 0.5
   GrapplingCd: 1
   GunTip: {fileID: 7559652529320178095}
+  GunTipPos: {x: 0, y: 0, z: 0}
   WhatIsGrappleable:
     serializedVersion: 2
     m_Bits: 4294967295
   Lr: {fileID: 7559652530442090822}
+  DashSpeed: 0
+  DashDistance: 0
+  DashCd: 0
   RocketBullet: {fileID: 6655116186052315253, guid: 5dff9832461c8da438ee78c4d048380d, type: 3}
   RocketPos: {fileID: 7559652529019913661}
   RocketCount: 0
@@ -2710,9 +2713,12 @@ MonoBehaviour:
   - {fileID: 7559652529478346949}
   RocketPower: 3
   IsFireReady: 0
-  FollowCamera: {fileID: 0}
   Freeze: 0
   ActiveGrapple: 0
+  enableMovementOnNextTouch: 0
+  AimTarget: {fileID: 0}
+  PlayerRig: {fileID: 0}
+  AimDistance: 1
 --- !u!54 &4138478201477766251
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2753,7 +2759,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &4138478201477766253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2791,7 +2797,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4138478201477766252}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ad34abafad169848a38072baa96cdb2, type: 3}
   m_Name: 
@@ -2927,7 +2933,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4138478201477766252}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2999,7 +3005,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4138478201477766252}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a553cb17010b2403e8523b558bffbc14, type: 3}
   m_Name: 

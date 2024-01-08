@@ -9,6 +9,9 @@ public class VRHeadController : NetworkBehaviour
     public GameObject XRMainCameraObject;
     public Transform XRHead;
 
+    [Header("Head Aim")]
+    public float maxDistance = 100f;
+
     public override void OnStartClient()
     {
         base.OnStartClient();
@@ -28,5 +31,16 @@ public class VRHeadController : NetworkBehaviour
         XRHead.SetPositionAndRotation(
             XRMainCameraObject.transform.position, 
             XRMainCameraObject.transform.rotation);
+
+        if(Physics.Raycast(XRHead.position, XRHead.forward, out RaycastHit hitInfo, maxDistance))
+        {
+            Debug.Log($"Ray Hit : {hitInfo.rigidbody.gameObject.name}");
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(XRHead.position, XRHead.position + XRHead.forward * maxDistance);
     }
 }
