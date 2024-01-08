@@ -33877,7 +33877,7 @@ MonoBehaviour:
   syncInterval: 0
   EarthQuakeImpactPrefab: {fileID: 1383401501377398005, guid: e148d91d1ef233541bd2123f9e7e0a40, type: 3}
   isEarthquakePoseOnly: 1
-  velocityThreshold: 50
+  velocityThreshold: 10
   leftHandCoolDown: 0.5
   rightHandCoolDown: 0.5
   curLeftCoolDown: 0

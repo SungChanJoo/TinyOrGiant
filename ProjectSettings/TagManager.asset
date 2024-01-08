@@ -22,9 +22,9 @@ TagManager:
   - Water
   - UI
   - Ground
-  - 
-  - 
-  - 
+  - Ghost
+  - HitBox
+  - GrabOnly
   - 
   - 
   - Left Hand Physics

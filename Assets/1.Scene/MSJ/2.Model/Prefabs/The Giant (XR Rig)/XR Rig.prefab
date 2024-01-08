@@ -5528,6 +5528,7 @@ MonoBehaviour:
   syncInterval: 0
   controller: {fileID: 2403833317657924616}
   handType: 1
+  maxMoveSpeed: 50
   isClawPose: 0
   clawThreshold: 0.7
   isFistPose: 0
@@ -5536,16 +5537,16 @@ MonoBehaviour:
   punchAngleThreshold: 60
   isEarthquakePose: 0
   earthquakeAngleThreshold: 60
-  magicalPunch_hapticIntensity: 0.6
-  magicalPunch_hapticDuration: 0.2
+  magicalPunch_hapticIntensity: 0.4
+  magicalPunch_hapticDuration: 0.1
   rayInteractor: {fileID: 2403833317755995167}
   magicalPunchProjectile: {fileID: 4458528096270883757, guid: 7cbf8309e3e131b4598ce9898ecd3e82, type: 3}
   punchForwardAngleThreshold: 80
   punchVelocityThreshold: 2
   punchCoolDown: 0.5
   curPunchCoolDown: 0
-  earthquake_hapticIntensity: 0.8
-  earthquake_hapticDuration: 0.2
+  earthquake_hapticIntensity: 0.4
+  earthquake_hapticDuration: 0.1
   showNonPhysicalHand: 1
   distanceThreshold: 3
 --- !u!54 &2708565373874945734
@@ -8999,6 +9000,7 @@ MonoBehaviour:
   syncInterval: 0
   controller: {fileID: 2403833318704060042}
   handType: 0
+  maxMoveSpeed: 50
   isClawPose: 0
   clawThreshold: 0.7
   isFistPose: 0

@@ -15,6 +15,7 @@ public class HandPresencePhysics : NetworkBehaviour
     public ActionBasedController controller;
     public HandPresenceType handType;
     private HandPresence handPresence;
+    public float maxMoveSpeed = 5f;
 
     [Header("Pose Detection")]
     public bool isClawPose = false;
@@ -155,11 +156,18 @@ public class HandPresencePhysics : NetworkBehaviour
         return forwardBias > upwardedBias                       // 주먹 기준, 정면방향 이동이 윗방향 이동보다 큰 지
                 && forwardAngle <= punchForwardAngleThreshold;  // 주먹의 정면 방향으로 내지르는지
     }
-    
+
     private void TryMoveHand()
     {
         // Try move to target position
-        rb.velocity = (target.position - transform.position) / Time.fixedDeltaTime;
+        var desiredVelocity = (target.position - transform.position) / Time.fixedDeltaTime;
+        if (desiredVelocity.magnitude > maxMoveSpeed)
+        {
+            var ratio = maxMoveSpeed / desiredVelocity.magnitude;
+            desiredVelocity = new Vector3(desiredVelocity.x * ratio, desiredVelocity.y * ratio, desiredVelocity.z * ratio);
+        }
+
+        rb.velocity = desiredVelocity;
     }
 
     private void TryRotateHand()
