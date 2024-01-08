@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.unity.animation.rigging": "1.0.3",
     "com.unity.cinemachine": "2.6.17",
     "com.unity.ide.visualstudio": "2.0.22",
     "com.unity.nuget.newtonsoft-json": "3.2.1",
