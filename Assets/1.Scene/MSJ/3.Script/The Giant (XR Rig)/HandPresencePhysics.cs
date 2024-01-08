@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public enum HandPresenceType
 {
@@ -11,6 +12,7 @@ public enum HandPresenceType
 
 public class HandPresencePhysics : NetworkBehaviour
 {
+    public ActionBasedController controller;
     public HandPresenceType handType;
     private HandPresence handPresence;
 
@@ -28,6 +30,9 @@ public class HandPresencePhysics : NetworkBehaviour
     [Range(30f, 90f)] public float earthquakeAngleThreshold = 60f;
 
     [Header("Magical Punch")]
+    [Range(0f, 1f)] public float magicalPunch_hapticIntensity = 0f;
+    [Range(0f, 5f)] public float magicalPunch_hapticDuration = 0f;
+
     public Transform rayInteractor; // 사용하지 않도록 변경 필요
     public GameObject magicalPunchProjectile;
 
@@ -35,6 +40,10 @@ public class HandPresencePhysics : NetworkBehaviour
     [Range(1f, 5f)] public float punchVelocityThreshold = 2f;
     [Range(.1f, 10f)] public float punchCoolDown = .5f;
     public float curPunchCoolDown = 0f;
+
+    [Header("Earth Quake")]
+    [Range(0f, 1f)] public float earthquake_hapticIntensity = 0f;
+    [Range(0f, 5f)] public float earthquake_hapticDuration = 0f;
 
     [Header("Non-Physical Hand")]
     public bool showNonPhysicalHand = true;
@@ -122,6 +131,8 @@ public class HandPresencePhysics : NetworkBehaviour
             var projectileObj = Instantiate(magicalPunchProjectile, rayInteractor.position, rayInteractor.rotation);
             NetworkServer.Spawn(projectileObj);
             curPunchCoolDown = punchCoolDown;
+
+            controller.SendHapticImpulse(magicalPunch_hapticIntensity, magicalPunch_hapticDuration);
         }
 
         lastTargetPos = currentTargetPosition;

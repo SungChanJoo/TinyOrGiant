@@ -49,6 +49,10 @@ public class EarthQuakeDetector : NetworkBehaviour
 
         if (isEarthQuake)
         {
+            var handPhysics = collision.gameObject.GetComponent<HandPresencePhysics>();
+            var handController = handPhysics.controller;
+            handController.SendHapticImpulse(handPhysics.earthquake_hapticIntensity, handPhysics.earthquake_hapticDuration);
+
             var position = collision.collider.ClosestPoint(transform.position);
 
             var rotationEuler = collision.gameObject.transform.rotation.eulerAngles;

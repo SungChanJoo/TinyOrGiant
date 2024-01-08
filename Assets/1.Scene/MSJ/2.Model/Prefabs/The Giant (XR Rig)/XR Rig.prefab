@@ -3252,12 +3252,12 @@ MonoBehaviour:
   m_PlayHapticsOnSelectCanceled: 0
   m_HapticSelectCancelIntensity: 0
   m_HapticSelectCancelDuration: 0
-  m_PlayHapticsOnHoverEntered: 0
-  m_HapticHoverEnterIntensity: 0
-  m_HapticHoverEnterDuration: 0
-  m_PlayHapticsOnHoverExited: 0
-  m_HapticHoverExitIntensity: 0
-  m_HapticHoverExitDuration: 0
+  m_PlayHapticsOnHoverEntered: 1
+  m_HapticHoverEnterIntensity: 0.2
+  m_HapticHoverEnterDuration: 0.1
+  m_PlayHapticsOnHoverExited: 1
+  m_HapticHoverExitIntensity: 0.2
+  m_HapticHoverExitDuration: 0.1
   m_PlayHapticsOnHoverCanceled: 0
   m_HapticHoverCancelIntensity: 0
   m_HapticHoverCancelDuration: 0
@@ -3646,21 +3646,21 @@ MonoBehaviour:
   m_PlayAudioClipOnHoverCanceled: 0
   m_AudioClipForOnHoverCanceled: {fileID: 0}
   m_AllowHoverAudioWhileSelecting: 1
-  m_PlayHapticsOnSelectEntered: 0
-  m_HapticSelectEnterIntensity: 0
-  m_HapticSelectEnterDuration: 0
-  m_PlayHapticsOnSelectExited: 0
-  m_HapticSelectExitIntensity: 0
-  m_HapticSelectExitDuration: 0
+  m_PlayHapticsOnSelectEntered: 1
+  m_HapticSelectEnterIntensity: 0.2
+  m_HapticSelectEnterDuration: 0.1
+  m_PlayHapticsOnSelectExited: 1
+  m_HapticSelectExitIntensity: 0.2
+  m_HapticSelectExitDuration: 0.1
   m_PlayHapticsOnSelectCanceled: 0
   m_HapticSelectCancelIntensity: 0
   m_HapticSelectCancelDuration: 0
   m_PlayHapticsOnHoverEntered: 0
-  m_HapticHoverEnterIntensity: 0
-  m_HapticHoverEnterDuration: 0
+  m_HapticHoverEnterIntensity: 0.8
+  m_HapticHoverEnterDuration: 0.5
   m_PlayHapticsOnHoverExited: 0
-  m_HapticHoverExitIntensity: 0
-  m_HapticHoverExitDuration: 0
+  m_HapticHoverExitIntensity: 0.8
+  m_HapticHoverExitDuration: 0.5
   m_PlayHapticsOnHoverCanceled: 0
   m_HapticHoverCancelIntensity: 0
   m_HapticHoverCancelDuration: 0
@@ -4136,12 +4136,12 @@ MonoBehaviour:
   m_PlayHapticsOnSelectCanceled: 0
   m_HapticSelectCancelIntensity: 0
   m_HapticSelectCancelDuration: 0
-  m_PlayHapticsOnHoverEntered: 0
-  m_HapticHoverEnterIntensity: 0
-  m_HapticHoverEnterDuration: 0
-  m_PlayHapticsOnHoverExited: 0
-  m_HapticHoverExitIntensity: 0
-  m_HapticHoverExitDuration: 0
+  m_PlayHapticsOnHoverEntered: 1
+  m_HapticHoverEnterIntensity: 0.2
+  m_HapticHoverEnterDuration: 0.1
+  m_PlayHapticsOnHoverExited: 1
+  m_HapticHoverExitIntensity: 0.2
+  m_HapticHoverExitDuration: 0.1
   m_PlayHapticsOnHoverCanceled: 0
   m_HapticHoverCancelIntensity: 0
   m_HapticHoverCancelDuration: 0
@@ -4901,21 +4901,21 @@ MonoBehaviour:
   m_PlayAudioClipOnHoverCanceled: 0
   m_AudioClipForOnHoverCanceled: {fileID: 0}
   m_AllowHoverAudioWhileSelecting: 1
-  m_PlayHapticsOnSelectEntered: 0
-  m_HapticSelectEnterIntensity: 0
-  m_HapticSelectEnterDuration: 0
-  m_PlayHapticsOnSelectExited: 0
-  m_HapticSelectExitIntensity: 0
-  m_HapticSelectExitDuration: 0
+  m_PlayHapticsOnSelectEntered: 1
+  m_HapticSelectEnterIntensity: 0.2
+  m_HapticSelectEnterDuration: 0.1
+  m_PlayHapticsOnSelectExited: 1
+  m_HapticSelectExitIntensity: 0.2
+  m_HapticSelectExitDuration: 0.1
   m_PlayHapticsOnSelectCanceled: 0
   m_HapticSelectCancelIntensity: 0
   m_HapticSelectCancelDuration: 0
   m_PlayHapticsOnHoverEntered: 0
-  m_HapticHoverEnterIntensity: 0
-  m_HapticHoverEnterDuration: 0
+  m_HapticHoverEnterIntensity: 0.8
+  m_HapticHoverEnterDuration: 0.5
   m_PlayHapticsOnHoverExited: 0
-  m_HapticHoverExitIntensity: 0
-  m_HapticHoverExitDuration: 0
+  m_HapticHoverExitIntensity: 0.8
+  m_HapticHoverExitDuration: 0.5
   m_PlayHapticsOnHoverCanceled: 0
   m_HapticHoverCancelIntensity: 0
   m_HapticHoverCancelDuration: 0
@@ -5526,6 +5526,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  controller: {fileID: 2403833317657924616}
   handType: 1
   isClawPose: 0
   clawThreshold: 0.7
@@ -5535,12 +5536,16 @@ MonoBehaviour:
   punchAngleThreshold: 60
   isEarthquakePose: 0
   earthquakeAngleThreshold: 60
+  magicalPunch_hapticIntensity: 0.6
+  magicalPunch_hapticDuration: 0.2
   rayInteractor: {fileID: 2403833317755995167}
   magicalPunchProjectile: {fileID: 4458528096270883757, guid: 7cbf8309e3e131b4598ce9898ecd3e82, type: 3}
   punchForwardAngleThreshold: 80
   punchVelocityThreshold: 2
   punchCoolDown: 0.5
   curPunchCoolDown: 0
+  earthquake_hapticIntensity: 0.8
+  earthquake_hapticDuration: 0.2
   showNonPhysicalHand: 1
   distanceThreshold: 3
 --- !u!54 &2708565373874945734
@@ -8992,6 +8997,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  controller: {fileID: 2403833318704060042}
   handType: 0
   isClawPose: 0
   clawThreshold: 0.7
@@ -9001,12 +9007,16 @@ MonoBehaviour:
   punchAngleThreshold: 60
   isEarthquakePose: 0
   earthquakeAngleThreshold: 60
+  magicalPunch_hapticIntensity: 0.4
+  magicalPunch_hapticDuration: 0.1
   rayInteractor: {fileID: 2403833317350218485}
   magicalPunchProjectile: {fileID: 4458528096270883757, guid: 7cbf8309e3e131b4598ce9898ecd3e82, type: 3}
   punchForwardAngleThreshold: 80
   punchVelocityThreshold: 2
   punchCoolDown: 0.5
   curPunchCoolDown: 0
+  earthquake_hapticIntensity: 0.4
+  earthquake_hapticDuration: 0.1
   showNonPhysicalHand: 1
   distanceThreshold: 3
 --- !u!54 &8494143761016436414
