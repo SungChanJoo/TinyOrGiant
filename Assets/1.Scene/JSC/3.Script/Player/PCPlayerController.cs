@@ -391,8 +391,19 @@ public class PCPlayerController : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
         if (Freeze) return;
-        
-
+        if (IsGrap)
+        {
+            if (RocketCount > 0)
+            {
+                rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+                rb.AddForce(Vector3.up * JumpPower * RocketPower, ForceMode.Impulse);
+                CmdPlayRocketJumpEffect();
+                if (IsGrap)
+                    IsGrap = false;
+            }
+            else
+                return;
+        }
         if (isGround)
         {
             isGround = false;
@@ -402,13 +413,11 @@ public class PCPlayerController : NetworkBehaviour
             state = PlayerState.Jump;
             rb.AddForce(Vector3.up * JumpPower, ForceMode.Impulse);
         }
-        else if (RocketCount > 0 || IsGrap)
+        else if (RocketCount > 0)
         {
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(Vector3.up * JumpPower * RocketPower, ForceMode.Impulse);
             CmdPlayRocketJumpEffect();
-            if (IsGrap)
-                IsGrap = false;
         }
     }
     [Command]
