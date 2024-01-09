@@ -5,19 +5,44 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class MagicalPunchProjectileController : MonoBehaviour
 {
+    public float lifeTime = 3f;
     [Range(0f, 500f)] public float speed = 10f;
-    [Range(0f, 10f)] public float lifeTime = 3f;
-    Rigidbody rigidbody;
+    //[Range(0f, 10f)] public float lifeTime = 3f;
+    public Rigidbody rigidbody;
+    private VRHeadController headController;
 
     private void Awake()
     {
         TryGetComponent(out rigidbody);
+        headController = FindObjectOfType<VRHeadController>();
     }
 
-    private IEnumerator Start()
+    private Vector3 targetPos;
+
+    public void StartMove()
     {
-        rigidbody.velocity = transform.forward * speed;
-        yield return new WaitForSeconds(lifeTime);
-        Destroy(gameObject);
+        targetPos = headController.currentAimPoint;
+        StartCoroutine(UpdateRotation());
+        rigidbody.velocity = (targetPos - transform.position).normalized * speed;
+    }
+    
+    private IEnumerator UpdateRotation()
+    {
+        transform.forward = (targetPos - transform.position).normalized;
+
+        float elapsedTime = 0f;
+        while (elapsedTime < lifeTime)
+        {
+            elapsedTime += Time.deltaTime;
+            transform.forward = (targetPos - transform.position).normalized;
+            yield return null;
+        }
+
+        Destroy(gameObject, .1f);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Destroy(gameObject, .1f);
     }
 }

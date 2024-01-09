@@ -110,7 +110,7 @@ public class PCPlayerController : NetworkBehaviour
         Cam = GameObject.FindGameObjectWithTag("MainCamera").transform;
         _freeLook = GameObject.FindGameObjectWithTag("PCPlayerCam").GetComponent<CinemachineFreeLook>();
         _animator = GetComponent<Animator>();
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
         state = PlayerState.Idle;
         isGround = true;

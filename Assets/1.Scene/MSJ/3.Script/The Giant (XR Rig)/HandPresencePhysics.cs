@@ -127,16 +127,23 @@ public class HandPresencePhysics : NetworkBehaviour
         }
 
         Vector3 desiredMove = target.position - lastTargetPos;
+        CreateMagicalPunch(desiredMove);
+
+        lastTargetPos = currentTargetPosition;
+    }
+
+    private void CreateMagicalPunch(Vector3 desiredMove)
+    {
         if (IsValidPunch(desiredMove))
         {
             var projectileObj = Instantiate(magicalPunchProjectile, rayInteractor.position, rayInteractor.rotation);
+            var projectileController = projectileObj.GetComponent<MagicalPunchProjectileController>();
+            projectileController.StartMove();
             NetworkServer.Spawn(projectileObj);
             curPunchCoolDown = punchCoolDown;
 
             controller.SendHapticImpulse(magicalPunch_hapticIntensity, magicalPunch_hapticDuration);
         }
-
-        lastTargetPos = currentTargetPosition;
     }
 
     private bool IsValidPunch(Vector3 desiredMove)

@@ -1,19 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class DestroyTimer : MonoBehaviour
+public class DestroyTimer : NetworkBehaviour
 {
     public float delayTime = 2f;
 
     void Start()
     {
-        StartCoroutine(Destroy(delayTime));
-    }
-
-    private IEnumerator Destroy(float delayTime)
-    {
-        yield return new WaitForSeconds(delayTime);
-        Destroy(gameObject);
+        //Destroy(gameObject, delayTime);
     }
 }

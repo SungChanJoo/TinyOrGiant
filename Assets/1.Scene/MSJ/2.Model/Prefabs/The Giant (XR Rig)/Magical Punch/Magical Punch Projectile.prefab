@@ -128,8 +128,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a13b4ee7ec90646479c6980a0f433cf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lifeTime: 2
   speed: 100
-  lifeTime: 3
+  rigidbody: {fileID: 0}
 --- !u!114 &432855802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,6 +245,18 @@ PrefabInstance:
     - target: {fileID: 198048785800816542, guid: 20846bb16be54cd4982718a137e7718f, type: 3}
       propertyPath: ShapeModule.radius.value
       value: 0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 198048785800816542, guid: 20846bb16be54cd4982718a137e7718f, type: 3}
+      propertyPath: SubModule.subEmitters.Array.data[0].properties
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 198048785800816542, guid: 20846bb16be54cd4982718a137e7718f, type: 3}
+      propertyPath: SubModule.subEmitters.Array.data[1].properties
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 198048785800816542, guid: 20846bb16be54cd4982718a137e7718f, type: 3}
+      propertyPath: SubModule.subEmitters.Array.data[2].properties
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 20846bb16be54cd4982718a137e7718f, type: 3}

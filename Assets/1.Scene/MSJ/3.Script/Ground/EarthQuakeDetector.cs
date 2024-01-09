@@ -62,7 +62,6 @@ public class EarthQuakeDetector : NetworkBehaviour
             NetworkServer.Spawn(earthQuakeObj);
         }
     }
-
     private bool IsLeftHandHit(Collision collision)
     {
         var isPhysicalLeftHand = collision.gameObject.layer == LayerMask.NameToLayer("Left Hand Physics");
