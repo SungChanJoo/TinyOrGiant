@@ -78,6 +78,7 @@ public class PCPlayerController : NetworkBehaviour
     public float DashDistance;
     public float DashCd;
     private float dashCdTimer;
+    public ParticleSystem DashEffect;
 
     [Header("Rocket")]
     public GameObject RocketBullet;
@@ -87,6 +88,7 @@ public class PCPlayerController : NetworkBehaviour
     public GameObject[] EquidRocket;
     public float RocketPower = 3f;
     public bool IsFireReady = false;
+    public ParticleSystem RocketJumpEffect;
 
     [Header("ETC")]
     bool _rotateOnMove = true;
@@ -96,7 +98,8 @@ public class PCPlayerController : NetworkBehaviour
     public Transform AimTarget;
     public RigBuilder PlayerRig;
     public float AimDistance =1f;
-    
+    public bool IsGrap;
+
     private Animator _animator;
     private Ray ray;
 
@@ -114,6 +117,7 @@ public class PCPlayerController : NetworkBehaviour
         //Cursor.visible = false;
         state = PlayerState.Idle;
         isGround = true;
+        IsGrap = false;
         PlayerRig.enabled = false;
 
 
@@ -178,7 +182,7 @@ public class PCPlayerController : NetworkBehaviour
     {
 
         if (!isLocalPlayer) return;
-
+        if (IsGrap) return; 
         if (rb.velocity.magnitude < 0.01f)
         {
             _animator.SetFloat("x", rb.velocity.x);
@@ -207,7 +211,7 @@ public class PCPlayerController : NetworkBehaviour
 
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 10f);
             transform.rotation = Quaternion.Euler(30f, transform.eulerAngles.y, 0f);
-
+            
         }
         #endregion
 
@@ -273,18 +277,19 @@ public class PCPlayerController : NetworkBehaviour
         #endregion
 
         #region Jump Gravity
-        if (rb.velocity.y < 3 && !isGround)
+        if (rb.velocity.y < 3.5f && !isGround)
         {
             rb.AddForce(Physics.gravity * GravityScale, ForceMode.Acceleration);
         }
         #endregion
 
-
-
     }
+
     private void Update()
     {
+
         if (!isLocalPlayer) return;
+        if (IsGrap) return;
         //if (GameManager.Instance.playerType != PlayerType.PC) return;
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -356,6 +361,7 @@ public class PCPlayerController : NetworkBehaviour
     private void OnMovemnetStarted(InputAction.CallbackContext value)
     {
         if (!isLocalPlayer) return;
+        if (IsGrap) return;
 
         if (!Freeze)
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
@@ -363,6 +369,7 @@ public class PCPlayerController : NetworkBehaviour
     private void OnMovemnetPerformed(InputAction.CallbackContext value)
     {
         if (!isLocalPlayer || state == PlayerState.Grappling) return;
+        if (IsGrap) return;
 
         state = PlayerState.Run;
         _inputDirection = new Vector3(value.ReadValue<Vector2>().x, 0f, value.ReadValue<Vector2>().y);
@@ -371,9 +378,10 @@ public class PCPlayerController : NetworkBehaviour
     }
     private void OnMovemnetCanceled(InputAction.CallbackContext value)
     {
-        if (!isLocalPlayer || state == PlayerState.Grappling) return;
-
-        state = PlayerState.Idle;
+        if (!isLocalPlayer ) return;
+        if (IsGrap) return;
+        if(state != PlayerState.Grappling)
+            state = PlayerState.Idle;
         _inputDirection = Vector3.zero;
     }
     #endregion
@@ -383,7 +391,19 @@ public class PCPlayerController : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
         if (Freeze) return;
-        
+        if (IsGrap)
+        {
+            if (RocketCount > 0)
+            {
+                rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+                rb.AddForce(Vector3.up * JumpPower * RocketPower, ForceMode.Impulse);
+                CmdPlayRocketJumpEffect();
+                if (IsGrap)
+                    IsGrap = false;
+            }
+            else
+                return;
+        }
         if (isGround)
         {
             isGround = false;
@@ -395,10 +415,29 @@ public class PCPlayerController : NetworkBehaviour
         }
         else if (RocketCount > 0)
         {
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(Vector3.up * JumpPower * RocketPower, ForceMode.Impulse);
-            EquidRocket[RocketCount - 1].gameObject.SetActive(false);
-            RocketCount--;
+            CmdPlayRocketJumpEffect();
         }
+    }
+    [Command]
+    private void CmdPlayRocketJumpEffect()
+    {
+        RpcPlayRocketJumpEffect();
+    }
+    [ClientRpc]
+    private void RpcPlayRocketJumpEffect()
+    {
+        StartCoroutine(PlayRocketJumpEffect_co());
+    }
+
+    private IEnumerator PlayRocketJumpEffect_co()
+    {
+        EquidRocket[RocketCount - 1].gameObject.SetActive(false);
+        RocketCount--;
+        RocketJumpEffect.Play();
+        yield return new WaitForSeconds(2f);
+        RocketJumpEffect.Stop();
     }
 
     #endregion
@@ -407,7 +446,8 @@ public class PCPlayerController : NetworkBehaviour
     private void FirePerformed(InputAction.CallbackContext obj)
     {
         if (!isLocalPlayer) return;
-
+        if (IsGrap) return;
+        if (Freeze) return;
         //Aim UI º¯°æÇØÁà todo 1227
         if (RocketCount > 0)
         {
@@ -417,6 +457,8 @@ public class PCPlayerController : NetworkBehaviour
     private void FireCanceled(InputAction.CallbackContext obj)
     {
         if (!isLocalPlayer) return;
+        if (IsGrap) return;
+        if (Freeze) return;
 
         CmdFireRocket(ray);
     }
@@ -426,7 +468,9 @@ public class PCPlayerController : NetworkBehaviour
     private void GrapplingPerformed(InputAction.CallbackContext obj)
     {
         if (!isLocalPlayer) return;
-        Debug.Log((grapplingCdTimer > 0) +" | "+ (Freeze));
+        if (IsGrap) return;
+        if (IsFireReady) return;
+
         if (grapplingCdTimer > 0 || Freeze) return;
 
         if (Physics.Raycast(ray, out RaycastHit hit, 999f))
@@ -459,7 +503,10 @@ public class PCPlayerController : NetworkBehaviour
     private void GrpplingCanceled(InputAction.CallbackContext obj)
     {
         if (!isLocalPlayer) return;
-        if (Freeze) 
+        if (IsGrap) return;
+        if (IsFireReady) return;
+
+        if (Freeze)
             CmdStopGrappling();
     }
     #endregion 
@@ -468,6 +515,9 @@ public class PCPlayerController : NetworkBehaviour
     {
         //Debug.Log(_inputDirection.magnitude);
         if (_inputDirection.magnitude < 0.01f || !isGround || dashCdTimer > 0 || Freeze) return;
+        if (IsGrap) return;
+        if (IsFireReady) return;
+
         dashCdTimer = DashCd;
         float targetAngle = Mathf.Atan2(_inputDirection.x, _inputDirection.z) * Mathf.Rad2Deg + Cam.eulerAngles.y;
         transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
@@ -477,18 +527,32 @@ public class PCPlayerController : NetworkBehaviour
         //_animator.SetTrigger("Dash");
         rb.velocity = _moveDirection.normalized * DashSpeed;
         Freeze = true;
-        StartCoroutine(DashFreeze_co());
+        CmdPlayDashEffect();
+        //StartCoroutine(DashFreeze_co());
     }
     private void DashCanceled(InputAction.CallbackContext obj)
     {
 
     }
     #endregion
+    [Command]
+    private void CmdPlayDashEffect()
+    {
+        RpcPlayDashEffect();
+    }
+    [ClientRpc]
+    private void RpcPlayDashEffect()
+    {
+        StartCoroutine(DashFreeze_co());
+    }
     IEnumerator DashFreeze_co()
     {
+        DashEffect.Play();
         while (true)
         {
-            yield return new WaitForSeconds(DashDistance);
+            yield return new WaitForSeconds(DashDistance * 0.8f);
+            DashEffect.Stop();
+            yield return new WaitForSeconds(DashDistance * 0.1f);
             break;
         }
         Freeze = false;
@@ -505,6 +569,7 @@ public class PCPlayerController : NetworkBehaviour
         //state = PlayerState.Idle;
         _animator.SetBool("isGrappling", false);
         state = PlayerState.Jump;
+
     }
 
     public void SetRotateOnMove(bool newRotateOnMove)

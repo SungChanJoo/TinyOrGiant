@@ -9,13 +9,9 @@ public class RocketBullet : NetworkBehaviour
     [SerializeField] private float _speed = 100f;
     [SerializeField] private float offest_y = 1f;
     [SerializeField] private float _graph = 0.2f;
-    private bool isFire = false;
-/*    [SerializeField]
-    private float _trailRate = 200;
-    [SerializeField]
-    private GameObject _smokeTrail;
-    [SerializeField]
-    private GameObject _explosion;*/
+    [SerializeField] private GameObject ExplosionEffect;
+    [SerializeField] private GameObject RocketLineEffect;
+    private bool isFire;
 
     void Awake()
     {
@@ -25,26 +21,11 @@ public class RocketBullet : NetworkBehaviour
         PCPlayerController.OnFired += OnRocketFired;
         //Physics.IgnoreLayerCollision(7, 7, true);
     }
-
-    /*    private void OnCollisionEnter(Collision collision)
-        {
-    *//*        if (collision.collider.CompareTag("Destructable"))
-            {
-                //Instantiate(_explosion, collision.transform.position, Quaternion.identity);
-                Destroy(collision.collider.gameObject);
-            }*//*
-
-            //Destroy(gameObject);
-        }*/
+    private void OnEnable()
+    {
+    }
     private void FixedUpdate()
     {
-/*        Vector3 dir = Camera.main.ScreenPointToRay(Input.mousePosition).direction;
-        Ray ray = new Ray(transform.position, dir);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, 999f))
-        {
-            Debug.Log(hit.transform.gameObject.name);
-        }*/
         if (Rb.velocity.y <4)
         {
             //앞으로 기울일려면 z축을 +해주면 된다.
@@ -52,13 +33,11 @@ public class RocketBullet : NetworkBehaviour
             targetRotation.eulerAngles = new Vector3( transform.rotation.eulerAngles.x,
                                                       transform.rotation.eulerAngles.y,
                                                       transform.rotation.eulerAngles.z + Mathf.Abs(Rb.velocity.y) * _graph);
-            //Debug.Log("eulerAngles" + targetRotation.eulerAngles);
             if(transform.rotation.eulerAngles.z > 180)
             {
                 return;
             }
             transform.rotation = targetRotation;
-            //transform.rotation = Quaternion.Euler(targetRotation.x, targetRotation.y, targetRotation.z - _rb.velocity.y);
         }
     }
 
@@ -70,19 +49,31 @@ public class RocketBullet : NetworkBehaviour
             Rb.isKinematic = false;
             Rb.useGravity = true;
 
-            //Vector3 dir = Camera.main.ScreenPointToRay(Input.mousePosition).direction;
-            //Ray ray = new Ray(player.transform.position, dir);
-            //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-/*            if (Physics.Raycast(ray, out RaycastHit hit, 999f))
-            {
-                Debug.Log(hit.transform.gameObject.name);
-            }*/
             Vector3 editRayDirection = new Vector3(targetVector.x, targetVector.y + offest_y, targetVector.z);
-            Debug.Log("로켓 발싸합니다.~" + editRayDirection * _speed);
             Rb.AddForce(editRayDirection * _speed, ForceMode.Impulse);
             isFire = true;
             PCPlayerController.OnFired -= OnRocketFired;
+            Destroy(gameObject, 5f);
 
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.name.Equals("Dummy"))
+        {
+            if(isFire)
+            {
+                //Todo 0108 적에게 데미지주는 메소드 추가해줘
+                var Effect = Instantiate(ExplosionEffect, transform.position, Quaternion.identity);
+                Destroy(Effect, 2f);
+                //RocketLineEffect.GetComponent<ParticleSystem>().loop = false;
+                Rb.isKinematic = true;
+                Rb.useGravity = false;
+                Destroy(gameObject, 1.5f);
+            }
+
+        }
+    }
+
 }
