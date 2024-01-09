@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 using Mirror;
 using Cinemachine;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.XR.Interaction.Toolkit;
+using Unity.XR.CoreUtils;
 
 public enum PlayerState
 {
@@ -98,7 +100,7 @@ public class PCPlayerController : NetworkBehaviour
     public Transform AimTarget;
     public RigBuilder PlayerRig;
     public float AimDistance =1f;
-    public bool IsGrap;
+    public bool IsGrab;
 
     private Animator _animator;
     private Ray ray;
@@ -110,15 +112,15 @@ public class PCPlayerController : NetworkBehaviour
     {
         input = new PlayerControls();
         rb = GetComponent<Rigidbody>();
-        Cam = GameObject.FindGameObjectWithTag("MainCamera").transform;
-        _freeLook = GameObject.FindGameObjectWithTag("PCPlayerCam").GetComponent<CinemachineFreeLook>();
         _animator = GetComponent<Animator>();
         //Cursor.visible = false;
         state = PlayerState.Idle;
         isGround = true;
-        IsGrap = false;
+        IsGrab = false;
         PlayerRig.enabled = false;
         if (GameManager.Instance.playerType != PlayerType.PC) return;
+        _freeLook = GameObject.FindGameObjectWithTag("PCPlayerCam").GetComponent<CinemachineFreeLook>();
+        Cam = GameObject.FindGameObjectWithTag("MainCamera").transform;
         Cursor.lockState = CursorLockMode.Locked;
 
     }
@@ -177,12 +179,13 @@ public class PCPlayerController : NetworkBehaviour
     private void RpcPlayTriggerAni(string aniName)
     {
         _animator.SetTrigger(aniName);
+        Debug.Log(aniName);
     }
     private void FixedUpdate()
     {
 
         if (!isLocalPlayer) return;
-        if (IsGrap) return; 
+        if (IsGrab) return; 
         if (rb.velocity.magnitude < 0.01f)
         {
             _animator.SetFloat("x", rb.velocity.x);
@@ -289,7 +292,7 @@ public class PCPlayerController : NetworkBehaviour
     {
 
         if (!isLocalPlayer) return;
-        if (IsGrap) return;
+        if (IsGrab) return;
         if (GameManager.Instance.playerType != PlayerType.PC) return;
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -361,7 +364,7 @@ public class PCPlayerController : NetworkBehaviour
     private void OnMovemnetStarted(InputAction.CallbackContext value)
     {
         if (!isLocalPlayer) return;
-        if (IsGrap) return;
+        if (IsGrab) return;
 
         if (!Freeze)
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
@@ -369,7 +372,7 @@ public class PCPlayerController : NetworkBehaviour
     private void OnMovemnetPerformed(InputAction.CallbackContext value)
     {
         if (!isLocalPlayer || state == PlayerState.Grappling) return;
-        if (IsGrap) return;
+        if (IsGrab) return;
 
         state = PlayerState.Run;
         _inputDirection = new Vector3(value.ReadValue<Vector2>().x, 0f, value.ReadValue<Vector2>().y);
@@ -379,7 +382,7 @@ public class PCPlayerController : NetworkBehaviour
     private void OnMovemnetCanceled(InputAction.CallbackContext value)
     {
         if (!isLocalPlayer ) return;
-        if (IsGrap) return;
+        if (IsGrab) return;
         if(state != PlayerState.Grappling)
             state = PlayerState.Idle;
         _inputDirection = Vector3.zero;
@@ -391,15 +394,15 @@ public class PCPlayerController : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
         if (Freeze) return;
-        if (IsGrap)
+        if (IsGrab)
         {
             if (RocketCount > 0)
             {
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
                 rb.AddForce(Vector3.up * JumpPower * RocketPower, ForceMode.Impulse);
                 CmdPlayRocketJumpEffect();
-                if (IsGrap)
-                    IsGrap = false;
+                if (IsGrab)
+                    IsGrab = false;
             }
             else
                 return;
@@ -446,7 +449,7 @@ public class PCPlayerController : NetworkBehaviour
     private void FirePerformed(InputAction.CallbackContext obj)
     {
         if (!isLocalPlayer) return;
-        if (IsGrap) return;
+        if (IsGrab) return;
         if (Freeze) return;
         //Aim UI 변경해줘 todo 1227
         if (RocketCount > 0)
@@ -457,7 +460,7 @@ public class PCPlayerController : NetworkBehaviour
     private void FireCanceled(InputAction.CallbackContext obj)
     {
         if (!isLocalPlayer) return;
-        if (IsGrap) return;
+        if (IsGrab) return;
         if (Freeze) return;
 
         CmdFireRocket(ray);
@@ -468,7 +471,7 @@ public class PCPlayerController : NetworkBehaviour
     private void GrapplingPerformed(InputAction.CallbackContext obj)
     {
         if (!isLocalPlayer) return;
-        if (IsGrap) return;
+        if (IsGrab) return;
         if (IsFireReady) return;
 
         if (grapplingCdTimer > 0 || Freeze) return;
@@ -503,7 +506,7 @@ public class PCPlayerController : NetworkBehaviour
     private void GrpplingCanceled(InputAction.CallbackContext obj)
     {
         if (!isLocalPlayer) return;
-        if (IsGrap) return;
+        if (IsGrab) return;
         if (IsFireReady) return;
 
         if (Freeze)
@@ -515,7 +518,7 @@ public class PCPlayerController : NetworkBehaviour
     {
         //Debug.Log(_inputDirection.magnitude);
         if (_inputDirection.magnitude < 0.01f || !isGround || dashCdTimer > 0 || Freeze) return;
-        if (IsGrap) return;
+        if (IsGrab) return;
         if (IsFireReady) return;
 
         dashCdTimer = DashCd;
@@ -583,6 +586,9 @@ public class PCPlayerController : NetworkBehaviour
         Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
                                     transform.position.z);
         Gizmos.DrawSphere(spherePosition, GroundedRadius);
+
+        Gizmos.color = Color.blue;
+        //Gizmos.DrawSphere(transform.position, 4f);
     }
 
 
@@ -607,24 +613,117 @@ public class PCPlayerController : NetworkBehaviour
                 CmdStopGrappling();
                 enableMovementOnNextTouch = false;
             }
-
-
         }
-
     }
-    public void Grabbed(bool value)
-    {
-        IsGrap = value;
-    }
-/*    IEnumerator CollisionFreeze_co()
-    {
 
-        Freeze = true;
-        yield return new WaitForSeconds(0.3f);
-        Freeze = false;
-        if (state == PlayerState.Idle)
-            _inputDirection = Vector3.zero;
-    }*/
+    // Grab Interactable Event
+    public void Grabbed(bool isGrabbed)
+    {
+        CmdUpdateToHandPosition(isGrabbed);
+    }
+
+    private IEnumerator currentUpdatePos = null;
+    private IEnumerator UpdateToHandTransform(GameObject targetObj)
+    {
+        while (true)
+        {
+            transform.position = targetObj.transform.position;
+            transform.rotation = targetObj.transform.rotation;
+            yield return null;
+        }
+    }
+    [Command(requiresAuthority = false)]
+    private void CmdUpdateToHandPosition(bool isGrabbed)
+    {
+        RpcUpdateToHandPosition(isGrabbed);
+    }
+    [ClientRpc]
+    private void RpcUpdateToHandPosition(bool isGrabbed)
+    {
+        IsGrab = isGrabbed;
+        Collider[] handColliders = Physics.OverlapSphere(transform.position, 4f);
+
+        // 잡았으면 손의 자식
+        if (IsGrab)
+        {
+            foreach (var handCollider in handColliders)
+            {
+                if (handCollider.gameObject.layer == LayerMask.NameToLayer("Left Hand Physics"))
+                {
+                    //CmdChangeParent(handCollider.gameObject);
+
+                    if (currentUpdatePos != null)
+                    {
+                        StopCoroutine(currentUpdatePos);
+                        currentUpdatePos = null;
+                    }
+                    currentUpdatePos = UpdateToHandTransform(handCollider.gameObject);
+                    StartCoroutine(currentUpdatePos);
+
+                    Debug.Log("왼손 잡기!");
+                    return;
+                }
+                else if (handCollider.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics"))
+                {
+                    //CmdChangeParent(handCollider.gameObject);
+
+                    if (currentUpdatePos != null)
+                    {
+                        StopCoroutine(currentUpdatePos);
+                        currentUpdatePos = null;
+                    }
+                    currentUpdatePos = UpdateToHandTransform(handCollider.gameObject);
+                    StartCoroutine(currentUpdatePos);
+
+                    Debug.Log("오른손 잡기!");
+                    return;
+                }
+            }
+        }
+        // 놓았으면 원래 대로
+        else
+        {
+            foreach (var handCollider in handColliders)
+            {
+                if (handCollider.gameObject.layer == LayerMask.NameToLayer("Left Hand Physics"))
+                {
+                    //CmdChangeParent(null);
+
+                    if (currentUpdatePos != null)
+                    {
+                        StopCoroutine(currentUpdatePos);
+                        currentUpdatePos = null;
+                    }
+
+                    Debug.Log("왼손 놓기!");
+                    return;
+                }
+                else if (handCollider.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics"))
+                {
+                    //CmdChangeParent(null);
+
+                    if (currentUpdatePos != null)
+                    {
+                        StopCoroutine(currentUpdatePos);
+                        currentUpdatePos = null;
+                    }
+
+                    Debug.Log("오른손 놓기!");
+                    return;
+                }
+            }
+        }
+    }
+
+    /*    IEnumerator CollisionFreeze_co()
+        {
+
+            Freeze = true;
+            yield return new WaitForSeconds(0.3f);
+            Freeze = false;
+            if (state == PlayerState.Idle)
+                _inputDirection = Vector3.zero;
+        }*/
     private void OnTriggerEnter(Collider other)
     {
         if (!isLocalPlayer) return;

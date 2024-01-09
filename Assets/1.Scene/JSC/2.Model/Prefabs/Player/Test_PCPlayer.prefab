@@ -363,7 +363,7 @@ MonoBehaviour:
   AimTarget: {fileID: 5146438058494510461}
   PlayerRig: {fileID: 2608007290464046638}
   AimDistance: 30
-  IsGrap: 0
+  IsGrab: 0
 --- !u!54 &2608007290464046647
 Rigidbody:
   m_ObjectHideFlags: 0
