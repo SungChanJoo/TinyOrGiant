@@ -113,13 +113,13 @@ public class PCPlayerController : NetworkBehaviour
         Cam = GameObject.FindGameObjectWithTag("MainCamera").transform;
         _freeLook = GameObject.FindGameObjectWithTag("PCPlayerCam").GetComponent<CinemachineFreeLook>();
         _animator = GetComponent<Animator>();
-        //Cursor.lockState = CursorLockMode.Locked;
         //Cursor.visible = false;
         state = PlayerState.Idle;
         isGround = true;
         IsGrap = false;
         PlayerRig.enabled = false;
-
+        if (GameManager.Instance.playerType != PlayerType.PC) return;
+        Cursor.lockState = CursorLockMode.Locked;
 
     }
 
@@ -290,7 +290,7 @@ public class PCPlayerController : NetworkBehaviour
 
         if (!isLocalPlayer) return;
         if (IsGrap) return;
-        //if (GameManager.Instance.playerType != PlayerType.PC) return;
+        if (GameManager.Instance.playerType != PlayerType.PC) return;
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         #region Grappling
@@ -611,6 +611,10 @@ public class PCPlayerController : NetworkBehaviour
 
         }
 
+    }
+    public void Grabbed(bool value)
+    {
+        IsGrap = value;
     }
 /*    IEnumerator CollisionFreeze_co()
     {
