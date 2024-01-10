@@ -93,6 +93,7 @@ public class PCPlayerController : NetworkBehaviour
     public ParticleSystem RocketJumpEffect;
 
     [Header("Ragdoll")]
+    public float ragdollOffset = 0.9f;
     public Transform RigPelvis;
     public bool isRagdoll = false;
     public List<Collider> ragdollColliders = new List<Collider>();
@@ -147,6 +148,20 @@ public class PCPlayerController : NetworkBehaviour
         }
     }
 
+
+    [Command]
+    private void CmdToggleRagdoll(bool isTurnOn)
+    {
+        RpcToggleRagdoll(isTurnOn);
+    }
+    [ClientRpc]
+    private void RpcToggleRagdoll(bool isTurnOn)
+    {
+        isRagdoll = isTurnOn;
+        ToggleRagdoll(isTurnOn);
+        _animator.enabled = !isRagdoll;
+    }
+
     private void ToggleRagdoll(bool isTurnOn)
     {
         foreach (var ragdollCollider in ragdollColliders)
@@ -176,9 +191,6 @@ public class PCPlayerController : NetworkBehaviour
         input.Land.Grappling.canceled += GrpplingCanceled;
 
         input.Land.Dash.performed += DashPerformed;
-        input.Land.Dash.performed += DashCanceled;
-
-        input.Land.Ragdoll.performed += OnRagdollPerformed;
     }
 
     private void OnDisable()
@@ -197,9 +209,6 @@ public class PCPlayerController : NetworkBehaviour
         input.Land.Grappling.canceled -= GrpplingCanceled;
 
         input.Land.Dash.performed -= DashPerformed;
-        input.Land.Dash.performed -= DashCanceled;
-
-        input.Land.Ragdoll.performed -= OnRagdollPerformed;
     }
 
     public override void OnStartLocalPlayer()
@@ -222,9 +231,16 @@ public class PCPlayerController : NetworkBehaviour
     }
     private void FixedUpdate()
     {
-
         if (!isLocalPlayer) return;
-        if (IsGrab) return; 
+
+        //if(isRagdoll)
+        //{
+        //    // Hip을 기준으로 Transform 동기화
+        //    transform.position = RigPelvis.position;
+        //    return;
+        //}
+        if (IsGrab) return;
+        
         if (rb.velocity.magnitude < 0.01f)
         {
             _animator.SetFloat("x", rb.velocity.x);
@@ -304,7 +320,6 @@ public class PCPlayerController : NetworkBehaviour
         #region Friciton
         if (isGround && _inputDirection.magnitude < 0.01f && state != PlayerState.Jump && state != PlayerState.Grappling && !Freeze)
         {
-
             Vector3 normalVelocity = rb.velocity;
             float amount = Mathf.Min(Mathf.Abs(Mathf.Abs(normalVelocity.magnitude)), Mathf.Abs(frictionAmount));
             if(_animator != null)
@@ -327,10 +342,16 @@ public class PCPlayerController : NetworkBehaviour
 
     }
 
+    
     private void Update()
     {
-
         if (!isLocalPlayer) return;
+        if (isRagdoll)
+        {
+            RigPelvis.position = transform.position - Vector3.up * ragdollOffset;
+            //Debug.Log($"transform.position : {transform.position} RigPelvis.position : {RigPelvis.position}");
+            return;
+        }
         if (IsGrab) return;
         if (GameManager.Instance.playerType != PlayerType.PC) return;
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -553,7 +574,7 @@ public class PCPlayerController : NetworkBehaviour
     }
     #endregion
 
-    #region KeyboardButton : Ragdoll
+/*    #region KeyboardButton : Ragdoll
     private void OnRagdollPerformed(InputAction.CallbackContext context)
     {
         isRagdoll = !isRagdoll;
@@ -561,45 +582,10 @@ public class PCPlayerController : NetworkBehaviour
 
         IsGrab = isRagdoll;
 
-/*        if (isRagdoll)
-        {
-            //_animator.SetFloat("x", 0);
-            //_animator.SetFloat("y", 0);
 
-            // 위치 동기화 시작
-            if (currentUpdatePosition != null)
-            {
-                StopCoroutine(currentUpdatePosition);
-                currentUpdatePosition = null;
-            }
-            currentUpdatePosition = UpdatePositionToPelvis();
-            StartCoroutine(currentUpdatePosition);
-        }
-        else
-        {
-            // 위치 동기화 종료
-            if (currentUpdatePosition != null)
-            {
-                StopCoroutine(currentUpdatePosition);
-                currentUpdatePosition = null;
-            }
-        }*/
+    }*/
 
-        _animator.enabled = !isRagdoll;
-        //PlayerColl.enabled = !isRagdoll;
-    }
 
-    private IEnumerator currentUpdatePosition;
-    private IEnumerator UpdatePositionToPelvis()
-    {
-        while (true)
-        {
-            transform.position = RigPelvis.position;
-            //transform.rotation = RigPelvis.rotation;
-            yield return null;
-        }
-    }
-    #endregion
 
     private void DashPerformed(InputAction.CallbackContext obj)
     {
@@ -620,10 +606,7 @@ public class PCPlayerController : NetworkBehaviour
         CmdPlayDashEffect();
         //StartCoroutine(DashFreeze_co());
     }
-    private void DashCanceled(InputAction.CallbackContext obj)
-    {
 
-    }
     #endregion
     [Command]
     private void CmdPlayDashEffect()
@@ -707,6 +690,7 @@ public class PCPlayerController : NetworkBehaviour
     public void Grabbed(bool isGrabbed)
     {
         CmdUpdateToHandPosition(isGrabbed);
+        CmdToggleRagdoll(isGrabbed);
     }
 
     private IEnumerator currentUpdatePos = null;
