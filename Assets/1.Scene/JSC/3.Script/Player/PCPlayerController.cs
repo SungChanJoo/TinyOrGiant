@@ -803,6 +803,7 @@ public class PCPlayerController : NetworkBehaviour
     [ClientRpc]
     public void RpcThrowPlayer(Vector3 direction)
     {
+        Debug.Log(direction.normalized);
         rb.velocity = Vector3.zero;
         rb.AddForce(-direction * throwForce, ForceMode.Impulse);
     }
