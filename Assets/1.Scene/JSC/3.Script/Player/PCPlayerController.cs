@@ -149,7 +149,7 @@ public class PCPlayerController : NetworkBehaviour
     }
 
 
-    [Command]
+    [Command(requiresAuthority = false)]
     private void CmdToggleRagdoll(bool isTurnOn)
     {
         RpcToggleRagdoll(isTurnOn);
