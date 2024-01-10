@@ -698,8 +698,6 @@ public class PCPlayerController : NetworkBehaviour
     {
         CmdToggleRagdoll(isGrabbed);
         CmdUpdateToHandPosition(isGrabbed);
-
-        if (!isGrabbed) CmdThrowPlayer(lastHandVelocity);
     }
 
     private IEnumerator currentUpdatePos = null;
@@ -713,7 +711,6 @@ public class PCPlayerController : NetworkBehaviour
         }
     }
 
-    private Vector3 lastHandVelocity;
     [Command(requiresAuthority = false)]
     private void CmdUpdateToHandPosition(bool isGrabbed)
     {
@@ -766,8 +763,8 @@ public class PCPlayerController : NetworkBehaviour
                 if (handCollider.gameObject.layer == LayerMask.NameToLayer("Left Hand Physics"))
                 {
                     var leftHandPresence = GameObject.FindGameObjectWithTag("PhysicsLeftHandPresence");
-                    lastHandVelocity = leftHandPresence.GetComponent<Rigidbody>().velocity;
-                    //CmdThrowPlayer(handVelocity);
+                    var direction = leftHandPresence.GetComponent<Rigidbody>().velocity;
+                    ThrowPlayer(direction);
 
                     if (currentUpdatePos != null)
                     {
@@ -781,8 +778,8 @@ public class PCPlayerController : NetworkBehaviour
                 else if (handCollider.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics"))
                 {
                     var rightHandPresence = GameObject.FindGameObjectWithTag("PhysicsLeftHandPresence");
-                    lastHandVelocity = rightHandPresence.GetComponent<Rigidbody>().velocity;
-                    //CmdThrowPlayer(handVelocity);
+                    var direction = rightHandPresence.GetComponent<Rigidbody>().velocity;
+                    ThrowPlayer(direction);
 
                     if (currentUpdatePos != null)
                     {
@@ -797,16 +794,9 @@ public class PCPlayerController : NetworkBehaviour
         }
     }
 
-    [Command(requiresAuthority = false)]
-    public void CmdThrowPlayer(Vector3 direction)
-    {
-        RpcThrowPlayer(direction);
-    }
-
     [Header("Throw")]
     public float throwForce = 20f;
-    [ClientRpc]
-    public void RpcThrowPlayer(Vector3 direction)
+    public void ThrowPlayer(Vector3 direction)
     {
         Debug.Log(direction.normalized);
         rb.velocity = Vector3.zero;
