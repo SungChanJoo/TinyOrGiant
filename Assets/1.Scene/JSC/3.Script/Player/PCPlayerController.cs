@@ -146,6 +146,8 @@ public class PCPlayerController : NetworkBehaviour
             if (rigidbody.gameObject.layer == LayerMask.NameToLayer("Ragdoll"))
                 ragdollRigidbodies.Add(rigidbody);
         }
+
+        ToggleRagdoll(false);
     }
 
 
