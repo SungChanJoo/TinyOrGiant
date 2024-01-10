@@ -159,23 +159,8 @@ public class PCPlayerController : NetworkBehaviour
     private void RpcToggleRagdoll(bool isTurnOn)
     {
         isRagdoll = isTurnOn;
-/*        if(!isRagdoll)
-        {
-            //StartCoroutine(DelayRagdoll(isRagdoll));
-        }
-        else
-        {
-
-        }*/
         ToggleRagdoll(isTurnOn);
-        
     }
-/*    IEnumerator DelayRagdoll(bool isTurnOn)
-    {
-        yield return new WaitForSeconds(1f);
-        ToggleRagdoll(isTurnOn);
-        _animator.enabled = !isRagdoll;
-    }*/
 
     private void ToggleRagdoll(bool isTurnOn)
     {
@@ -710,8 +695,8 @@ public class PCPlayerController : NetworkBehaviour
     // Grab Interactable Event
     public void Grabbed(bool isGrabbed)
     {
-        CmdUpdateToHandPosition(isGrabbed);
         CmdToggleRagdoll(isGrabbed);
+        CmdUpdateToHandPosition(isGrabbed);
     }
 
     private IEnumerator currentUpdatePos = null;
