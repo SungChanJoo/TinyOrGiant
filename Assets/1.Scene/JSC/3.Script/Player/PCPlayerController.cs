@@ -742,8 +742,6 @@ public class PCPlayerController : NetworkBehaviour
             {
                 if (handCollider.gameObject.layer == LayerMask.NameToLayer("Left Hand Physics"))
                 {
-                    //CmdChangeParent(handCollider.gameObject);
-
                     if (currentUpdatePos != null)
                     {
                         StopCoroutine(currentUpdatePos);
@@ -757,8 +755,6 @@ public class PCPlayerController : NetworkBehaviour
                 }
                 else if (handCollider.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics"))
                 {
-                    //CmdChangeParent(handCollider.gameObject);
-
                     if (currentUpdatePos != null)
                     {
                         StopCoroutine(currentUpdatePos);
@@ -779,7 +775,8 @@ public class PCPlayerController : NetworkBehaviour
             {
                 if (handCollider.gameObject.layer == LayerMask.NameToLayer("Left Hand Physics"))
                 {
-                    //CmdChangeParent(null);
+                    var handVelocity = handCollider.transform.root.gameObject.GetComponent<Rigidbody>().velocity;
+                    CmdThrowPlayer(handVelocity);
 
                     if (currentUpdatePos != null)
                     {
@@ -792,7 +789,8 @@ public class PCPlayerController : NetworkBehaviour
                 }
                 else if (handCollider.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics"))
                 {
-                    //CmdChangeParent(null);
+                    var handVelocity = handCollider.transform.root.gameObject.GetComponent<Rigidbody>().velocity;
+                    CmdThrowPlayer(handVelocity);
 
                     if (currentUpdatePos != null)
                     {
@@ -807,15 +805,20 @@ public class PCPlayerController : NetworkBehaviour
         }
     }
 
-    /*    IEnumerator CollisionFreeze_co()
-        {
+    [Command(requiresAuthority = false)]
+    public void CmdThrowPlayer(Vector3 direction)
+    {
+        RpcThrowPlayer(direction);
+    }
 
-            Freeze = true;
-            yield return new WaitForSeconds(0.3f);
-            Freeze = false;
-            if (state == PlayerState.Idle)
-                _inputDirection = Vector3.zero;
-        }*/
+    [Header("Throw")]
+    public float throwForce = 1f;
+    [ClientRpc]
+    public void RpcThrowPlayer(Vector3 direction)
+    {
+        rb.AddForce(direction * throwForce, ForceMode.Impulse);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!isLocalPlayer) return;
