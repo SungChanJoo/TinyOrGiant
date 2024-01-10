@@ -179,7 +179,7 @@ public class PCPlayerController : NetworkBehaviour
 
     private void ToggleRagdoll(bool isTurnOn)
     {
-        rb.isKinematic = isTurnOn;
+        //rb.isKinematic = isTurnOn;
         _animator.enabled = !isTurnOn;
 
         foreach (var ragdollCollider in ragdollColliders)
