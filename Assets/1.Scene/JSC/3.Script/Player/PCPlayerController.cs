@@ -147,7 +147,6 @@ public class PCPlayerController : NetworkBehaviour
                 ragdollRigidbodies.Add(rigidbody);
         }
 
-        ToggleRagdoll(false);
     }
 
 
@@ -160,25 +159,29 @@ public class PCPlayerController : NetworkBehaviour
     private void RpcToggleRagdoll(bool isTurnOn)
     {
         isRagdoll = isTurnOn;
-        if(!isRagdoll)
+/*        if(!isRagdoll)
         {
-            StartCoroutine(DelayRagdoll(isRagdoll));
+            //StartCoroutine(DelayRagdoll(isRagdoll));
         }
         else
         {
-            ToggleRagdoll(isTurnOn);
-            _animator.enabled = !isRagdoll;
-        }
+
+        }*/
+        ToggleRagdoll(isTurnOn);
+        
     }
-    IEnumerator DelayRagdoll(bool isTurnOn)
+/*    IEnumerator DelayRagdoll(bool isTurnOn)
     {
         yield return new WaitForSeconds(1f);
         ToggleRagdoll(isTurnOn);
         _animator.enabled = !isRagdoll;
-    }
+    }*/
 
     private void ToggleRagdoll(bool isTurnOn)
     {
+        rb.isKinematic = isTurnOn;
+        _animator.enabled = !isTurnOn;
+
         foreach (var ragdollCollider in ragdollColliders)
         {
             ragdollCollider.enabled = isTurnOn;
@@ -364,6 +367,7 @@ public class PCPlayerController : NetworkBehaviour
         if (isRagdoll)
         {
             RigPelvis.position = transform.position - Vector3.up * ragdollOffset;
+            RigPelvis.rotation = transform.rotation;
             return;
         }
         if (IsGrab) return;
@@ -603,6 +607,9 @@ public class PCPlayerController : NetworkBehaviour
 
     private void DashPerformed(InputAction.CallbackContext obj)
     {
+        IsGrab = true;
+        CmdToggleRagdoll(true);
+
         //Debug.Log(_inputDirection.magnitude);
         if (_inputDirection.magnitude < 0.01f || !isGround || dashCdTimer > 0 || Freeze) return;
         if (IsGrab) return;
