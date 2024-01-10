@@ -466,6 +466,7 @@ public class PCPlayerController : NetworkBehaviour
                 CmdPlayRocketJumpEffect();
                 if (IsGrab)
                     IsGrab = false;
+                CmdToggleRagdoll(IsGrab);
             }
             else
                 return;
