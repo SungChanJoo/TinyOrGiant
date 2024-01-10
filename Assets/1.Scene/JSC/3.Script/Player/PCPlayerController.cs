@@ -775,7 +775,8 @@ public class PCPlayerController : NetworkBehaviour
             {
                 if (handCollider.gameObject.layer == LayerMask.NameToLayer("Left Hand Physics"))
                 {
-                    var handVelocity = handCollider.transform.root.gameObject.GetComponent<Rigidbody>().velocity;
+                    var leftHandPresence = GameObject.FindGameObjectWithTag("PhysicsLeftHandPresence");
+                    var handVelocity = leftHandPresence.GetComponent<Rigidbody>().velocity;
                     CmdThrowPlayer(handVelocity);
 
                     if (currentUpdatePos != null)
@@ -789,7 +790,8 @@ public class PCPlayerController : NetworkBehaviour
                 }
                 else if (handCollider.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics"))
                 {
-                    var handVelocity = handCollider.transform.root.gameObject.GetComponent<Rigidbody>().velocity;
+                    var rightHandPresence = GameObject.FindGameObjectWithTag("PhysicsLeftHandPresence");
+                    var handVelocity = rightHandPresence.GetComponent<Rigidbody>().velocity;
                     CmdThrowPlayer(handVelocity);
 
                     if (currentUpdatePos != null)
