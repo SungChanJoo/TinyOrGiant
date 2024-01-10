@@ -92,6 +92,12 @@ public class PCPlayerController : NetworkBehaviour
     public bool IsFireReady = false;
     public ParticleSystem RocketJumpEffect;
 
+    [Header("Ragdoll")]
+    public Transform RigPelvis;
+    public bool isRagdoll = false;
+    public List<Collider> ragdollColliders = new List<Collider>();
+    public List<Rigidbody> ragdollRigidbodies = new List<Rigidbody>();
+
     [Header("ETC")]
     bool _rotateOnMove = true;
     public bool Freeze = false;
@@ -101,6 +107,7 @@ public class PCPlayerController : NetworkBehaviour
     public RigBuilder PlayerRig;
     public float AimDistance =1f;
     public bool IsGrab;
+    public Collider PlayerColl;
 
     private Animator _animator;
     private Ray ray;
@@ -123,6 +130,34 @@ public class PCPlayerController : NetworkBehaviour
         Cam = GameObject.FindGameObjectWithTag("MainCamera").transform;
         Cursor.lockState = CursorLockMode.Locked;
 
+        // Ragdoll Collider 탐색
+        var colliders = FindObjectsOfType<Collider>();
+        foreach (var collider in colliders)
+        {
+            if (collider.gameObject.layer == LayerMask.NameToLayer("Ragdoll"))
+                ragdollColliders.Add(collider);
+        }
+
+        // Ragdoll Rigidbody 탐색
+        var rigidbodies = FindObjectsOfType<Rigidbody>();
+        foreach (var rigidbody in rigidbodies)
+        {
+            if (rigidbody.gameObject.layer == LayerMask.NameToLayer("Ragdoll"))
+                ragdollRigidbodies.Add(rigidbody);
+        }
+    }
+
+    private void ToggleRagdoll(bool isTurnOn)
+    {
+        foreach (var ragdollCollider in ragdollColliders)
+        {
+            ragdollCollider.enabled = isTurnOn;
+        }
+        foreach (var ragdollRigidbody in ragdollRigidbodies)
+        {
+            ragdollRigidbody.isKinematic = !isTurnOn;
+            ragdollRigidbody.useGravity = isTurnOn;
+        }
     }
 
     private void OnEnable()
@@ -142,6 +177,8 @@ public class PCPlayerController : NetworkBehaviour
 
         input.Land.Dash.performed += DashPerformed;
         input.Land.Dash.performed += DashCanceled;
+
+        input.Land.Ragdoll.performed += OnRagdollPerformed;
     }
 
     private void OnDisable()
@@ -161,6 +198,8 @@ public class PCPlayerController : NetworkBehaviour
 
         input.Land.Dash.performed -= DashPerformed;
         input.Land.Dash.performed -= DashCanceled;
+
+        input.Land.Ragdoll.performed -= OnRagdollPerformed;
     }
 
     public override void OnStartLocalPlayer()
@@ -512,7 +551,55 @@ public class PCPlayerController : NetworkBehaviour
         if (Freeze)
             CmdStopGrappling();
     }
-    #endregion 
+    #endregion
+
+    #region KeyboardButton : Ragdoll
+    private void OnRagdollPerformed(InputAction.CallbackContext context)
+    {
+        isRagdoll = !isRagdoll;
+        ToggleRagdoll(isRagdoll);
+
+        IsGrab = isRagdoll;
+
+/*        if (isRagdoll)
+        {
+            //_animator.SetFloat("x", 0);
+            //_animator.SetFloat("y", 0);
+
+            // 위치 동기화 시작
+            if (currentUpdatePosition != null)
+            {
+                StopCoroutine(currentUpdatePosition);
+                currentUpdatePosition = null;
+            }
+            currentUpdatePosition = UpdatePositionToPelvis();
+            StartCoroutine(currentUpdatePosition);
+        }
+        else
+        {
+            // 위치 동기화 종료
+            if (currentUpdatePosition != null)
+            {
+                StopCoroutine(currentUpdatePosition);
+                currentUpdatePosition = null;
+            }
+        }*/
+
+        _animator.enabled = !isRagdoll;
+        //PlayerColl.enabled = !isRagdoll;
+    }
+
+    private IEnumerator currentUpdatePosition;
+    private IEnumerator UpdatePositionToPelvis()
+    {
+        while (true)
+        {
+            transform.position = RigPelvis.position;
+            //transform.rotation = RigPelvis.rotation;
+            yield return null;
+        }
+    }
+    #endregion
 
     private void DashPerformed(InputAction.CallbackContext obj)
     {

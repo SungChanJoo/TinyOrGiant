@@ -71,6 +71,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Ragdoll"",
+                    ""type"": ""Button"",
+                    ""id"": ""09a2a0f6-49d8-41e6-b39f-ff029629ad61"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -172,6 +181,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f904d98d-5ef4-42bb-8f2b-d6bcce31dda9"",
+                    ""path"": ""<Keyboard>/backquote"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ragdoll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -197,6 +217,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Land_Fire = m_Land.FindAction("Fire", throwIfNotFound: true);
         m_Land_Grappling = m_Land.FindAction("Grappling", throwIfNotFound: true);
         m_Land_Dash = m_Land.FindAction("Dash", throwIfNotFound: true);
+        m_Land_Ragdoll = m_Land.FindAction("Ragdoll", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -261,6 +282,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Land_Fire;
     private readonly InputAction m_Land_Grappling;
     private readonly InputAction m_Land_Dash;
+    private readonly InputAction m_Land_Ragdoll;
     public struct LandActions
     {
         private @PlayerControls m_Wrapper;
@@ -270,6 +292,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Fire => m_Wrapper.m_Land_Fire;
         public InputAction @Grappling => m_Wrapper.m_Land_Grappling;
         public InputAction @Dash => m_Wrapper.m_Land_Dash;
+        public InputAction @Ragdoll => m_Wrapper.m_Land_Ragdoll;
         public InputActionMap Get() { return m_Wrapper.m_Land; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -294,6 +317,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Dash.started -= m_Wrapper.m_LandActionsCallbackInterface.OnDash;
                 @Dash.performed -= m_Wrapper.m_LandActionsCallbackInterface.OnDash;
                 @Dash.canceled -= m_Wrapper.m_LandActionsCallbackInterface.OnDash;
+                @Ragdoll.started -= m_Wrapper.m_LandActionsCallbackInterface.OnRagdoll;
+                @Ragdoll.performed -= m_Wrapper.m_LandActionsCallbackInterface.OnRagdoll;
+                @Ragdoll.canceled -= m_Wrapper.m_LandActionsCallbackInterface.OnRagdoll;
             }
             m_Wrapper.m_LandActionsCallbackInterface = instance;
             if (instance != null)
@@ -313,6 +339,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
+                @Ragdoll.started += instance.OnRagdoll;
+                @Ragdoll.performed += instance.OnRagdoll;
+                @Ragdoll.canceled += instance.OnRagdoll;
             }
         }
     }
@@ -333,5 +362,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnGrappling(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+        void OnRagdoll(InputAction.CallbackContext context);
     }
 }
