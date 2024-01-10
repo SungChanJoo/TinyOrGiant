@@ -370,6 +370,7 @@ MonoBehaviour:
   AimDistance: 30
   IsGrab: 0
   PlayerColl: {fileID: 5572218715593038353}
+  throwForce: 20
 --- !u!54 &2608007290464046647
 Rigidbody:
   m_ObjectHideFlags: 0

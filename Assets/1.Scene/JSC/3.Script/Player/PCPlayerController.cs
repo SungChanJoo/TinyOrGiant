@@ -799,12 +799,12 @@ public class PCPlayerController : NetworkBehaviour
     }
 
     [Header("Throw")]
-    public float throwForce = 1f;
+    public float throwForce = 20f;
     [ClientRpc]
     public void RpcThrowPlayer(Vector3 direction)
     {
         rb.velocity = Vector3.zero;
-        rb.AddForce(direction * throwForce, ForceMode.Impulse);
+        rb.AddForce(-direction * throwForce, ForceMode.Impulse);
     }
 
     private void OnTriggerEnter(Collider other)
