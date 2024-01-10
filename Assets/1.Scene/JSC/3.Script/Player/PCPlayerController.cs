@@ -698,6 +698,8 @@ public class PCPlayerController : NetworkBehaviour
     {
         CmdToggleRagdoll(isGrabbed);
         CmdUpdateToHandPosition(isGrabbed);
+
+        if (!isGrabbed) CmdThrowPlayer(lastHandVelocity);
     }
 
     private IEnumerator currentUpdatePos = null;
@@ -710,6 +712,8 @@ public class PCPlayerController : NetworkBehaviour
             yield return null;
         }
     }
+
+    private Vector3 lastHandVelocity;
     [Command(requiresAuthority = false)]
     private void CmdUpdateToHandPosition(bool isGrabbed)
     {
@@ -762,8 +766,8 @@ public class PCPlayerController : NetworkBehaviour
                 if (handCollider.gameObject.layer == LayerMask.NameToLayer("Left Hand Physics"))
                 {
                     var leftHandPresence = GameObject.FindGameObjectWithTag("PhysicsLeftHandPresence");
-                    var handVelocity = leftHandPresence.GetComponent<Rigidbody>().velocity;
-                    CmdThrowPlayer(handVelocity);
+                    lastHandVelocity = leftHandPresence.GetComponent<Rigidbody>().velocity;
+                    //CmdThrowPlayer(handVelocity);
 
                     if (currentUpdatePos != null)
                     {
@@ -777,8 +781,8 @@ public class PCPlayerController : NetworkBehaviour
                 else if (handCollider.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics"))
                 {
                     var rightHandPresence = GameObject.FindGameObjectWithTag("PhysicsLeftHandPresence");
-                    var handVelocity = rightHandPresence.GetComponent<Rigidbody>().velocity;
-                    CmdThrowPlayer(handVelocity);
+                    lastHandVelocity = rightHandPresence.GetComponent<Rigidbody>().velocity;
+                    //CmdThrowPlayer(handVelocity);
 
                     if (currentUpdatePos != null)
                     {
@@ -806,7 +810,7 @@ public class PCPlayerController : NetworkBehaviour
     {
         Debug.Log(direction.normalized);
         rb.velocity = Vector3.zero;
-        rb.AddForce(-direction * throwForce, ForceMode.Impulse);
+        rb.AddForce(direction * throwForce, ForceMode.Impulse);
     }
 
     private void OnTriggerEnter(Collider other)
