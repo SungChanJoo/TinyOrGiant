@@ -349,7 +349,6 @@ public class PCPlayerController : NetworkBehaviour
         if (isRagdoll)
         {
             RigPelvis.position = transform.position - Vector3.up * ragdollOffset;
-            //Debug.Log($"transform.position : {transform.position} RigPelvis.position : {RigPelvis.position}");
             return;
         }
         if (IsGrab) return;
