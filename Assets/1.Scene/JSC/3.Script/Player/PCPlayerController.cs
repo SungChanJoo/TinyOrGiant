@@ -158,6 +158,19 @@ public class PCPlayerController : NetworkBehaviour
     private void RpcToggleRagdoll(bool isTurnOn)
     {
         isRagdoll = isTurnOn;
+        if(!isRagdoll)
+        {
+            StartCoroutine(DelayRagdoll(isRagdoll));
+        }
+        else
+        {
+            ToggleRagdoll(isTurnOn);
+            _animator.enabled = !isRagdoll;
+        }
+    }
+    IEnumerator DelayRagdoll(bool isTurnOn)
+    {
+        yield return new WaitForSeconds(1f);
         ToggleRagdoll(isTurnOn);
         _animator.enabled = !isRagdoll;
     }
