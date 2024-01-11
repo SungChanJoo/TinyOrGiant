@@ -14,17 +14,17 @@ public class DealDamage : NetworkBehaviour
 
         var targetHealth = collision.gameObject.GetComponent<Health>();
         if (targetHealth == null) return;
-        CmdTakeDamage(targetHealth , defaultDamage);
+        CmdTakeDamage(collision, defaultDamage);
     }
     [Command]
-    public void CmdTakeDamage(Health targetHealth, float damage)
+    public void CmdTakeDamage(Collision collision, float damage)
     {
-        RpcTakeDamage(targetHealth, damage);
+        RpcTakeDamage(collision, damage);
     }
     [ClientRpc]
-    public void RpcTakeDamage(Health targetHealth, float damage)
+    public void RpcTakeDamage(Collision collision, float damage)
     {
+        var targetHealth = collision.gameObject.GetComponent<Health>();
         targetHealth.TakeDamage(damage);
-
     }
 }
