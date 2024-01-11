@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: -5911449487650223514}
   - component: {fileID: 2297963183153405212}
   - component: {fileID: 3629455720221599878}
+  - component: {fileID: 1303397285266590798}
   m_Layer: 0
   m_Name: Test_RocketBullet
   m_TagString: Bullet
@@ -190,6 +191,22 @@ MonoBehaviour:
   positionSensitivity: 0.01
   rotationSensitivity: 0.01
   scaleSensitivity: 0.01
+--- !u!114 &1303397285266590798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8076116670456268050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b6116b1fda312c488eb50969fde5b05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultDamage: 1
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 28672
 --- !u!1001 &3901423549246011084
 PrefabInstance:
   m_ObjectHideFlags: 0
