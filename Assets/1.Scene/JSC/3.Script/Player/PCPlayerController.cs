@@ -91,6 +91,8 @@ public class PCPlayerController : NetworkBehaviour
     public float RocketPower = 3f;
     public bool IsFireReady = false;
     public ParticleSystem RocketJumpEffect;
+    public GameObject BasicAim;
+    public GameObject AttackAim;
 
     [Header("Ragdoll")]
     public float ragdollOffset = 0.9f;
@@ -518,6 +520,11 @@ public class PCPlayerController : NetworkBehaviour
         //Aim UI º¯°æÇØÁà todo 1227
         if (RocketCount > 0)
         {
+            if(BasicAim.activeSelf)
+            {
+                BasicAim.SetActive(false);
+                AttackAim.SetActive(true);
+            }
             CmdFireReadyRocket();
         }
     }
@@ -526,7 +533,11 @@ public class PCPlayerController : NetworkBehaviour
         if (!isLocalPlayer) return;
         if (IsGrab) return;
         if (Freeze) return;
-
+        if (BasicAim.activeSelf)
+        {
+            BasicAim.SetActive(true);
+            AttackAim.SetActive(false);
+        }
         CmdFireRocket(ray);
     }
     #endregion
