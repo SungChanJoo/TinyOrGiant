@@ -23,6 +23,6 @@ public class Health : MonoBehaviour
 
     public virtual void Die()
     {
-        gameObject.SetActive(false);
+        transform.root.gameObject.SetActive(false);
     }
 }

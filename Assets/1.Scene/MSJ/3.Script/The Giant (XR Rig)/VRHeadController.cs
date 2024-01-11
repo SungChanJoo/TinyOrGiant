@@ -45,6 +45,8 @@ public class VRHeadController : NetworkBehaviour
     
     private void OnDrawGizmos()
     {
+        if (XRMainCamera == null) return;
+
         Gizmos.color = Color.red;
         Gizmos.DrawLine(XRMainCamera.transform.position, XRMainCamera.transform.position + XRMainCamera.transform.forward * maxDistance);
 

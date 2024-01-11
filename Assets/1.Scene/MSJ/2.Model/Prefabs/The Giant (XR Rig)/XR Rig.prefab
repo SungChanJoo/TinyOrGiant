@@ -5527,6 +5527,7 @@ GameObject:
   - component: {fileID: 2708565373874945752}
   - component: {fileID: 2708565373874945735}
   - component: {fileID: 2708565373874945734}
+  - component: {fileID: 5439162447254138945}
   m_Layer: 13
   m_Name: Right Hand Presence Physics
   m_TagString: PhysicsRightHandPresence
@@ -5617,6 +5618,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &5439162447254138945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2708565373874945754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b6116b1fda312c488eb50969fde5b05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  defaultDamage: 1
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &3623323317989040872
 GameObject:
   m_ObjectHideFlags: 0
@@ -5837,6 +5857,7 @@ GameObject:
   - component: {fileID: 5708207962651758421}
   - component: {fileID: 5708207962651758420}
   - component: {fileID: 5708207962651758423}
+  - component: {fileID: 766954442234181906}
   m_Layer: 14
   m_Name: Head Physics
   m_TagString: PhysicsHead
@@ -5936,6 +5957,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &766954442234181906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5708207962651758408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21230b612ef00d64fbd447159e91e06b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHp: 3
+  currentHp: 0
 --- !u!1 &6278994798011224944
 GameObject:
   m_ObjectHideFlags: 0
@@ -8999,6 +9034,7 @@ GameObject:
   - component: {fileID: 8494143761016436412}
   - component: {fileID: 8494143761016436415}
   - component: {fileID: 8494143761016436414}
+  - component: {fileID: 8398513213657491460}
   m_Layer: 12
   m_Name: Left Hand Presence Physics
   m_TagString: PhysicsLeftHandPresence
@@ -9089,3 +9125,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &8398513213657491460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8494143761016436410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b6116b1fda312c488eb50969fde5b05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  defaultDamage: 1
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 256

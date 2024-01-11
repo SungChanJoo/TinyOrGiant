@@ -234,7 +234,6 @@ GameObject:
   - component: {fileID: 2608007290464046639}
   - component: {fileID: 6760667082219856557}
   - component: {fileID: -6555667415026362710}
-  - component: {fileID: -2178379459421171823}
   m_Layer: 7
   m_Name: Test_PCPlayer
   m_TagString: Player
@@ -812,20 +811,6 @@ MonoBehaviour:
   positionSensitivity: 0.01
   rotationSensitivity: 0.01
   scaleSensitivity: 0.01
---- !u!114 &-2178379459421171823
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2608007290464046640}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21230b612ef00d64fbd447159e91e06b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MaxHp: 3
-  currentHp: 0
 --- !u!1 &3373756924933127421
 GameObject:
   m_ObjectHideFlags: 0
@@ -925,6 +910,7 @@ GameObject:
   - component: {fileID: 1581559819899373179}
   - component: {fileID: 287401896696640943}
   - component: {fileID: 1996169965139009234}
+  - component: {fileID: 268641162668235547}
   m_Layer: 8
   m_Name: Hit Box
   m_TagString: Untagged
@@ -993,6 +979,20 @@ MonoBehaviour:
     m_Bits: 4096
   - serializedVersion: 2
     m_Bits: 8192
+--- !u!114 &268641162668235547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3969982893726874958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21230b612ef00d64fbd447159e91e06b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHp: 3
+  currentHp: 0
 --- !u!1 &4278134915539409384
 GameObject:
   m_ObjectHideFlags: 0
