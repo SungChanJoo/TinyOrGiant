@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: CloudsShaderMaterial
+  m_Shader: {fileID: -6465566751694194690, guid: eaeafbe9dc88ac545a4615007010a563, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_1cc550e5656c4fe3a14c681c27a01d20: 1.1
+    - Vector1_24d57ecd7b1f487a9c880a42f69bda1e: 8
+    - Vector1_2621d9edf8124a80876207b24f30ed8c: 1.2
+    - Vector1_28d871afafa1414f987f913b8f413d5c: 10
+    - Vector1_377b74d6d1194d9787b3b685aaeb48b3: 0.015
+    - Vector1_4593a75df25c4839b97de8d799ededd4: 1.2
+    - Vector1_600372aa5ba346bcb73ac008bfb16905: -1.3
+    - Vector1_62c63684bea64ce18a85f00e0fc8642c: 2
+    - Vector1_728853437e634aee9bf121c4eabd2f67: 0.01
+    - Vector1_8ad8e6dd723d4598a1a1fceeeaa553c2: 50
+    - Vector1_a5ba6bdc8b65480b862c5d1f2858f30a: 200
+    - Vector1_aef105c5bdce42f180b022a0a50f0d28: 0.01
+    - Vector1_db6459c7af354d1aba96ec5d43901991: 40
+    - Vector1_df6666ff831f4f0491da286bfe74642b: -0.5
+    m_Colors:
+    - Color_8ef95bbb13054cd49786f431e5756ed3: {r: 0.8490566, g: 0.66386074, b: 0.500623, a: 0}
+    - Color_f9124795d5774c298eca620811b0de3e: {r: 0.53266287, g: 0.61317855, b: 0.6603774, a: 0}
+    - Vector4_8a27f3d9349549a3b437c65ab64d06ac: {r: 0, g: 1, b: -1, a: 1}
+    - Vector4_b26b09cd6d2b40fb9e8d03380e6fb53b: {r: 1, g: 0, b: 0, a: 90}
+  m_BuildTextureStacks: []
