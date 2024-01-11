@@ -25,26 +25,38 @@ public class GameManager : NetworkBehaviour
 
     public PlayerType playerType;
     NetworkIdentity meId;
+
+    public readonly SyncList<GameObject> PlayerSyncList = new SyncList<GameObject>();
+
+    public List<GameObject> PlayerList = new List<GameObject>();
+    public GameObject LobbyUi;
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
             //DontDestroyOnLoad(gameObject);
         }
-/*        else
-        {
-            Destroy(gameObject);
-            return;
-        }*/
-        
+        /*        else
+                {
+                    Destroy(gameObject);
+                    return;
+                }*/
+
+    }
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        UpdatePlayerList();
     }
     public override void OnStartClient()
     {
         meId = GetComponent<NetworkIdentity>();
+        Debug.Log("OnStartClient");
     }
 
-    public void VRCharacter()
+
+/*    public void VRCharacter()
     {
 
         playerType = PlayerType.VR;
@@ -72,21 +84,119 @@ public class GameManager : NetworkBehaviour
         }
         foreach (GameObject obj in PCGameObeject)
         {
-            if(!obj.activeSelf)
+            if (!obj.activeSelf)
                 obj.SetActive(true);
         }
         CmdChangePC(meId.connectionToClient);
+    }*/
+
+    [Server]
+    public void UpdatePlayerList()
+    {
+        StartCoroutine(UpdatePlayerList_co());
     }
+    IEnumerator UpdatePlayerList_co()
+    {
+        while (true)
+        {
+            foreach (GameObject obj in PlayerSyncList)
+            {
+                if (obj == null)
+                    PlayerSyncList.Remove(obj);
+            }
+            for (int i = 0; i < PlayerList.Count; i++)
+            {
+
+                if (i < PlayerSyncList.Count)
+                {
+                    RpcUpdatePlayerList(i, true);
+                }
+                else
+                {
+                    RpcUpdatePlayerList(i, false);
+                }
+            }
+            yield return null;
+        }
+    }
+    [Server]
+    public void GameStart()
+    {
+        for(int i = 0; i < PlayerSyncList.Count; i++)
+        {
+            
+            if (i== 0)
+            {
+                //VR 캐릭터로 변경
+                playerType = PlayerType.VR;
+                foreach (GameObject obj in PCGameObeject)
+                {
+                    if (obj.activeSelf)
+                        obj.SetActive(false);
+                }
+                foreach (GameObject obj in VRGameObeject)
+                {
+                    if (!obj.activeSelf)
+                        obj.SetActive(true);
+                }
+                var playerId = PlayerSyncList[i].GetComponent<NetworkIdentity>();
+                if (NetworkManager.singleton is ChoiceNetworkManager manager)
+                {
+                    manager.ReplacePlayer(playerId.connectionToClient, VRorPC[1]);
+                }
+
+            }
+            else
+            {
+                //PC 캐릭터로 변경
+                //playerType = PlayerType.PC;
+
+                var playerId = PlayerSyncList[i].GetComponent<NetworkIdentity>();
+                Debug.Log(PlayerSyncList[i].name);
+
+                //CmdChangePC(playerId.connectionToClient);
+                if (NetworkManager.singleton is ChoiceNetworkManager manager)
+                {
+                    manager.ReplacePlayer(playerId.connectionToClient, VRorPC[2]);
+                }
+            }
+        }
+        RpcGameStart();
+        StopCoroutine(UpdatePlayerList_co());
+
+    }
+    public void ViewPCplayerUI()
+    {
+        foreach (GameObject obj in VRGameObeject)
+        {
+            if (obj.activeSelf)
+                obj.SetActive(false);
+        }
+        foreach (GameObject obj in PCGameObeject)
+        {
+            if (!obj.activeSelf)
+                obj.SetActive(true);
+        }
+    }
+    [ClientRpc]
+    public void RpcGameStart()
+    {
+        LobbyUi.SetActive(false);
+    }
+    [ClientRpc]
+    public void RpcUpdatePlayerList(int i, bool value)
+    {
+        if (PlayerList[i].activeSelf != value)
+            PlayerList[i].SetActive(value);
+    }
+
 
     [Command(requiresAuthority = false)]
     public void CmdChangeVR(NetworkConnectionToClient conn)
     {
-        if (NetworkManager.singleton is ChoiceNetworkManager manager)
-        {
-            manager.ReplacePlayer(conn, VRorPC[1]);
-        }
+
     }
-    [Command(requiresAuthority = false)]
+/*    [Command(requiresAuthority = false)]
     public void CmdChangePC(NetworkConnectionToClient conn)
     {
 
@@ -94,5 +204,5 @@ public class GameManager : NetworkBehaviour
         {
             manager.ReplacePlayer(conn, VRorPC[2]);
         }
-    }
+    }*/
 }

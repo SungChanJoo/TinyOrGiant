@@ -129,8 +129,7 @@ public class PCPlayerController : NetworkBehaviour
         IsGrab = false;
         PlayerRig.enabled = false;
         if (GameManager.Instance.playerType != PlayerType.PC) return;
-        _freeLook = GameObject.FindGameObjectWithTag("PCPlayerCam").GetComponent<CinemachineFreeLook>();
-        Cam = GameObject.FindGameObjectWithTag("MainCamera").transform;
+
         Cursor.lockState = CursorLockMode.Locked;
 
         // Ragdoll Collider Å½»ö
@@ -218,6 +217,11 @@ public class PCPlayerController : NetworkBehaviour
 
     public override void OnStartLocalPlayer()
     {
+
+        GameManager.Instance.playerType = PlayerType.PC;
+        GameManager.Instance.ViewPCplayerUI();
+        _freeLook = GameObject.FindGameObjectWithTag("PCPlayerCam").GetComponent<CinemachineFreeLook>();
+        Cam = GameObject.FindGameObjectWithTag("MainCamera").transform;
         _freeLook.Follow = this.transform;
         _freeLook.LookAt = this.transform;
     }
@@ -533,7 +537,7 @@ public class PCPlayerController : NetworkBehaviour
         if (!isLocalPlayer) return;
         if (IsGrab) return;
         if (Freeze) return;
-        if (BasicAim.activeSelf)
+        if (!BasicAim.activeSelf)
         {
             BasicAim.SetActive(true);
             AttackAim.SetActive(false);
@@ -604,8 +608,8 @@ public class PCPlayerController : NetworkBehaviour
 
     private void DashPerformed(InputAction.CallbackContext obj)
     {
-        IsGrab = true;
-        CmdToggleRagdoll(true);
+/*        IsGrab = true;
+        CmdToggleRagdoll(true);*/
 
         //Debug.Log(_inputDirection.magnitude);
         if (_inputDirection.magnitude < 0.01f || !isGround || dashCdTimer > 0 || Freeze) return;
