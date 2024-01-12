@@ -789,6 +789,10 @@ public class PCPlayerController : NetworkBehaviour
                         StopCoroutine(currentUpdatePos);
                         currentUpdatePos = null;
                     }
+
+                    var obj = GameObject.Find("[Direct Interactor] Dynamic Attach");
+                    if (obj != null)
+                        Destroy(obj);
                     Debug.Log("¿Þ¼Õ ³õ±â!");
                     return;
                 }

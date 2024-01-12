@@ -16,8 +16,10 @@ public class DealDamage : NetworkBehaviour
 
             if (targetHealth == null) return;
             targetHealth.CmdTakeDamage(defaultDamage);
-
-            Destroy(gameObject, 1.5f);
+            if(gameObject.CompareTag("Bullet"))
+            {
+                Destroy(gameObject, 1.5f);
+            }
         }
     }
 }

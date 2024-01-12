@@ -371,6 +371,7 @@ MonoBehaviour:
   PlayerRig: {fileID: 2608007290464046638}
   AimDistance: 30
   IsGrab: 0
+  GrapPoint: {fileID: 0}
   PlayerColl: {fileID: 5572218715593038353}
   throwForce: 5
 --- !u!54 &2608007290464046647
@@ -926,7 +927,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3969982893726874958}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -63.0701, y: -0.5300002, z: 16.879}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2608007290464046645}
@@ -941,11 +942,11 @@ CapsuleCollider:
   m_GameObject: {fileID: 3969982893726874958}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 2
+  m_Enabled: 1
+  m_Radius: 1.1
+  m_Height: 4.2
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!54 &287401896696640943
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -991,8 +992,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21230b612ef00d64fbd447159e91e06b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   MaxHp: 3
   currentHp: 0
+  IsDead: 0
 --- !u!1 &4278134915539409384
 GameObject:
   m_ObjectHideFlags: 0

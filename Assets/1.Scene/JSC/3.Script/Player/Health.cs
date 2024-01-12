@@ -34,8 +34,9 @@ public class Health : NetworkBehaviour
     }
     public virtual void Die()
     {
+        if(!IsDead)
+            GameManager.Instance.ViewWinnerUI(GameManager.Instance.playerType);
         IsDead = true;
-        GameManager.Instance.ViewWinnerUI(GameManager.Instance.playerType);
         //transform.root.gameObject.SetActive(false);
     }
 }
