@@ -28,21 +28,28 @@ public class CannonSwitchController : MonoBehaviour
         var canTurnOn = (uint)targetToTurnOn.value;
         var canTurnOff = (uint)targetToTurnOff.value;
 
-        // Turn On
+        // Activate Cannon
         if ((canTurnOn & opponent) > 0)
         {
-            isTurnedOn = !isTurnedOn;
-            renderer.material = isTurnedOn ? turnOnMaterial : turnOffMaterial;
-            
-            if (isTurnedOn) cannonController.ActivateCannon();
-            else cannonController.DeactivateCannon();
+            // 중복실행 방지
+            if (isTurnedOn) return;
+
+            cannonController.ActivateCannon();
         }
 
-        // Turn Off
+        // Deactivate Cannon
         if ((canTurnOff & opponent) > 0)
         {
-            isTurnedOn = false;
-            renderer.material = turnOffMaterial;
+            // 중복실행 방지
+            if (!isTurnedOn) return;
+
+            cannonController.DeactivateCannon();
         }
     }
+
+    public void SetSwitchState(bool isTurnOn)
+	{
+        isTurnedOn = isTurnOn;
+        renderer.material = isTurnedOn ? turnOnMaterial : turnOffMaterial;
+	}
 }

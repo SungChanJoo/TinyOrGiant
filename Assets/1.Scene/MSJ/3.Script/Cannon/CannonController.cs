@@ -7,6 +7,7 @@ public class CannonController : NetworkBehaviour
 {
     public Transform rotater;
     public Transform cannon;
+    public CannonSwitchController cannonSwitch;
 
     private float startAngle;
 
@@ -27,6 +28,9 @@ public class CannonController : NetworkBehaviour
 
     public void ActivateCannon()
     {
+        // Change switch state
+        cannonSwitch.SetSwitchState(true);
+
         // Start Cannon Up
         if (_currentCannonUp != null)
         {
@@ -56,6 +60,9 @@ public class CannonController : NetworkBehaviour
 
     public void DeactivateCannon()
     {
+        // Change switch state
+        cannonSwitch.SetSwitchState(false);
+
         // Start Cannon Down
         if (_currentCannonDown != null)
         {
@@ -74,10 +81,10 @@ public class CannonController : NetworkBehaviour
             _currentLookTarget = null;
         }
 
-        // Stop Fire Shell on server
         if (!isServer) return;
 
-        if (_currentFireShell != null)
+        // Stop Fire Shell on server
+        if (isServer && _currentFireShell != null)
         {
             StopCoroutine(_currentFireShell);
             _currentFireShell = null;
@@ -104,7 +111,7 @@ public class CannonController : NetworkBehaviour
 
             var progress = rotaterLookTargetOverTime.Evaluate(elapsedTime / rotaterLookTargetDuration);
             var angleDiff = Vector3.Angle(currentForward, targetForward);
-            var angleToRotate = Mathf.Lerp(0, rotater.eulerAngles.y + angleDiff, progress);
+            var angleToRotate = Mathf.Lerp(rotater.eulerAngles.y, rotater.eulerAngles.y + angleDiff, progress);
 
             rotater.eulerAngles = new Vector3(rotater.eulerAngles.x, angleToRotate, rotater.eulerAngles.z);
         }
@@ -195,5 +202,21 @@ public class CannonController : NetworkBehaviour
         // Fire
         GameObject shellObj = Instantiate(cannonShellPrefab, firePosition.position, firePosition.rotation);
         NetworkServer.Spawn(shellObj);
+
+        // Deactivate
+        //   Server에서만 실행되므로 동기화 필요
+        CmdDeactivateCannon();
     }
+
+    [Command(requiresAuthority = false)]
+    public void CmdDeactivateCannon()
+	{
+        RpcDeactivateCannon();
+	}
+
+    [ClientRpc]
+    public void RpcDeactivateCannon()
+	{
+        DeactivateCannon();
+	}
 }
