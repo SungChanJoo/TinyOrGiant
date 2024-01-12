@@ -209,7 +209,7 @@ MonoBehaviour:
   defaultDamage: 1
   targetLayer:
     serializedVersion: 2
-    m_Bits: 81920
+    m_Bits: 16384
 --- !u!1001 &3901423549246011084
 PrefabInstance:
   m_ObjectHideFlags: 0

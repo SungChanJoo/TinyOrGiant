@@ -181,20 +181,20 @@ public class GameManager : NetworkBehaviour
                 obj.SetActive(true);
         }
     }
-    public void ViewWinnerUI(PlayerType playerType)
+    public void ViewWinnerUI(PlayerType Type)
     {
         WinnerUi.SetActive(true);
-        CmdViewWinnerUI(playerType);
+        CmdViewWinnerUI(Type);
     }
     [Command(requiresAuthority = false)]
-    public void CmdViewWinnerUI(PlayerType playerType)
+    public void CmdViewWinnerUI(PlayerType Type)
     {
-        RpcViewWinnerUI(playerType);
+        RpcViewWinnerUI(Type);
     }
     [ClientRpc]
-    public void RpcViewWinnerUI(PlayerType playerType)
+    public void RpcViewWinnerUI(PlayerType Type)
     {
-        if (playerType == PlayerType.VR)
+        if (Type == PlayerType.VR)
         {
             WinnerText.text = "PC Win!";
         }
