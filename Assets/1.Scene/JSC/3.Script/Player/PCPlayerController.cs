@@ -131,8 +131,7 @@ public class PCPlayerController : NetworkBehaviour
         IsGrab = false;
         PlayerRig.enabled = false;
         if (GameManager.Instance.playerType != PlayerType.PC) return;
-
-
+        
         // Ragdoll Collider Å½»ö
         var colliders = FindObjectsOfType<Collider>();
         foreach (var collider in colliders)
@@ -140,43 +139,12 @@ public class PCPlayerController : NetworkBehaviour
             if (collider.gameObject.layer == LayerMask.NameToLayer("Ragdoll"))
                 ragdollColliders.Add(collider);
         }
-
         // Ragdoll Rigidbody Å½»ö
         var rigidbodies = FindObjectsOfType<Rigidbody>();
         foreach (var rigidbody in rigidbodies)
         {
             if (rigidbody.gameObject.layer == LayerMask.NameToLayer("Ragdoll"))
                 ragdollRigidbodies.Add(rigidbody);
-        }
-
-    }
-
-
-    [Command(requiresAuthority = false)]
-    private void CmdToggleRagdoll(bool isTurnOn)
-    {
-        RpcToggleRagdoll(isTurnOn);
-    }
-    [ClientRpc]
-    private void RpcToggleRagdoll(bool isTurnOn)
-    {
-        isRagdoll = isTurnOn;
-        ToggleRagdoll(isTurnOn);
-    }
-
-    private void ToggleRagdoll(bool isTurnOn)
-    {
-        //rb.isKinematic = isTurnOn;
-        _animator.enabled = !isTurnOn;
-
-        foreach (var ragdollCollider in ragdollColliders)
-        {
-            ragdollCollider.enabled = isTurnOn;
-        }
-        foreach (var ragdollRigidbody in ragdollRigidbodies)
-        {
-            ragdollRigidbody.isKinematic = !isTurnOn;
-            ragdollRigidbody.useGravity = isTurnOn;
         }
     }
 
@@ -229,18 +197,6 @@ public class PCPlayerController : NetworkBehaviour
         _freeLook.LookAt = this.transform;
     }
 
-
-    [Command]
-    private void CmdPlayTriggerAni(string aniName)
-    {
-        RpcPlayTriggerAni(aniName);
-    }
-    [ClientRpc]
-    private void RpcPlayTriggerAni(string aniName)
-    {
-        _animator.SetTrigger(aniName);
-        Debug.Log(aniName);
-    }
     private void FixedUpdate()
     {
         if (!isLocalPlayer) return;
@@ -353,7 +309,6 @@ public class PCPlayerController : NetworkBehaviour
         #endregion
 
     }
-
     
     private void Update()
     {
@@ -409,17 +364,7 @@ public class PCPlayerController : NetworkBehaviour
         }
         #endregion
     }
-    [Command]
-    private void CmdAimTargetPos(Vector3 pos)
-    {
-        RpcAimTargetPos(pos);
-    }
-    [ClientRpc]
-    private void RpcAimTargetPos(Vector3 pos)
-    {
-        AimTarget.position = pos;
-
-    }
+   
     private void LateUpdate()
     {
         if (!isLocalPlayer) return;
@@ -466,11 +411,11 @@ public class PCPlayerController : NetworkBehaviour
     {
         if (!isLocalPlayer) return;
         if (Freeze) return;
+        //±×·¦ Å»Ãâ
         if (IsGrab)
         {
             if (RocketCount > 0)
             {
-
                 CmdPlayRocketJumpEffect();
                 CmdToggleRagdoll(IsGrab);
                 CmdSetGrabInteractable();
@@ -482,6 +427,7 @@ public class PCPlayerController : NetworkBehaviour
             else
                 return;
         }
+        //Á¡ÇÁ
         if (isGround)
         {
             isGround = false;
@@ -598,23 +544,11 @@ public class PCPlayerController : NetworkBehaviour
     }
     #endregion
 
-/*    #region KeyboardButton : Ragdoll
-    private void OnRagdollPerformed(InputAction.CallbackContext context)
-    {
-        isRagdoll = !isRagdoll;
-        ToggleRagdoll(isRagdoll);
-
-        IsGrab = isRagdoll;
-
-
-    }*/
-
-
-
+    #region Shift : Dash
     private void DashPerformed(InputAction.CallbackContext obj)
     {
-/*        IsGrab = true;
-        CmdToggleRagdoll(true);*/
+        /*        IsGrab = true;
+                CmdToggleRagdoll(true);*/
 
         //Debug.Log(_inputDirection.magnitude);
         if (_inputDirection.magnitude < 0.01f || !isGround || dashCdTimer > 0 || Freeze) return;
@@ -633,8 +567,6 @@ public class PCPlayerController : NetworkBehaviour
         CmdPlayDashEffect();
         //StartCoroutine(DashFreeze_co());
     }
-
-    #endregion
     [Command]
     private void CmdPlayDashEffect()
     {
@@ -659,6 +591,24 @@ public class PCPlayerController : NetworkBehaviour
         if (state == PlayerState.Idle)
             _inputDirection = Vector3.zero;
     }
+    #endregion
+    #endregion
+
+    private void ToggleRagdoll(bool isTurnOn)
+    {
+        //rb.isKinematic = isTurnOn;
+        _animator.enabled = !isTurnOn;
+
+        foreach (var ragdollCollider in ragdollColliders)
+        {
+            ragdollCollider.enabled = isTurnOn;
+        }
+        foreach (var ragdollRigidbody in ragdollRigidbodies)
+        {
+            ragdollRigidbody.isKinematic = !isTurnOn;
+            ragdollRigidbody.useGravity = isTurnOn;
+        }
+    }
     private void StopGrappling()
     {
 
@@ -669,50 +619,13 @@ public class PCPlayerController : NetworkBehaviour
         //state = PlayerState.Idle;
         _animator.SetBool("isGrappling", false);
         state = PlayerState.Jump;
-
     }
-
     public void SetRotateOnMove(bool newRotateOnMove)
     {
         _rotateOnMove = newRotateOnMove;
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
-                                    transform.position.z);
-        Gizmos.DrawSphere(spherePosition, GroundedRadius);
-
-        Gizmos.color = Color.blue;
-        //Gizmos.DrawSphere(transform.position, 4f);
-    }
-
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (!isLocalPlayer) return;
-
-        if (enableMovementOnNextTouch)
-        {
-            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
-                                                transform.position.z);
-            isGround = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
-                                    QueryTriggerInteraction.Ignore);
-            if (!isGround)
-            {
-                CmdStopGrappling();
-                rb.AddForce(-(grappleMoveVector + Vector3.down) * 10f, ForceMode.Impulse);
-                enableMovementOnNextTouch = false;
-            }
-            else
-            {
-                CmdStopGrappling();
-                enableMovementOnNextTouch = false;
-            }
-        }
-    }
-
+    #region Grab Interactable Event
     // Grab Interactable Event
     public void Grabbed(bool isGrabbed)
     {
@@ -811,27 +724,6 @@ public class PCPlayerController : NetworkBehaviour
             }
         }
     }
-    [Command(requiresAuthority = false)]
-    public void CmdSetGrabInteractable()
-    {
-        Debug.Log("CmdSetGrabInteractable");
-        RpcSetGrabInteractable();
-    }
-    [ClientRpc]
-    public void RpcSetGrabInteractable()
-    {
-        Debug.Log("RpcSetGrabInteractable");
-        StartCoroutine(SetGrabInteractable());
-    }
-
-    IEnumerator SetGrabInteractable()
-    {
-        grabInteractable.enabled = false;
-        Debug.Log("grabInteractable : " + grabInteractable.enabled);
-        yield return new WaitForSeconds(1f);
-        grabInteractable.enabled = true;
-    }
-
     [Header("Throw")]
     public float throwForce = 20f;
     public void ThrowPlayer(Vector3 direction)
@@ -840,7 +732,50 @@ public class PCPlayerController : NetworkBehaviour
         rb.velocity = Vector3.zero;
         rb.AddForce(direction * throwForce, ForceMode.Impulse);
     }
+    #region EscapeGrap
+    [Command(requiresAuthority = false)]
+    public void CmdSetGrabInteractable()
+    {
+        RpcSetGrabInteractable();
+    }
+    [ClientRpc]
+    public void RpcSetGrabInteractable()
+    {
+        StartCoroutine(SetGrabInteractable());
+    }
 
+    IEnumerator SetGrabInteractable()
+    {
+        grabInteractable.enabled = false;
+        yield return new WaitForSeconds(1f);
+        grabInteractable.enabled = true;
+    }
+    #endregion
+    #endregion
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (!isLocalPlayer) return;
+
+        if (enableMovementOnNextTouch)
+        {
+            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
+                                                transform.position.z);
+            isGround = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
+                                    QueryTriggerInteraction.Ignore);
+            if (!isGround)
+            {
+                CmdStopGrappling();
+                rb.AddForce(-(grappleMoveVector + Vector3.down) * 10f, ForceMode.Impulse);
+                enableMovementOnNextTouch = false;
+            }
+            else
+            {
+                CmdStopGrappling();
+                enableMovementOnNextTouch = false;
+            }
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (!isLocalPlayer) return;
@@ -851,7 +786,16 @@ public class PCPlayerController : NetworkBehaviour
             CmdPickUpRocket(other.transform.gameObject);
         }
     }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
+                                    transform.position.z);
+        Gizmos.DrawSphere(spherePosition, GroundedRadius);
 
+        Gizmos.color = Color.blue;
+        //Gizmos.DrawSphere(transform.position, 4f);
+    }
     #region Command
     #region Grappling
 
@@ -897,7 +841,21 @@ public class PCPlayerController : NetworkBehaviour
     {
         RpcPickUpRocket(rocket);
     }
-
+    [Command]
+    private void CmdPlayTriggerAni(string aniName)
+    {
+        RpcPlayTriggerAni(aniName);
+    }
+    [Command]
+    private void CmdAimTargetPos(Vector3 pos)
+    {
+        RpcAimTargetPos(pos);
+    }
+    [Command(requiresAuthority = false)]
+    private void CmdToggleRagdoll(bool isTurnOn)
+    {
+        RpcToggleRagdoll(isTurnOn);
+    }
     #endregion
 
     #region ClientRpc
@@ -970,6 +928,24 @@ public class PCPlayerController : NetworkBehaviour
                 rocket.SetActive(false);
             }
         }
+    }
+    [ClientRpc]
+    private void RpcPlayTriggerAni(string aniName)
+    {
+        _animator.SetTrigger(aniName);
+        Debug.Log(aniName);
+    }
+    [ClientRpc]
+    private void RpcAimTargetPos(Vector3 pos)
+    {
+        AimTarget.position = pos;
+    }
+
+    [ClientRpc]
+    private void RpcToggleRagdoll(bool isTurnOn)
+    {
+        isRagdoll = isTurnOn;
+        ToggleRagdoll(isTurnOn);
     }
     #endregion
 }
