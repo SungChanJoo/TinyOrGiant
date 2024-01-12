@@ -790,9 +790,6 @@ public class PCPlayerController : NetworkBehaviour
                         currentUpdatePos = null;
                     }
 
-                    var obj = GameObject.Find("[Direct Interactor] Dynamic Attach");
-                    if (obj != null)
-                        Destroy(obj);
                     Debug.Log("왼손 놓기!");
                     return;
                 }
@@ -807,9 +804,8 @@ public class PCPlayerController : NetworkBehaviour
                         StopCoroutine(currentUpdatePos);
                         currentUpdatePos = null;
                     }
-                    var obj = GameObject.Find("[Direct Interactor] Dynamic Attach");
-                    if (obj != null)
-                        Destroy(obj);
+                    GetComponent<XRGrabInteractable>().enabled = false;
+
                     Debug.Log("오른손 놓기!");
                     return;
                 }
@@ -817,11 +813,12 @@ public class PCPlayerController : NetworkBehaviour
         }
     }
 
-    IEnumerator SetActiveGrapPoint()
+    IEnumerator SetGrabInteractable()
     {
-        GrapPoint.SetActive(false);
-        yield return new WaitForSeconds(3f);
-        GrapPoint.SetActive(true);
+        var grabInteractable = GetComponent<XRGrabInteractable>();
+        grabInteractable.enabled = false;
+        yield return new WaitForSeconds(1f);
+        grabInteractable.enabled = true;
     }
 
     [Header("Throw")]
