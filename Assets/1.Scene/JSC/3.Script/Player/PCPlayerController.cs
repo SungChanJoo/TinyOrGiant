@@ -472,10 +472,10 @@ public class PCPlayerController : NetworkBehaviour
                 rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
                 rb.AddForce(Vector3.up * JumpPower * RocketPower, ForceMode.Impulse);
                 CmdPlayRocketJumpEffect();
-                if (IsGrab)
-                    IsGrab = false;
                 CmdToggleRagdoll(IsGrab);
                 CmdSetGrabInteractable();
+                if (IsGrab)
+                    IsGrab = false;
             }
             else
                 return;
@@ -809,7 +809,7 @@ public class PCPlayerController : NetworkBehaviour
             }
         }
     }
-    [Command]
+    [Command(requiresAuthority = false)]
     public void CmdSetGrabInteractable()
     {
         RpcSetGrabInteractable();
