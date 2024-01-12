@@ -202,6 +202,7 @@ public class GameManager : NetworkBehaviour
         {
             WinnerText.text = "VR Win!";
         }
+        Time.timeScale = 0;
     }
 
     [ClientRpc]
