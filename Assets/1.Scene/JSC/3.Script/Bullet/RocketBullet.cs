@@ -60,20 +60,38 @@ public class RocketBullet : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.name.Equals("Dummy"))
+        if (other.CompareTag("PhysicsHead"))
         {
-            if(isFire)
+            if (isFire)
             {
                 //Todo 0108 적에게 데미지주는 메소드 추가해줘
                 var Effect = Instantiate(ExplosionEffect, transform.position, Quaternion.identity);
                 Destroy(Effect, 2f);
                 //RocketLineEffect.GetComponent<ParticleSystem>().loop = false;
-                Rb.isKinematic = true;
+                //CmdTakeDamage(1f);
+
+/*                Rb.isKinematic = true;
                 Rb.useGravity = false;
-                Destroy(gameObject, 1.5f);
+
+                Destroy(gameObject);*/
             }
 
         }
     }
+/*    [Command(requiresAuthority = false)]
+    public void CmdTakeDamage(float damage)
+    {
+        Debug.Log("CmdTakeDamage");
+        RpcTakeDamage(damage);
+    }
+    [ClientRpc]
+    public void RpcTakeDamage(float damage)
+    {
+        Debug.Log("RpcTakeDamage");
+        Debug.Log("damage" + damage);
+        *//*        var targetHealth = obj.GetComponent<Health>();
+                targetHealth.TakeDamage(damage);*//*
+
+    }*/
 
 }

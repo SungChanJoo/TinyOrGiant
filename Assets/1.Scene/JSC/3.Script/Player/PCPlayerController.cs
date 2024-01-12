@@ -130,7 +130,6 @@ public class PCPlayerController : NetworkBehaviour
         PlayerRig.enabled = false;
         if (GameManager.Instance.playerType != PlayerType.PC) return;
 
-        Cursor.lockState = CursorLockMode.Locked;
 
         // Ragdoll Collider Å½»ö
         var colliders = FindObjectsOfType<Collider>();
@@ -222,6 +221,8 @@ public class PCPlayerController : NetworkBehaviour
         GameManager.Instance.ViewPCplayerUI();
         _freeLook = GameObject.FindGameObjectWithTag("PCPlayerCam").GetComponent<CinemachineFreeLook>();
         Cam = GameObject.FindGameObjectWithTag("MainCamera").transform;
+        Cursor.lockState = CursorLockMode.Locked;
+        
         _freeLook.Follow = this.transform;
         _freeLook.LookAt = this.transform;
     }

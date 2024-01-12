@@ -8,23 +8,16 @@ public class DealDamage : NetworkBehaviour
     public float defaultDamage = 1f;
     public LayerMask targetLayer;
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.layer != targetLayer) return;
+        if (((uint)(1 << other.gameObject.layer) & (uint)targetLayer.value) > 0)
+        {
+            var targetHealth = other.gameObject.GetComponent<Health>();
 
-        var targetHealth = collision.gameObject.GetComponent<Health>();
-        if (targetHealth == null) return;
-        CmdTakeDamage(collision, defaultDamage);
-    }
-    [Command]
-    public void CmdTakeDamage(Collision collision, float damage)
-    {
-        RpcTakeDamage(collision, damage);
-    }
-    [ClientRpc]
-    public void RpcTakeDamage(Collision collision, float damage)
-    {
-        var targetHealth = collision.gameObject.GetComponent<Health>();
-        targetHealth.TakeDamage(damage);
+            if (targetHealth == null) return;
+            targetHealth.CmdTakeDamage(defaultDamage);
+
+            Destroy(gameObject, 1.5f);
+        }
     }
 }

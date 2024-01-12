@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Health : MonoBehaviour
+using Mirror;
+public class Health : NetworkBehaviour
 {
     public float MaxHp = 3f;
     public float currentHp;
+    public bool IsDead = false;
 
     private void Awake()
     {
@@ -15,14 +16,26 @@ public class Health : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHp -= damage;
+        Debug.Log("currentHp : " + currentHp);
         if(currentHp <= 0)
         {
             Die();
         }
     }
-
+    [Command]
+    public void CmdTakeDamage(float damage)
+    {
+        RpcTakeDamage(damage);
+    }
+    [ClientRpc]
+    public void RpcTakeDamage(float damage)
+    {
+        TakeDamage(damage);
+    }
     public virtual void Die()
     {
-        transform.root.gameObject.SetActive(false);
+        IsDead = true;
+        GameManager.Instance.ViewWinnerUI(GameManager.Instance.playerType);
+        //transform.root.gameObject.SetActive(false);
     }
 }

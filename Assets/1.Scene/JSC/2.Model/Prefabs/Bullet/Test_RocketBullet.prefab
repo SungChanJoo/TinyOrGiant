@@ -203,10 +203,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b6116b1fda312c488eb50969fde5b05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
   defaultDamage: 1
   targetLayer:
     serializedVersion: 2
-    m_Bits: 28672
+    m_Bits: 81920
 --- !u!1001 &3901423549246011084
 PrefabInstance:
   m_ObjectHideFlags: 0

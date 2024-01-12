@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Mirror;
 
 public enum PlayerType
@@ -30,6 +31,8 @@ public class GameManager : NetworkBehaviour
 
     public List<GameObject> PlayerList = new List<GameObject>();
     public GameObject LobbyUi;
+    public GameObject WinnerUi;
+    public Text WinnerText;
     private void Awake()
     {
         if (Instance == null)
@@ -178,6 +181,29 @@ public class GameManager : NetworkBehaviour
                 obj.SetActive(true);
         }
     }
+    public void ViewWinnerUI(PlayerType playerType)
+    {
+        WinnerUi.SetActive(true);
+        CmdViewWinnerUI(playerType);
+    }
+    [Command(requiresAuthority = false)]
+    public void CmdViewWinnerUI(PlayerType playerType)
+    {
+        RpcViewWinnerUI(playerType);
+    }
+    [ClientRpc]
+    public void RpcViewWinnerUI(PlayerType playerType)
+    {
+        if (playerType == PlayerType.VR)
+        {
+            WinnerText.text = "PC Win!";
+        }
+        else
+        {
+            WinnerText.text = "VR Win!";
+        }
+    }
+
     [ClientRpc]
     public void RpcGameStart()
     {
