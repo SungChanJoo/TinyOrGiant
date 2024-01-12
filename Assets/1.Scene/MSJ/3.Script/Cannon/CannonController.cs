@@ -23,16 +23,6 @@ public class CannonController : NetworkBehaviour
             yield return null;
             target = GameObject.FindGameObjectWithTag("PhysicsHead");
         }
-
-        ///////////* Test *///////////
-        while (true)
-        {
-            yield return new WaitForSeconds(5);
-            ActivateCannon();
-
-            yield return new WaitForSeconds(5);
-            DeactivateCannon();
-        }
     }
 
     public void ActivateCannon()
@@ -57,8 +47,11 @@ public class CannonController : NetworkBehaviour
         _currentLookTarget = LookTarget();
         StartCoroutine(_currentLookTarget);
 
-        // Fire Shell on server
-        if (isServer) StartCoroutine(FireShell());
+        // Start Fire Shell on server
+        if (!isServer) return;
+
+        _currentFireShell = FireShell();
+        StartCoroutine(_currentFireShell);
     }
 
     public void DeactivateCannon()
@@ -79,6 +72,15 @@ public class CannonController : NetworkBehaviour
         {
             StopCoroutine(_currentLookTarget);
             _currentLookTarget = null;
+        }
+
+        // Stop Fire Shell on server
+        if (!isServer) return;
+
+        if (_currentFireShell != null)
+        {
+            StopCoroutine(_currentFireShell);
+            _currentFireShell = null;
         }
     }
 
@@ -184,6 +186,7 @@ public class CannonController : NetworkBehaviour
     public float cannonFireShellDelay = 3f;
     public float fireStrength = 10f;
 
+    private IEnumerator _currentFireShell = null;
     private IEnumerator FireShell()
     {
         // Wait to fire

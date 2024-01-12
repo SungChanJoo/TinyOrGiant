@@ -279,6 +279,84 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &135857772
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1752816982}
+    m_Modifications:
+    - target: {fileID: 8680255991032498162, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_Name
+      value: Canon Switch
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498167, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b57fe4dbe56b8644d99bfcd9b8c69ad5, type: 2}
+    - target: {fileID: 8822257655724712223, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: turnOnMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: ca7f1b4a3bd078540a1d4b2c6f069af9, type: 2}
+    - target: {fileID: 8822257655724712223, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: turnOffMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: b57fe4dbe56b8644d99bfcd9b8c69ad5, type: 2}
+    - target: {fileID: 8822257655724712223, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: cannonController
+      value: 
+      objectReference: {fileID: 458303448193794989}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+--- !u!4 &135857773 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+  m_PrefabInstance: {fileID: 135857772}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &136679742
 GameObject:
   m_ObjectHideFlags: 0
@@ -990,6 +1068,7 @@ Transform:
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children:
   - {fileID: 314169904}
+  - {fileID: 902126079}
   m_Father: {fileID: 6874470660735316052}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1880,6 +1959,7 @@ Transform:
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children:
   - {fileID: 789920598}
+  - {fileID: 1679301945}
   m_Father: {fileID: 6874470660735316052}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2343,6 +2423,84 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 898450354}
   m_CullTransparentMesh: 1
+--- !u!1001 &902126078
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 314099630}
+    m_Modifications:
+    - target: {fileID: 8680255991032498162, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_Name
+      value: Canon Switch
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498167, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b57fe4dbe56b8644d99bfcd9b8c69ad5, type: 2}
+    - target: {fileID: 8822257655724712223, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: turnOnMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: ca7f1b4a3bd078540a1d4b2c6f069af9, type: 2}
+    - target: {fileID: 8822257655724712223, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: turnOffMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: b57fe4dbe56b8644d99bfcd9b8c69ad5, type: 2}
+    - target: {fileID: 8822257655724712223, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: cannonController
+      value: 
+      objectReference: {fileID: 458303447543617877}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+--- !u!4 &902126079 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+  m_PrefabInstance: {fileID: 902126078}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &902601881
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4100,6 +4258,7 @@ Transform:
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children:
   - {fileID: 1439029998}
+  - {fileID: 1828008975}
   m_Father: {fileID: 6874470660735316052}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4779,6 +4938,84 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1679301944
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 789849800}
+    m_Modifications:
+    - target: {fileID: 8680255991032498162, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_Name
+      value: Canon Switch
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498167, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b57fe4dbe56b8644d99bfcd9b8c69ad5, type: 2}
+    - target: {fileID: 8822257655724712223, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: turnOnMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: ca7f1b4a3bd078540a1d4b2c6f069af9, type: 2}
+    - target: {fileID: 8822257655724712223, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: turnOffMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: b57fe4dbe56b8644d99bfcd9b8c69ad5, type: 2}
+    - target: {fileID: 8822257655724712223, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: cannonController
+      value: 
+      objectReference: {fileID: 458303447096129587}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+--- !u!4 &1679301945 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+  m_PrefabInstance: {fileID: 1679301944}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1680125782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5064,6 +5301,7 @@ Transform:
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children:
   - {fileID: 1752744136}
+  - {fileID: 135857773}
   m_Father: {fileID: 6874470660735316052}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5261,6 +5499,72 @@ Transform:
   m_Father: {fileID: 1752758422}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1828008974
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1438959472}
+    m_Modifications:
+    - target: {fileID: 8680255991032498162, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_Name
+      value: Canon Switch
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8822257655724712223, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+      propertyPath: cannonController
+      value: 
+      objectReference: {fileID: 458303448535832971}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+--- !u!4 &1828008975 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8680255991032498165, guid: f380d06d734410a419a98931a4e3aa1a, type: 3}
+  m_PrefabInstance: {fileID: 1828008974}
+  m_PrefabAsset: {fileID: 0}
 --- !u!850595691 &1865902300
 LightingSettings:
   m_ObjectHideFlags: 0
