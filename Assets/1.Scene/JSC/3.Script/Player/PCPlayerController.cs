@@ -475,7 +475,7 @@ public class PCPlayerController : NetworkBehaviour
                 if (IsGrab)
                     IsGrab = false;
                 CmdToggleRagdoll(IsGrab);
-                CmdUpdateToHandPosition(IsGrab);
+                CmdSetGrabInteractable();
             }
             else
                 return;
@@ -789,7 +789,6 @@ public class PCPlayerController : NetworkBehaviour
                         StopCoroutine(currentUpdatePos);
                         currentUpdatePos = null;
                     }
-
                     Debug.Log("왼손 놓기!");
                     return;
                 }
@@ -804,13 +803,21 @@ public class PCPlayerController : NetworkBehaviour
                         StopCoroutine(currentUpdatePos);
                         currentUpdatePos = null;
                     }
-                    GetComponent<XRGrabInteractable>().enabled = false;
-
                     Debug.Log("오른손 놓기!");
                     return;
                 }
             }
         }
+    }
+    [Command]
+    public void CmdSetGrabInteractable()
+    {
+        RpcSetGrabInteractable();
+    }
+    [ClientRpc]
+    public void RpcSetGrabInteractable()
+    {
+        StartCoroutine(SetGrabInteractable());
     }
 
     IEnumerator SetGrabInteractable()
