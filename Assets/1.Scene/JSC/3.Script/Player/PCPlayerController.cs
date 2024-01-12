@@ -110,6 +110,7 @@ public class PCPlayerController : NetworkBehaviour
     public RigBuilder PlayerRig;
     public float AimDistance =1f;
     public bool IsGrab;
+    public GameObject GrapPoint;
     public Collider PlayerColl;
 
     private Animator _animator;
@@ -474,6 +475,7 @@ public class PCPlayerController : NetworkBehaviour
                 if (IsGrab)
                     IsGrab = false;
                 CmdToggleRagdoll(IsGrab);
+                CmdUpdateToHandPosition(IsGrab);
             }
             else
                 return;
@@ -787,7 +789,6 @@ public class PCPlayerController : NetworkBehaviour
                         StopCoroutine(currentUpdatePos);
                         currentUpdatePos = null;
                     }
-
                     Debug.Log("왼손 놓기!");
                     return;
                 }
@@ -802,12 +803,18 @@ public class PCPlayerController : NetworkBehaviour
                         StopCoroutine(currentUpdatePos);
                         currentUpdatePos = null;
                     }
-
                     Debug.Log("오른손 놓기!");
                     return;
                 }
             }
         }
+    }
+
+    IEnumerator SetActiveGrapPoint()
+    {
+        GrapPoint.SetActive(false);
+        yield return new WaitForSeconds(3f);
+        GrapPoint.SetActive(true);
     }
 
     [Header("Throw")]
