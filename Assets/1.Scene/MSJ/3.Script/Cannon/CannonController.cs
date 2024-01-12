@@ -14,30 +14,29 @@ public class CannonController : NetworkBehaviour
 
     private IEnumerator Start()
     {
+        // Cache initial angle on start
         startAngle = cannon.eulerAngles.x;
 
         // Find VRHead game object
         while (target == null)
         {
-            target = GameObject.FindGameObjectWithTag("PhysicsHead");
             yield return null;
+            target = GameObject.FindGameObjectWithTag("PhysicsHead");
         }
 
-        //Invoke(nameof(ActivateCannon), 2f);
-        //Invoke(nameof(DeactivateCannon), 10f);
+        ///////////* Test *///////////
+        while (true)
+        {
+            yield return new WaitForSeconds(5);
+            ActivateCannon();
+
+            yield return new WaitForSeconds(5);
+            DeactivateCannon();
+        }
     }
 
     public void ActivateCannon()
     {
-        // Start Look Target
-        if (_currentLookTarget != null)
-        {
-            StopCoroutine(_currentLookTarget);
-            _currentLookTarget = null;
-        }
-        _currentLookTarget = LookTarget();
-        StartCoroutine(_currentLookTarget);
-
         // Start Cannon Up
         if (_currentCannonUp != null)
         {
@@ -46,17 +45,24 @@ public class CannonController : NetworkBehaviour
         }
         _currentCannonUp = CannonUp();
         StartCoroutine(_currentCannonUp);
-    }
 
-    public void DeactivateCannon()
-    {
-        // Stop Look Target
+        // Start Look Target
+        if (target == null) return;
+
         if (_currentLookTarget != null)
         {
             StopCoroutine(_currentLookTarget);
             _currentLookTarget = null;
         }
+        _currentLookTarget = LookTarget();
+        StartCoroutine(_currentLookTarget);
 
+        // Fire Shell on server
+        if (isServer) StartCoroutine(FireShell());
+    }
+
+    public void DeactivateCannon()
+    {
         // Start Cannon Down
         if (_currentCannonDown != null)
         {
@@ -65,6 +71,15 @@ public class CannonController : NetworkBehaviour
         }
         _currentCannonDown = CannonDown();
         StartCoroutine(_currentCannonDown);
+
+        // Stop Look Target
+        if (target == null) return;
+
+        if (_currentLookTarget != null)
+        {
+            StopCoroutine(_currentLookTarget);
+            _currentLookTarget = null;
+        }
     }
 
     [Header("Rotater Look Target")]
@@ -160,5 +175,22 @@ public class CannonController : NetworkBehaviour
             var angleToRotate = Mathf.Lerp(startValue, targetValue, progress);
             cannon.eulerAngles = new Vector3(angleToRotate, cannon.eulerAngles.y, cannon.eulerAngles.z);
         }
+    }
+
+    [Header("Fire Shell")]
+    public Transform firePosition;
+    public GameObject cannonShellPrefab;
+    [Range(1f, 100f)]
+    public float cannonFireShellDelay = 3f;
+    public float fireStrength = 10f;
+
+    private IEnumerator FireShell()
+    {
+        // Wait to fire
+        yield return new WaitForSeconds(cannonFireShellDelay);
+
+        // Fire
+        GameObject shellObj = Instantiate(cannonShellPrefab, firePosition.position, firePosition.rotation);
+        NetworkServer.Spawn(shellObj);
     }
 }
