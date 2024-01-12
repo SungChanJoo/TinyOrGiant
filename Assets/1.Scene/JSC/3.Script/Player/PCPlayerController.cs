@@ -824,6 +824,7 @@ public class PCPlayerController : NetworkBehaviour
     {
         var grabInteractable = GetComponent<XRGrabInteractable>();
         grabInteractable.enabled = false;
+        Debug.Log("grabInteractable : " + grabInteractable.enabled);
         yield return new WaitForSeconds(1f);
         grabInteractable.enabled = true;
     }
