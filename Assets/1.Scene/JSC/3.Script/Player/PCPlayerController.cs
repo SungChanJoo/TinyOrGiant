@@ -110,7 +110,7 @@ public class PCPlayerController : NetworkBehaviour
     public RigBuilder PlayerRig;
     public float AimDistance =1f;
     public bool IsGrab;
-    public GameObject GrapPoint;
+    public XRGrabInteractable grabInteractable;
     public Collider PlayerColl;
 
     private Animator _animator;
@@ -124,6 +124,7 @@ public class PCPlayerController : NetworkBehaviour
         input = new PlayerControls();
         rb = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
+        grabInteractable = GetComponent<XRGrabInteractable>();
         //Cursor.visible = false;
         state = PlayerState.Idle;
         isGround = true;
@@ -812,17 +813,18 @@ public class PCPlayerController : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdSetGrabInteractable()
     {
+        Debug.Log("CmdSetGrabInteractable");
         RpcSetGrabInteractable();
     }
     [ClientRpc]
     public void RpcSetGrabInteractable()
     {
+        Debug.Log("RpcSetGrabInteractable");
         StartCoroutine(SetGrabInteractable());
     }
 
     IEnumerator SetGrabInteractable()
     {
-        var grabInteractable = GetComponent<XRGrabInteractable>();
         grabInteractable.enabled = false;
         Debug.Log("grabInteractable : " + grabInteractable.enabled);
         yield return new WaitForSeconds(1f);
