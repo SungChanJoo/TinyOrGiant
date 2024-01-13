@@ -5975,6 +5975,7 @@ MonoBehaviour:
   MaxHp: 3
   currentHp: 0
   IsDead: 0
+  damageDelay: 0.5
 --- !u!1 &6278994798011224944
 GameObject:
   m_ObjectHideFlags: 0

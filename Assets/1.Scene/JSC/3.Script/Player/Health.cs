@@ -8,13 +8,25 @@ public class Health : NetworkBehaviour
     public float currentHp;
     public bool IsDead = false;
 
-    private void Awake()
-    {
+    public float damageDelay = 0f;
+    private float currentDamageDelay = 0f;
+
+	private void Start()
+	{
         currentHp = MaxHp;
+        currentDamageDelay = damageDelay;
+    }
+
+	private void Update()
+	{
+		if (currentDamageDelay > 0) currentDamageDelay = Mathf.Max(0, currentDamageDelay - Time.deltaTime);
     }
 
     public void TakeDamage(float damage)
     {
+        if (currentDamageDelay != 0 || currentHp == 0) return;
+
+        currentDamageDelay = damageDelay;
         currentHp -= damage;
         Debug.Log("currentHp : " + currentHp);
         if(currentHp <= 0)

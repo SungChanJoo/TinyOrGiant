@@ -371,7 +371,7 @@ MonoBehaviour:
   PlayerRig: {fileID: 2608007290464046638}
   AimDistance: 30
   IsGrab: 0
-  GrapPoint: {fileID: 0}
+  grabInteractable: {fileID: 0}
   PlayerColl: {fileID: 5572218715593038353}
   throwForce: 5
 --- !u!54 &2608007290464046647
@@ -998,6 +998,7 @@ MonoBehaviour:
   MaxHp: 3
   currentHp: 0
   IsDead: 0
+  damageDelay: 0.5
 --- !u!1 &4278134915539409384
 GameObject:
   m_ObjectHideFlags: 0
