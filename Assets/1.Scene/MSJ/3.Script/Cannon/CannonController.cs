@@ -24,13 +24,6 @@ public class CannonController : NetworkBehaviour
             yield return null;
             target = GameObject.FindGameObjectWithTag("PhysicsHead");
         }
-
-        // Test
-		while (true)
-		{
-            yield return new WaitForSeconds(5f);
-            ActivateCannon();
-		}
     }
 
     public void ActivateCannon()
