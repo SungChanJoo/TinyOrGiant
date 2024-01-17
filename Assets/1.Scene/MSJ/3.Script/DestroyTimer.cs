@@ -5,10 +5,10 @@ using Mirror;
 
 public class DestroyTimer : NetworkBehaviour
 {
-    public float delayTime = 2f;
+    public float delayTime = 1.5f;
 
     void Start()
     {
-        //Destroy(gameObject, delayTime);
+        Destroy(gameObject, delayTime);
     }
 }

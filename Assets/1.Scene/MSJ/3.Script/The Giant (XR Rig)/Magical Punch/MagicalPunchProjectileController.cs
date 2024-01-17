@@ -6,9 +6,11 @@ using UnityEngine;
 public class MagicalPunchProjectileController : MonoBehaviour
 {
     public float lifeTime = 3f;
+    public float destoryDelay = .5f;
     [Range(0f, 500f)] public float speed = 10f;
+
     //[Range(0f, 10f)] public float lifeTime = 3f;
-    public Rigidbody rigidbody;
+    private Rigidbody rigidbody;
     private VRHeadController headController;
 
     private void Awake()
@@ -37,12 +39,10 @@ public class MagicalPunchProjectileController : MonoBehaviour
             transform.forward = (targetPos - transform.position).normalized;
             yield return null;
         }
-
-        Destroy(gameObject, .1f);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Destroy(gameObject, .1f);
+        Destroy(gameObject, destoryDelay);
     }
 }
