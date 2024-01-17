@@ -47,40 +47,19 @@ public class CubeHandler : NetworkBehaviour
     public void SetCubeSlotEmpty(bool isEmpty)
     {
         AssignedSlot.IsEmpty = isEmpty;
-        //RPCSetCubeSlotEmpty(isEmpty);
     }
-
-    //[ClientRpc]
-    //public void RPCSetCubeSlotEmpty(bool isEmpty)
-    //{
-    //    AssignedSlot.IsEmpty = isEmpty;
-    //}
 
     [Server]
     public void SetCubeUsed(bool isUsed)
     {
         IsUsed = isUsed;
-        //RPCSetCubeUsed(isUsed);
     }
-
-    //[ClientRpc]
-    //public void RPCSetCubeUsed(bool isUsed)
-    //{
-    //    IsUsed = isUsed;
-    //}
 
     [Server]
     public void AssignCubeSlot(GameObject slotObj)
     {
         AssignedSlot = slotObj.GetComponent<CubeSlot>();
-        //RPCAssignCubeSlot(slotObj);
     }
-
-    //[ClientRpc]
-    //public void RPCAssignCubeSlot(GameObject slotObj)
-    //{
-    //    AssignedSlot = slotObj.GetComponent<CubeSlot>();
-    //}
     #endregion
 
     [Server]
