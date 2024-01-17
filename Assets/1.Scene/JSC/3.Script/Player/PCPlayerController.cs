@@ -229,7 +229,7 @@ public class PCPlayerController : NetworkBehaviour
             _animator.SetBool("isGround", isGround);
         if (isGround)
         {
-            CmdToggleRagdoll(false);
+            //CmdToggleRagdoll(false);
 
             transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0f);
 

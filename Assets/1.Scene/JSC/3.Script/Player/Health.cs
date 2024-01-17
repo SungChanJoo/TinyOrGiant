@@ -34,7 +34,7 @@ public class Health : NetworkBehaviour
         
         if(PCPlayer != null)
         {
-            PCPlayer.ToggleRagdoll(true);
+           // PCPlayer.ToggleRagdoll(true);
             if (PCPlayer.IsGrab) return; 
         }
         currentDamageDelay = damageDelay;
