@@ -51,7 +51,8 @@ public class CannonShellController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("DeadZone"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("DeadZone")
+            || other.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             Destroy(gameObject);
         }
