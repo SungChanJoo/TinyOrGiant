@@ -5,12 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/1.Scene/MainGame.unity
+  - enabled: 0
+    path: Assets/Scenes/XR Card Flip.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
+  - enabled: 0
     path: Assets/1.Scene/JSC/1.Scene/JSC_Test_Network.unity
     guid: d73a4781e139b8843b34b0628a76b03b
+  - enabled: 1
+    path: Assets/1.Scene/JSC/1.Scene/Test Lobby.unity
+    guid: 481002538f629aa4fad02c20e2caca98
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: da833bb1968328b4884ba92d13788ba3, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: dd70a54c624ce6d4495c9afbf3ba0b86, type: 2}
