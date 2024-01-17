@@ -102,8 +102,12 @@ public class PCPlayerController : NetworkBehaviour
     public List<Rigidbody> ragdollRigidbodies = new List<Rigidbody>();
 
     [Header("ETC")]
+    [SyncVar(hook = nameof(ChangeRotate))]
     bool _rotateOnMove = true;
+    void ChangeRotate(bool _old, bool _new) { }
+    [SyncVar(hook = nameof(ChangeFreeze))]
     public bool Freeze = false;
+    void ChangeFreeze(bool _old, bool _new) { }
     public bool ActiveGrapple;
     public bool enableMovementOnNextTouch;
     public Transform AimTarget;
@@ -130,12 +134,8 @@ public class PCPlayerController : NetworkBehaviour
         isGround = true;
         IsGrab = false;
         PlayerRig.enabled = false;
-    }
-
-    private void Start()
-    {
         if (GameManager.Instance.playerType != PlayerType.PC) return;
-
+        
         // Ragdoll Collider 탐색
         var colliders = FindObjectsOfType<Collider>();
         foreach (var collider in colliders)
@@ -257,6 +257,7 @@ public class PCPlayerController : NetworkBehaviour
             if (_rotateOnMove && !Freeze)
             {
                 transform.rotation = Quaternion.Euler(0f, angle, 0f);
+                Debug.Log("평상시 회전");
             }
                 _moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
 
@@ -350,6 +351,8 @@ public class PCPlayerController : NetworkBehaviour
         #region CameraMovement
         if (!_rotateOnMove)
         {
+            Debug.Log("조준시 회전");
+
             Vector3 mouseWorldPosition = Vector3.zero;
             if (Physics.Raycast(ray, out RaycastHit hit, 999f))
             {
@@ -357,11 +360,15 @@ public class PCPlayerController : NetworkBehaviour
             }
             Debug.DrawRay(transform.position, ray.direction * 999f, Color.red);
             Vector3 aimDirection = (mouseWorldPosition - transform.position).normalized;
+            //Vector3 aimDirection = mouseWorldPosition;
             CmdAimTargetPos(Cam.position + Cam.forward * AimDistance);
-            transform.forward = new Vector3(aimDirection.x, 0, aimDirection.z);
+            float targetAngle = Mathf.Atan2(aimDirection.x, aimDirection.z) * Mathf.Rad2Deg + Cam.eulerAngles.y;
+            transform.rotation = Quaternion.Euler(0f, targetAngle - 90f, 0f) ;
+
+            //transform.forward = new Vector3(aimDirection.x, 0, aimDirection.z);
             if (_animator != null && IsFireReady && _inputDirection.magnitude >= 0.1f && !Freeze)
             {
-                Debug.Log("transform.forward" + transform.forward);
+
                 _animator.SetFloat("x", _inputDirection.x);
                 _animator.SetFloat("y", _inputDirection.z);
             }
@@ -674,7 +681,7 @@ public class PCPlayerController : NetworkBehaviour
                     currentUpdatePos = UpdateToHandTransform(handCollider.gameObject);
                     StartCoroutine(currentUpdatePos);
 
-                    //Debug.Log("왼손 잡기!");
+                    Debug.Log("왼손 잡기!");
                     return;
                 }
                 else if (handCollider.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics"))
@@ -687,7 +694,7 @@ public class PCPlayerController : NetworkBehaviour
                     currentUpdatePos = UpdateToHandTransform(handCollider.gameObject);
                     StartCoroutine(currentUpdatePos);
 
-                    //Debug.Log("오른손 잡기!");
+                    Debug.Log("오른손 잡기!");
                     return;
                 }
             }
@@ -732,7 +739,7 @@ public class PCPlayerController : NetworkBehaviour
     public float throwForce = 20f;
     public void ThrowPlayer(Vector3 direction)
     {
-        //Debug.Log(direction.normalized);
+        Debug.Log(direction.normalized);
         rb.velocity = Vector3.zero;
         rb.AddForce(direction * throwForce, ForceMode.Impulse);
     }
