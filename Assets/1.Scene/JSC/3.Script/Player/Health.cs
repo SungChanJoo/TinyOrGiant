@@ -10,11 +10,17 @@ public class Health : NetworkBehaviour
 
     public float damageDelay = 0f;
     private float currentDamageDelay = 0f;
+    private PCPlayerController PCPlayer;
+    private void Awake()
+    {
+        PCPlayer = transform.root.gameObject.GetComponent<PCPlayerController>();
+    }
 
-	private void Start()
+    private void Start()
 	{
         currentHp = MaxHp;
         currentDamageDelay = damageDelay;
+
     }
 
 	private void Update()
@@ -25,7 +31,12 @@ public class Health : NetworkBehaviour
     public void TakeDamage(float damage)
     {
         if (currentDamageDelay != 0 || currentHp == 0) return;
-
+        
+        if(PCPlayer != null)
+        {
+            PCPlayer.ToggleRagdoll(true);
+            if (PCPlayer.IsGrab) return; 
+        }
         currentDamageDelay = damageDelay;
         currentHp -= damage;
         Debug.Log("currentHp : " + currentHp);
@@ -34,6 +45,7 @@ public class Health : NetworkBehaviour
             Die();
         }
     }
+    
     [Command(requiresAuthority =false)]
     public void CmdTakeDamage(float damage)
     {
