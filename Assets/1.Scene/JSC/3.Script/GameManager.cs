@@ -197,10 +197,12 @@ public class GameManager : NetworkBehaviour
         if (Type == PlayerType.VR)
         {
             WinnerText.text = "PC Win!";
+
         }
         else
         {
             WinnerText.text = "VR Win!";
+
         }
         //Time.timeScale = 0;
     }
