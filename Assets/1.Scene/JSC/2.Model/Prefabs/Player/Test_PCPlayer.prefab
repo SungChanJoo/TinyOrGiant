@@ -995,7 +995,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  MaxHp: 3
+  MaxHp: 30
   currentHp: 0
   IsDead: 0
   damageDelay: 0.5
