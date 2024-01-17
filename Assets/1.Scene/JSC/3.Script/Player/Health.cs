@@ -34,7 +34,7 @@ public class Health : NetworkBehaviour
             Die();
         }
     }
-    [Command]
+    [Command(requiresAuthority =false)]
     public void CmdTakeDamage(float damage)
     {
         RpcTakeDamage(damage);

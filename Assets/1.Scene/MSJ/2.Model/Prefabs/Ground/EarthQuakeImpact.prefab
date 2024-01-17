@@ -128,6 +128,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 198690204200233858, guid: ebd08277c128adf42bc8d4bff60e3348, type: 3}
       propertyPath: TriggerModule.enter
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198690204200233858, guid: ebd08277c128adf42bc8d4bff60e3348, type: 3}
+      propertyPath: TriggerModule.inside
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 198690204200233858, guid: ebd08277c128adf42bc8d4bff60e3348, type: 3}
@@ -143,8 +147,36 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 198690204200233858, guid: ebd08277c128adf42bc8d4bff60e3348, type: 3}
+      propertyPath: CollisionModule.radiusScale
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 198690204200233858, guid: ebd08277c128adf42bc8d4bff60e3348, type: 3}
       propertyPath: TriggerModule.colliderQueryMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 198690204200233858, guid: ebd08277c128adf42bc8d4bff60e3348, type: 3}
+      propertyPath: CollisionModule.collisionMessages
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 198690204200233858, guid: ebd08277c128adf42bc8d4bff60e3348, type: 3}
+      propertyPath: CollisionModule.maxCollisionShapes
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 198690204200233858, guid: ebd08277c128adf42bc8d4bff60e3348, type: 3}
+      propertyPath: CollisionModule.collidesWith.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 198690204200233858, guid: ebd08277c128adf42bc8d4bff60e3348, type: 3}
+      propertyPath: CollisionModule.collidesWithDynamic
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 198690204200233858, guid: ebd08277c128adf42bc8d4bff60e3348, type: 3}
+      propertyPath: TriggerModule.primitives.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 198690204200233858, guid: ebd08277c128adf42bc8d4bff60e3348, type: 3}
+      propertyPath: TriggerModule.primitives.Array.data[0]
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 199001637910331222, guid: ebd08277c128adf42bc8d4bff60e3348, type: 3}
       propertyPath: m_Materials.Array.size
@@ -228,8 +260,32 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ebd08277c128adf42bc8d4bff60e3348, type: 3}
+--- !u!1 &1384615554355140081 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1672181623104776, guid: ebd08277c128adf42bc8d4bff60e3348, type: 3}
+  m_PrefabInstance: {fileID: 1383401499852583161}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1379132206845808363 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4922765940162066, guid: ebd08277c128adf42bc8d4bff60e3348, type: 3}
   m_PrefabInstance: {fileID: 1383401499852583161}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6112213061422472287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384615554355140081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b6116b1fda312c488eb50969fde5b05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  defaultDamage: 1
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 256

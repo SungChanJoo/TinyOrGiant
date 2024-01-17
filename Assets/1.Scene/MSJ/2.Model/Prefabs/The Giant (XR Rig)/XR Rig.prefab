@@ -5637,6 +5637,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 256
+  earthQuake: {fileID: 0}
 --- !u!1 &3623323317989040872
 GameObject:
   m_ObjectHideFlags: 0
@@ -9149,3 +9150,4 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 256
+  earthQuake: {fileID: 0}

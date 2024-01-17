@@ -130,8 +130,12 @@ public class PCPlayerController : NetworkBehaviour
         isGround = true;
         IsGrab = false;
         PlayerRig.enabled = false;
+    }
+
+    private void Start()
+    {
         if (GameManager.Instance.playerType != PlayerType.PC) return;
-        
+
         // Ragdoll Collider 탐색
         var colliders = FindObjectsOfType<Collider>();
         foreach (var collider in colliders)
@@ -670,7 +674,7 @@ public class PCPlayerController : NetworkBehaviour
                     currentUpdatePos = UpdateToHandTransform(handCollider.gameObject);
                     StartCoroutine(currentUpdatePos);
 
-                    Debug.Log("왼손 잡기!");
+                    //Debug.Log("왼손 잡기!");
                     return;
                 }
                 else if (handCollider.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics"))
@@ -683,7 +687,7 @@ public class PCPlayerController : NetworkBehaviour
                     currentUpdatePos = UpdateToHandTransform(handCollider.gameObject);
                     StartCoroutine(currentUpdatePos);
 
-                    Debug.Log("오른손 잡기!");
+                    //Debug.Log("오른손 잡기!");
                     return;
                 }
             }
@@ -728,7 +732,7 @@ public class PCPlayerController : NetworkBehaviour
     public float throwForce = 20f;
     public void ThrowPlayer(Vector3 direction)
     {
-        Debug.Log(direction.normalized);
+        //Debug.Log(direction.normalized);
         rb.velocity = Vector3.zero;
         rb.AddForce(direction * throwForce, ForceMode.Impulse);
     }

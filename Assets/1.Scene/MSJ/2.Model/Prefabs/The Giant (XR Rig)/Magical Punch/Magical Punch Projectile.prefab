@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeTime: 3
-  destoryDelay: 0.5
+  destoryDelay: 0.1
   speed: 100
 --- !u!114 &432855802
 MonoBehaviour:
